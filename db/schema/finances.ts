@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { InferModel, relations } from "drizzle-orm";
 import {
   decimal,
   int,
@@ -55,3 +55,7 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     references: [categories.id],
   }),
 }));
+
+export type Categories = InferModel<typeof categories>[]
+
+

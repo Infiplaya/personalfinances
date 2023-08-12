@@ -1,4 +1,5 @@
 import { SignIn } from "@/components/sign-in";
+import { TransactionForm } from "@/components/transaction-form";
 import { db } from "@/db";
 import { categories, transactions } from "@/db/schema/finances";
 import { authOptions } from "@/lib/auth/auth";
@@ -15,11 +16,10 @@ export default async function Home() {
   });
 
   const transactionsQuery = await db.query.transactions.findMany({
-    with: {
-      category: true
-    },
+    // with: {
+    //   category: true,
+    // },
   });
-
 
   const createCategory = async () => {
     "use server";
@@ -31,36 +31,10 @@ export default async function Home() {
     revalidatePath("/");
   };
 
-  const createTransaction = async () => {
-    "use server";
-    try {
-      await db.insert(transactions).values({
-        name: "new transactiones",
-        description: "Groceries are cool",
-        quantity: 500.22,
-        userId: session?.user.id,
-        categoryId: 12,
-        type: "income",
-      });
-
-      revalidatePath("/");
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   return (
-    <main>
-      hello, world
-      {JSON.stringify(session?.user.id)}
+    <main className="max-w-lg mx-auto py-24">
       <SignIn />
-      <form action={createCategory}>
-        <button>create category</button>
-      </form>
-      <form action={createTransaction}>
-        <button>create transaction</button>
-      </form>
-      {JSON.stringify(categoriesQuery)}
+      <TransactionForm categories={categoriesQuery} />
       <div className="bg-red-500">{JSON.stringify(transactionsQuery)}</div>
     </main>
   );
