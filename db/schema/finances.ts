@@ -50,8 +50,8 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     fields: [transactions.userId],
     references: [users.id],
   }),
-  category: one(users, {
+  category: one(categories, {
     fields: [transactions.categoryId],
-    references: [users.id],
+    references: [categories.id],
   }),
 }));

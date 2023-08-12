@@ -8,8 +8,18 @@ import { revalidatePath } from "next/cache";
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  const categoriesQuery = await db.select().from(categories);
-  const transactionsQuery = await db.select().from(transactions);
+  const categoriesQuery = await db.query.categories.findMany({
+    with: {
+      transactions: true,
+    },
+  });
+
+  const transactionsQuery = await db.query.transactions.findMany({
+    with: {
+      category: true
+    },
+  });
+
 
   const createCategory = async () => {
     "use server";
@@ -29,13 +39,13 @@ export default async function Home() {
         description: "Groceries are cool",
         quantity: 500.22,
         userId: session?.user.id,
-        categoryId: categoriesQuery[0].id,
+        categoryId: 12,
         type: "income",
       });
 
       revalidatePath("/");
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   };
 
