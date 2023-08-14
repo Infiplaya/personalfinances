@@ -35,7 +35,6 @@ export default async function Home() {
     <main className="max-w-lg mx-auto py-24">
       <SignIn />
       <TransactionForm categories={categoriesQuery} />
-      <div className="bg-red-500">{JSON.stringify(transactionsQuery)}</div>
     </main>
   );
 }

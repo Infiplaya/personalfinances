@@ -22,11 +22,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import { Categories } from "@/db/schema/finances";
 import {
   TransactionForm,
   transactionFormSchema,
 } from "@/lib/validation/transaction";
-import { Categories } from "@/db/schema/finances";
+import { Textarea } from "./ui/textarea";
 
 export function TransactionForm({ categories }: { categories: Categories }) {
   const form = useForm<TransactionForm>({
@@ -48,7 +50,24 @@ export function TransactionForm({ categories }: { categories: Categories }) {
             <FormItem>
               <FormLabel>name</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Short description</FormLabel>
+              <FormControl>
+                <Textarea {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -59,14 +78,27 @@ export function TransactionForm({ categories }: { categories: Categories }) {
         />
         <FormField
           control={form.control}
-          name="description"
+          name="categoryId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>Description haha</FormDescription>
+              <FormLabel>Category</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value ? field.value.toString() : undefined}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {categories.map((c) => (
+                    <SelectItem key={c.id} value={c.id.toString()}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -78,21 +110,7 @@ export function TransactionForm({ categories }: { categories: Categories }) {
             <FormItem>
               <FormLabel>Quantity</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="categoryId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} type="number" />
+                <Input placeholder="shadcn" {...field} inputMode="numeric" />
               </FormControl>
               <FormMessage />
             </FormItem>
