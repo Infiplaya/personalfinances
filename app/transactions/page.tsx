@@ -1,9 +1,10 @@
+import { Button } from "@/components/ui/button";
 import { db } from "@/db";
-import { transactions } from "@/db/schema/finances";
-import { sql } from "drizzle-orm";
+import { Transaction, transactions } from "@/db/schema/finances";
+import { like, sql } from "drizzle-orm";
+import Link from "next/link";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import PaginationControls from "./data-table-pagination";
 
 interface Props {
   searchParams: {
@@ -11,10 +12,46 @@ interface Props {
   };
 }
 
-async function getTransactions(limit: number, offset: number) {
+type Column =
+  | "id"
+  | "name"
+  | "description"
+  | "quantity"
+  | "userId"
+  | "categoryId"
+  | "type"
+  | "timestamp"
+  | undefined;
+type Order = "asc" | "desc" | undefined;
+
+async function getTransactions(
+  limit: number,
+  offset: number,
+  name: string | string[] | undefined,
+  column: Column,
+  order: Order
+) {
   return await db.query.transactions.findMany({
     limit: limit,
     offset: offset,
+    where: (transactions) => {
+      if (typeof name === "string") {
+        return like(transactions.name, `%${name}%`);
+      } else {
+        return undefined;
+      }
+    },
+    orderBy: (transactions, { asc, desc }) => {
+      if (column && column in transactions) {
+        if (order === "asc") {
+          return [asc(transactions[column])];
+        } else {
+          return [desc(transactions[column])];
+        }
+      } else {
+        return [desc(transactions.id)];
+      }
+    },
     // with: {
     //   category: true,
     // },
@@ -32,6 +69,8 @@ async function countTransactions() {
 export default async function TransactionsPage({ searchParams }: Props) {
   const page = searchParams["page"] ?? "1";
   const per_page = searchParams["per_page"] ?? "5";
+  const name = searchParams["name"];
+  const sort = searchParams["sort"];
 
   const limit = typeof per_page === "string" ? Number(per_page) : 1;
   const offset =
@@ -41,20 +80,34 @@ export default async function TransactionsPage({ searchParams }: Props) {
         : 0
       : 0;
 
-  const start = (Number(page) - 1) * Number(per_page);
-  const end = start + Number(per_page);
+  const [column, order] =
+    typeof sort === "string"
+      ? (sort.split(".") as [
+          keyof Transaction | undefined,
+          "asc" | "desc" | undefined
+        ])
+      : [];
 
-  const transactions = await getTransactions(limit, offset);
+  const transactions = await getTransactions(
+    limit,
+    offset,
+    name,
+    column,
+    order
+  );
   const transactionsCount = await countTransactions();
-  const totalPages = Math.ceil(transactionsCount / Number(per_page));
 
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={transactions} />
-      <PaginationControls
-        hasNextPage={end < transactionsCount}
-        hasPrevPage={start > 0}
-        totalPages={totalPages}
+      <div className="w-full my-6 flex justify-end">
+        <Link href="/transactions/new">
+          <Button>New Transaction</Button>
+        </Link>
+      </div>
+      <DataTable
+        columns={columns}
+        data={transactions}
+        count={transactionsCount}
       />
     </div>
   );

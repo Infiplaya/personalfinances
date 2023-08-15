@@ -34,6 +34,7 @@
     "esbuild": "^0.19.1",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.13",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.263.1",
     "next": "13.4.13",
     "next-auth": "^4.23.0",
@@ -50,6 +51,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7",
     "drizzle-kit": "^0.19.12",
     "esbuild-register": "^3.4.2"
   }

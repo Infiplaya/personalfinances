@@ -1,0 +1,56 @@
+"use client";
+
+import { useTransition } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+
+interface PaginationControlsProps {
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  totalPages: number;
+}
+
+export function RowsControls({}) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+  const pathname = usePathname();
+  const perPage = searchParams.get("per_page") ?? "10";
+
+  function handleTableRows(value: string) {
+    const params = new URLSearchParams(window.location.search);
+    params.set("per_page", value);
+    params.delete("page");
+
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`);
+    });
+  }
+
+  return (
+    <Select
+      onValueChange={(value) => handleTableRows(value)}
+      defaultValue={perPage}
+    >
+      <div className="inline-flex items-center space-x-4">
+        <Label className="whitespace-nowrap">Rows Per Page</Label>
+        <SelectTrigger className="max-w-[6rem]">
+          <SelectValue />
+        </SelectTrigger>
+      </div>
+      <SelectContent>
+        <SelectItem value="10">10</SelectItem>
+        <SelectItem value="20">20</SelectItem>
+        <SelectItem value="30">30</SelectItem>
+        <SelectItem value="50">50</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+}
