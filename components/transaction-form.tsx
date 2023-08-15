@@ -23,14 +23,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Categories } from "@/db/schema/finances";
+import { Category } from "@/db/schema/finances";
 import {
   TransactionForm,
   transactionFormSchema,
 } from "@/lib/validation/transaction";
 import { Textarea } from "./ui/textarea";
+import { submitTransactionForm } from "@/app/actions";
 
-export function TransactionForm({ categories }: { categories: Categories }) {
+export function TransactionForm({ categories }: { categories: Category[] }) {
   const form = useForm<TransactionForm>({
     resolver: zodResolver(transactionFormSchema),
   });
@@ -38,8 +39,8 @@ export function TransactionForm({ categories }: { categories: Categories }) {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => {
-          console.log(data);
+        onSubmit={form.handleSubmit(async (data) => {
+          await submitTransactionForm(data);
         })}
         className="space-y-8"
       >
@@ -48,13 +49,10 @@ export function TransactionForm({ categories }: { categories: Categories }) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>name</FormLabel>
+              <FormLabel>Name (optional)</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -65,13 +63,10 @@ export function TransactionForm({ categories }: { categories: Categories }) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Short description</FormLabel>
+              <FormLabel>Short description (optional)</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Textarea className="resize-none" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -110,7 +105,11 @@ export function TransactionForm({ categories }: { categories: Categories }) {
             <FormItem>
               <FormLabel>Quantity</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} inputMode="numeric" />
+                <Input
+                  placeholder="Quantity of transaction"
+                  {...field}
+                  inputMode="numeric"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -138,7 +137,9 @@ export function TransactionForm({ categories }: { categories: Categories }) {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? "Submitting" : "Submit"}
+        </Button>
       </form>
     </Form>
   );

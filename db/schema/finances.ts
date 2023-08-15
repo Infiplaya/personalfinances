@@ -16,7 +16,7 @@ export const transactions = mysqlTable(
   "transactions",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }).notNull(),
+    name: varchar("name", { length: 256 }),
     description: text("description"),
     quantity: decimal("quantity", { precision: 10, scale: 2 }),
     userId: varchar("userId", { length: 255 }).notNull(),
@@ -56,6 +56,7 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   }),
 }));
 
-export type Categories = InferModel<typeof categories>[]
+export type Category = InferModel<typeof categories>
+export type Transaction = InferModel<typeof transactions>
 
 

@@ -10,7 +10,7 @@ export const transactionFormSchema = z.object({
     })
     .max(256, {
       message: "Name of transaction must be atmost 256 character long.",
-    }),
+    }).optional(),
   description: z.string().optional(),
   quantity: decimalValidator,
   categoryId: z.coerce.number(),
