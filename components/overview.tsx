@@ -12,8 +12,8 @@ export function Overview({ data }: { data: OverviewData }) {
       </CardHeader>
       <CardContent>
         <div className="flex flex-col lg:flex-row justify-between gap-5">
-          <div className="flex-1">
-            <p>Incomes</p>
+          <div className="flex-1 space-y-4">
+            <p className="text-base font-medium">Incomes</p>
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={data.incomes}>
                 <XAxis
@@ -32,15 +32,15 @@ export function Overview({ data }: { data: OverviewData }) {
                 />
                 <Bar
                   dataKey="quantitySum"
-                  fill="#adfa1d"
+                  fill="#22c55e"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
-          <div className="flex-1">
-            <p>Spendings</p>
+          <div className="flex-1 space-y-4">
+            <p className="text-base font-medium">Spendings</p>
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={data.spendings}>
                 <XAxis
@@ -59,7 +59,7 @@ export function Overview({ data }: { data: OverviewData }) {
                 />
                 <Bar
                   dataKey="quantitySum"
-                  fill="#adfa1d"
+                  fill="#ef4444"
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>

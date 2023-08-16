@@ -63,10 +63,19 @@ export type OverviewData = UnwrapPromise<ReturnType<typeof getOverviewData>>;
 export default async function Home() {
   const overviewData = await getOverviewData();
   return (
-    <main className="container mx-auto w-full">
-      <SummaryCard />
-      <RecentTransactions />
-      <MonthlyBalanceCard />
+    <main className="container mx-auto w-full space-y-10 py-10">
+      <div className="lg:grid grid-cols-8 gap-x-10 items-center">
+        <div className="lg:col-span-2">
+          <SummaryCard />
+        </div>
+        <div className="lg:col-span-2">
+          <MonthlyBalanceCard />
+        </div>
+        <div className="lg:col-span-4">
+          <RecentTransactions />
+        </div>
+      </div>
+
       <Overview data={overviewData} />
     </main>
   );
