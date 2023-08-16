@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { dateFormat, moneyFormat } from "@/lib/utils";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -58,10 +59,7 @@ export const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("quantity"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+      const formatted = moneyFormat(amount);
 
       return <div className="text-right font-medium">{formatted}</div>;
     },
@@ -81,9 +79,7 @@ export const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => {
       const date = row.getValue("timestamp") as Date;
-      const formatted = new Intl.DateTimeFormat("en-GB").format(date);
-
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="text-right font-medium">{dateFormat(date)}</div>;
     },
   },
   {

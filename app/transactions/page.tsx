@@ -1,3 +1,4 @@
+import { TransactionsToast } from "@/components/transactions-toast";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db";
 import { Transaction, transactions } from "@/db/schema/finances";
@@ -99,6 +100,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   return (
     <div className="container mx-auto py-10">
+      <TransactionsToast />
       <div className="w-full my-6 flex justify-end">
         <Link href="/transactions/new">
           <Button>New Transaction</Button>

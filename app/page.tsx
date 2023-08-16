@@ -1,13 +1,13 @@
-import { authOptions } from "@/lib/auth/auth";
-import { getServerSession } from "next-auth";
-
+import RecentTransactions from "@/components/recent-transactions";
+import SummaryCard from "@/components/summary-card";
+import { Toaster } from "sonner";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
-
   return (
     <main className="max-w-lg mx-auto py-24">
       great emptiness
+      <SummaryCard />
+      <RecentTransactions />
     </main>
   );
 }

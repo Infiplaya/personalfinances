@@ -14,12 +14,11 @@ export async function createNewTransaction(formData: TransactionForm) {
     await db.insert(transactions).values({
       ...formData,
       userId: session.user.id,
-      id: 21,
     });
   } catch (e) {
-    return "Something went wrong! Try again later..."
+    console.log(e);
+    return "Something went wrong! Try again later...";
   }
 
-  revalidatePath("/transactions")
+  revalidatePath("/transactions");
 }
-

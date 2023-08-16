@@ -1,10 +1,7 @@
 "use client";
 
-import React from "react";
-import {
-  Dialog,
-  InterceptedDialogContent,
-} from "@/components/ui/dialog";
+import React, { useState } from "react";
+import { Dialog, InterceptedDialogContent } from "@/components/ui/dialog";
 import { Category } from "@/db/schema/finances";
 import { TransactionForm } from "./transaction-form";
 

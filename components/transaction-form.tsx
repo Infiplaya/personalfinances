@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import {
   Select,
@@ -32,7 +33,13 @@ import { createNewTransaction } from "@/app/actions";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function TransactionForm({ categories }: { categories: Category[] }) {
+export function TransactionForm({
+  categories,
+  closeModal,
+}: {
+  categories: Category[];
+  closeModal?: () => void;
+}) {
   const [error, setError] = useState("");
   const form = useForm<TransactionForm>({
     resolver: zodResolver(transactionFormSchema),
@@ -48,7 +55,7 @@ export function TransactionForm({ categories }: { categories: Category[] }) {
           if (error) {
             setError(error);
           } else {
-            router.back();
+            router.replace("/transactions?success=true");
           }
         })}
         className="space-y-8"
@@ -66,7 +73,6 @@ export function TransactionForm({ categories }: { categories: Category[] }) {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="description"

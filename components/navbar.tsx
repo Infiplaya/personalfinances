@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
+import { toast } from "sonner";
 import { SignIn } from "./sign-in";
 import { ThemeSwitcher } from "./theme-switcher";
 
