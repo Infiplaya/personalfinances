@@ -53,7 +53,7 @@ export function TransactionForm({
         onSubmit={form.handleSubmit(async (data) => {
           const error = await createNewTransaction(data);
           if (error) {
-            setError(error);
+            toast.error(error);
           } else {
             router.replace("/transactions?success=true");
           }

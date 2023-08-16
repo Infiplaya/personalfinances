@@ -53,9 +53,6 @@ async function getTransactions(
         return [desc(transactions.id)];
       }
     },
-    // with: {
-    //   category: true,
-    // },
   });
 }
 

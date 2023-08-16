@@ -10,7 +10,7 @@ export default function Providers({ children }: { children: ReactNode }) {
     <SessionProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {children}
-        <Toaster />
+        <Toaster position="top-center" richColors />
       </ThemeProvider>
     </SessionProvider>
   );
