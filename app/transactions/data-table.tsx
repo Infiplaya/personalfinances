@@ -8,7 +8,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import debounce from "lodash.debounce";
 
 import {
   Table,
@@ -42,7 +41,7 @@ export function DataTable<TData, TValue>({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const page = searchParams?.get("page") ?? "1";
-  const per_page = searchParams?.get("per_page") ?? "5";
+  const per_page = searchParams?.get("per_page") ?? "10";
 
   const table = useReactTable({
     data,

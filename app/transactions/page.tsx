@@ -68,7 +68,7 @@ async function countTransactions() {
 
 export default async function TransactionsPage({ searchParams }: Props) {
   const page = searchParams["page"] ?? "1";
-  const per_page = searchParams["per_page"] ?? "5";
+  const per_page = searchParams["per_page"] ?? "10";
   const name = searchParams["name"];
   const sort = searchParams["sort"];
 

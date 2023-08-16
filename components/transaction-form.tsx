@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -29,18 +28,28 @@ import {
   transactionFormSchema,
 } from "@/lib/validation/transaction";
 import { Textarea } from "./ui/textarea";
-import { submitTransactionForm } from "@/app/actions";
+import { createNewTransaction } from "@/app/actions";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function TransactionForm({ categories }: { categories: Category[] }) {
+  const [error, setError] = useState("");
   const form = useForm<TransactionForm>({
     resolver: zodResolver(transactionFormSchema),
   });
+
+  const router = useRouter();
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(async (data) => {
-          await submitTransactionForm(data);
+          const error = await createNewTransaction(data);
+          if (error) {
+            setError(error);
+          } else {
+            router.back();
+          }
         })}
         className="space-y-8"
       >
@@ -137,9 +146,12 @@ export function TransactionForm({ categories }: { categories: Category[] }) {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Submitting" : "Submit"}
-        </Button>
+        <div className="inline-flex justify-between items-center w-full">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Submitting" : "Submit"}
+          </Button>
+          <p className="text-rose-500 text-sm dark:text-rose-400">{error}</p>
+        </div>
       </form>
     </Form>
   );
