@@ -1,6 +1,6 @@
 "use client";
 
-import { OverviewData } from "@/app/page";
+import { OverviewData } from "@/app/(dashboard)/page";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
@@ -29,7 +29,11 @@ export function Overview({ data }: { data: OverviewData }) {
                   axisLine={false}
                   tickFormatter={(value) => `$${value}`}
                 />
-                <Bar dataKey="totalIncome" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="totalIncome"
+                  fill="#22c55e"
+                  radius={[4, 4, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -57,7 +61,11 @@ export function Overview({ data }: { data: OverviewData }) {
                   axisLine={false}
                   tickFormatter={(value) => `$${value}`}
                 />
-                <Bar dataKey="totalExpenses" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="totalExpenses"
+                  fill="#ef4444"
+                  radius={[4, 4, 0, 0]}
+                />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
