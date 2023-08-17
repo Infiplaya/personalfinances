@@ -17,5 +17,5 @@ export default async function TransactionsPage({
   params: { id: string };
 }) {
   const data = await getTransaction(Number(params.id));
-  return <div className="container mx-auto py-10">{JSON.stringify(data)}</div>;
+  return <div className="py-10">{JSON.stringify(data)}</div>;
 }

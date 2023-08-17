@@ -5,6 +5,7 @@ import Providers from "./providers";
 import Navbar from "@/components/navbar";
 import { Toaster } from "sonner";
 import { Sidebar } from "@/components/sidebar";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,19 +16,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className="h-full">
+      <body className={cn(inter.className, "h-full")}>
         <Providers>
           <Navbar />
           <Sidebar />
-          {children}
-          {modal}
+          <div className="container mx-auto">{children}</div>
         </Providers>
       </body>
     </html>

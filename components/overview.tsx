@@ -16,7 +16,7 @@ export function Overview({ data }: { data: OverviewData }) {
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={data.incomes}>
                 <XAxis
-                  dataKey="day_of_week"
+                  dataKey="day"
                   stroke="#888888"
                   fontSize={12}
                   tickLine={false}
@@ -44,7 +44,7 @@ export function Overview({ data }: { data: OverviewData }) {
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={data.spendings}>
                 <XAxis
-                  dataKey="day_of_week"
+                  dataKey="day"
                   stroke="#888888"
                   fontSize={12}
                   tickLine={false}

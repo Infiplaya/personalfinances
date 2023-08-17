@@ -6,9 +6,17 @@ import SummaryCard from "@/components/summary-card";
 import { db } from "@/db";
 import { balances, transactions } from "@/db/schema/finances";
 import { authOptions } from "@/lib/auth/auth";
-import { UnwrapPromise } from "@/lib/utils";
+import { getDayOfWeek, UnwrapPromise } from "@/lib/utils";
 import { and, eq, gte, lte, sql } from "drizzle-orm";
 import { getServerSession } from "next-auth";
+import { z } from "zod";
+
+const overviewSchema = z.array(
+  z.object({
+    day: z.number().transform((val) => getDayOfWeek(Number(val))),
+    amountSum: z.string(),
+  })
+);
 
 async function getOverviewData(userId: string) {
   const currentDate = new Date();
@@ -18,7 +26,7 @@ async function getOverviewData(userId: string) {
   return await db.transaction(async (tx) => {
     const spendings = await tx
       .select({
-        day_of_week: sql<string>`weekday(${transactions.timestamp})`,
+        day: sql<number>`weekday(${transactions.timestamp})`,
         amountSum: sql<number>`sum(${transactions.amount})`,
       })
       .from(transactions)
@@ -34,7 +42,7 @@ async function getOverviewData(userId: string) {
 
     const incomes = await tx
       .select({
-        day_of_week: sql<string>`weekday(${transactions.timestamp})`,
+        day: sql<string>`weekday(${transactions.timestamp})`,
         amountSum: sql<number>`sum(${transactions.amount})`,
       })
       .from(transactions)
@@ -49,8 +57,8 @@ async function getOverviewData(userId: string) {
       .groupBy(sql`weekday(${transactions.timestamp})`);
 
     return {
-      incomes,
-      spendings,
+      incomes: overviewSchema.parse(incomes),
+      spendings: overviewSchema.parse(spendings),
     };
   });
 }
@@ -82,17 +90,17 @@ export default async function Home() {
   const overviewData = await getOverviewData(session?.user.id as string);
   const balanceData = await getBalanceData(session?.user.id as string);
   return (
-    <main className="container mx-auto w-full space-y-10 py-10">
-      <div className="lg:grid grid-cols-8 gap-x-10">
-        <div className="lg:col-span-2">
+    <main className="py-10 space-y-10">
+      <div className="lg:grid grid-cols-12 gap-x-10">
+        <div className="lg:col-span-3">
           {/* @ts-expect-error Server Component */}
           <SummaryCard />
         </div>
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3">
           {/* @ts-expect-error Server Component */}
           <MonthlyBalanceCard />
         </div>
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-6">
           {/* @ts-expect-error Server Component */}
           <RecentTransactions />
         </div>

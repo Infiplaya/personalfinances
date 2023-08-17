@@ -96,7 +96,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
   const transactionsCount = await countTransactions();
 
   return (
-    <div className="container mx-auto py-10">
+    <main className="mx-auto py-10">
       <TransactionsToast />
       <div className="w-full my-6 flex justify-end">
         <Link href="/transactions/new">
@@ -108,6 +108,6 @@ export default async function TransactionsPage({ searchParams }: Props) {
         data={transactions}
         count={transactionsCount}
       />
-    </div>
+    </main>
   );
 }
