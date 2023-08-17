@@ -1,12 +1,48 @@
 "use server";
 
 import { db } from "@/db";
+import { users } from "@/db/schema/auth";
 import { balances, transactions } from "@/db/schema/finances";
 import { authOptions } from "@/lib/auth/auth";
 import { TransactionForm } from "@/lib/validation/transaction";
-import { eq } from "drizzle-orm";
+import { eq, InferModel } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { hash } from "bcryptjs";
+import { RegisterForm } from "@/lib/validation/auth";
+import { v4 as uuidv4 } from "uuid";
+
+export async function registerUser(formData: RegisterForm) {
+  try {
+    const hashed_password = await hash(formData.password, 12);
+
+    type NewUser = InferModel<typeof users, "insert">;
+    const insertUser = async (user: NewUser) => {
+      return db.insert(users).values(user);
+    };
+
+    const newUser: NewUser = {
+      id: uuidv4(),
+      name: formData.name,
+      password: hashed_password,
+      email: formData.email.toLowerCase(),
+    };
+    await insertUser(newUser);
+
+    return {
+      user: {
+        name: newUser.name,
+        email: newUser.email,
+      },
+    };
+  } catch (e: any) {
+    console.log(e);
+    return {
+      error: e.message,
+    };
+  }
+}
+
 
 export async function createNewTransaction(formData: TransactionForm) {
   const session = await getServerSession(authOptions);

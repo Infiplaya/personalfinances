@@ -12,12 +12,15 @@ specifiers:
   '@radix-ui/react-select': ^1.2.2
   '@radix-ui/react-slot': ^1.0.2
   '@tanstack/react-table': ^8.9.3
+  '@types/bcryptjs': ^2.4.2
   '@types/lodash.debounce': ^4.0.7
   '@types/node': 20.4.10
   '@types/react': 18.2.20
   '@types/react-dom': 18.2.7
+  '@types/uuid': ^9.0.2
   add: ^2.0.6
   autoprefixer: 10.4.14
+  bcryptjs: ^2.4.3
   card: ^2.5.4
   class-variance-authority: ^0.7.0
   clsx: ^2.0.0
@@ -48,6 +51,7 @@ specifiers:
   tailwindcss-animate: ^1.0.6
   typescript: 5.1.6
   undici: ^5.23.0
+  uuid: ^9.0.0
   zod: ^3.21.4
 
 dependencies:
@@ -67,6 +71,7 @@ dependencies:
   '@types/react-dom': 18.2.7
   add: 2.0.6
   autoprefixer: 10.4.14_postcss@8.4.27
+  bcryptjs: 2.4.3
   card: 2.5.4
   class-variance-authority: 0.7.0
   clsx: 2.0.0
@@ -95,10 +100,13 @@ dependencies:
   tailwindcss-animate: 1.0.6_tailwindcss@3.3.3
   typescript: 5.1.6
   undici: 5.23.0
+  uuid: 9.0.0
   zod: 3.21.4
 
 devDependencies:
+  '@types/bcryptjs': 2.4.2
   '@types/lodash.debounce': 4.0.7
+  '@types/uuid': 9.0.2
   drizzle-kit: 0.19.12
   esbuild-register: 3.4.2_esbuild@0.19.1
 
@@ -1917,6 +1925,10 @@ packages:
       path-browserify: 1.0.1
     dev: false
 
+  /@types/bcryptjs/2.4.2:
+    resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
+    dev: true
+
   /@types/d3-array/3.0.5:
     resolution: {integrity: sha512-Qk7fpJ6qFp+26VeQ47WY0mkwXaiq8+76RJcncDEfMc2ocRzXLO67bLFRNI4OX1aGBoPzsM5Y2T+/m1pldOgD+A==}
     dev: false
@@ -1998,6 +2010,10 @@ packages:
   /@types/scheduler/0.16.3:
     resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
     dev: false
+
+  /@types/uuid/9.0.2:
+    resolution: {integrity: sha512-kNnC1GFBLuhImSnV7w4njQkUiJi0ZXUycu1rUaouPqiKlXkh77JKgdRnTAp1x5eBwcIwbtI+3otwzuIDEuDoxQ==}
+    dev: true
 
   /@typescript-eslint/parser/6.3.0_qj3u6ezxe2airdzjq3nyoxe24m:
     resolution: {integrity: sha512-ibP+y2Gr6p0qsUkhs7InMdXrwldjxZw66wpcQq9/PzAroM45wdwyu81T+7RibNCh8oc0AgrsyCwJByncY0Ongg==}
@@ -2288,6 +2304,10 @@ packages:
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+    dev: false
+
+  /bcryptjs/2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
     dev: false
 
   /binary-extensions/2.2.0:
@@ -5603,6 +5623,11 @@ packages:
 
   /uuid/8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
+    dev: false
+
+  /uuid/9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
     dev: false
 
