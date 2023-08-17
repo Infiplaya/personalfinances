@@ -5,17 +5,37 @@ import {
   AreaChart,
   CartesianGrid,
   ResponsiveContainer,
-  Tooltip,
+  Tooltip as ChartTooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Info } from "lucide-react";
+
 
 export function BalanceChart({ data }: { data: any }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Balance - last 30 days</CardTitle>
+        <div className="inline-flex space-x-4">
+          <CardTitle>Balance</CardTitle>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Info className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Your total balance over last 30 days</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
@@ -43,7 +63,7 @@ export function BalanceChart({ data }: { data: any }) {
               tickFormatter={(value) => `$${value}`}
             />
             <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
+            <ChartTooltip />
             <Area
               type="monotone"
               dataKey="totalBalance"

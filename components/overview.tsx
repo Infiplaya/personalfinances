@@ -3,6 +3,13 @@
 import { OverviewData } from "@/app/(dashboard)/page";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
 
 export function Overview({ data }: { data: OverviewData }) {
   return (
@@ -10,7 +17,19 @@ export function Overview({ data }: { data: OverviewData }) {
       <div className="flex-1">
         <Card>
           <CardHeader>
-            <CardTitle>Incomes</CardTitle>
+            <div className="inline-flex space-x-4">
+              <CardTitle>Incomes</CardTitle>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Info className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                  <p>Sum of your incomes in the last 7 days</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={350}>
@@ -42,7 +61,19 @@ export function Overview({ data }: { data: OverviewData }) {
       <div className="flex-1">
         <Card>
           <CardHeader>
-            <CardTitle>Spendings</CardTitle>
+            <div className="inline-flex space-x-4">
+              <CardTitle>Spendings</CardTitle>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Info className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sum of your spendings in the last 7 days</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={350}>

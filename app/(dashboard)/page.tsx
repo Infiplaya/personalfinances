@@ -3,6 +3,7 @@ import MonthlyBalanceCard from "@/components/month-summary-card";
 import { Overview } from "@/components/overview";
 import RecentTransactions from "@/components/recent-transactions";
 import SummaryCard from "@/components/summary-card";
+import { SuccessToast } from "@/components/success-toast";
 import { db } from "@/db";
 import { balances, transactions } from "@/db/schema/finances";
 import { authOptions } from "@/lib/auth/auth";
@@ -71,6 +72,7 @@ export default async function Home() {
   const balanceData = await getBalanceData(session?.user.id as string);
   return (
     <main className="py-10 space-y-10">
+      <SuccessToast message="Successfully logged in! Welcome back" />
       <div className="lg:grid grid-cols-12 gap-x-10">
         <div className="lg:col-span-3">
           {/* @ts-expect-error Server Component */}

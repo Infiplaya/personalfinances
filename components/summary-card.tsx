@@ -1,18 +1,19 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/db";
 import { transactions } from "@/db/schema/finances";
 import { authOptions } from "@/lib/auth/auth";
 import { cn, moneyFormat } from "@/lib/utils";
 import { eq, sql } from "drizzle-orm";
+import { Info } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { Label } from "./ui/label";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 async function getTotalIncomeAndExpenses(userId: string) {
   const result = await db
@@ -38,7 +39,19 @@ export default async function SummaryCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Summary</CardTitle>
+        <div className="inline-flex space-x-4">
+          <CardTitle>Summary </CardTitle>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Info className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Summary of all your transactions</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </CardHeader>
       <CardContent className="space-y-3">
         <div>

@@ -1,11 +1,9 @@
-import { TransactionsToast } from "@/components/transactions-toast";
-import { Button } from "@/components/ui/button";
+import { TransactionDialog } from "@/components/transactions/transaction-dialog";
 import { db } from "@/db";
-import { balances, Transaction, transactions } from "@/db/schema/finances";
+import { categories, Transaction, transactions } from "@/db/schema/finances";
 import { authOptions } from "@/lib/auth/auth";
 import { eq, like, sql } from "drizzle-orm";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 
@@ -108,13 +106,12 @@ export default async function TransactionsPage({ searchParams }: Props) {
   );
   const transactionsCount = await countTransactions(session?.user.id as string);
 
+  const categoriesData = await db.select().from(categories);
+
   return (
     <main className="mx-auto py-10">
-      <TransactionsToast />
       <div className="w-full my-6 flex justify-end">
-        <Link href="/transactions/new">
-          <Button>New Transaction</Button>
-        </Link>
+        <TransactionDialog categories={categoriesData} />
       </div>
       <DataTable
         columns={columns}

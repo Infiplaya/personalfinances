@@ -44,7 +44,6 @@ export function LoginForm() {
             }
           } catch (e) {
             console.log(e);
-            setError(e)
           }
         })}
         className="space-y-8"
@@ -76,7 +75,7 @@ export function LoginForm() {
           )}
         />
         <div className="inline-flex justify-between items-center w-full">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? "Submitting" : "Submit"}
           </Button>
           <p className="text-rose-500 text-sm dark:text-rose-400">{error}</p>

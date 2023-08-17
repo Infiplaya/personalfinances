@@ -55,7 +55,8 @@ export function TransactionForm({
           if (error) {
             toast.error(error);
           } else {
-            router.replace("/transactions?success=true");
+            if (closeModal) closeModal();
+            toast.success("Created new transaction!");
           }
         })}
         className="space-y-8"
@@ -98,7 +99,7 @@ export function TransactionForm({
               >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Category of transaction" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

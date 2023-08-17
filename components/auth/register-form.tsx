@@ -37,7 +37,7 @@ export function RegisterForm() {
           if (error) {
             console.log(error);
           } else {
-            signIn(undefined, { callbackUrl: "/signin" });
+            router.push("/signin?registration-success=true")
           }
         })}
         className="space-y-8"
@@ -82,7 +82,7 @@ export function RegisterForm() {
           )}
         />
         <div className="inline-flex justify-between items-center w-full">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? "Submitting" : "Submit"}
           </Button>
           <p className="text-rose-500 text-sm dark:text-rose-400">{error}</p>

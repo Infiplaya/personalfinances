@@ -4,8 +4,15 @@ import { transactions } from "@/db/schema/finances";
 import { authOptions } from "@/lib/auth/auth";
 import { cn, moneyFormat } from "@/lib/utils";
 import { and, eq, gte, lte, sql } from "drizzle-orm";
+import { Info } from "lucide-react";
 import { getServerSession } from "next-auth";
 import { Label } from "./ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 async function getBalanceForMonth(userId: string, month?: number) {
   const currentDate = new Date();
@@ -49,7 +56,19 @@ export default async function MonthlyBalanceCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>This Month</CardTitle>
+        <div className="inline-flex space-x-4">
+          <CardTitle>This Month</CardTitle>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Info className="w-4 h-4 text-gray-700 dark:text-gray-300" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Summary of transactions this month</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </CardHeader>
       <CardContent className="space-y-3">
         <div>
