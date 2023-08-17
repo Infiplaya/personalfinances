@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "6c71f286-657e-4704-930e-dc864cb25d95",
+  "id": "7a560010-899e-4e4f-9b1e-5d40c67e9550",
   "prevId": "5a81e054-f8af-4b36-b9b9-7fc6653552dd",
   "tables": {
     "accounts": {
@@ -255,13 +255,21 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(now())"
         }
       },
       "indexes": {
-        "userId_idx": {
-          "name": "userId_idx",
+        "idId_idx": {
+          "name": "idId_idx",
           "columns": [
-            "userId"
+            "id"
           ],
           "isUnique": true
         }

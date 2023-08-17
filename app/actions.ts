@@ -27,19 +27,12 @@ export async function createNewTransaction(formData: TransactionForm) {
         ? -Number(formData.amount)
         : Number(formData.amount);
 
-    if (userBalance) {
-      await db
-        .update(balances)
-        .set({
-          totalBalance: (userBalance.totalBalance as number) + amount,
-        })
-        .where(eq(balances.userId, session.user.id));
-    } else {
-      await db.insert(balances).values({
-        userId: session.user.id,
-        totalBalance: amount,
-      });
-    }
+    await db.insert(balances).values({
+      userId: session.user.id,
+      totalBalance: userBalance
+        ? (userBalance.totalBalance as number) + amount
+        : amount,
+    });
 
     // if it exist then update it
   } catch (e) {

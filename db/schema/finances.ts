@@ -48,9 +48,10 @@ export const balances = mysqlTable(
     id: serial("id").primaryKey(),
     totalBalance: double("totalBalance", { precision: 10, scale: 2 }).default(0.00),
     userId: varchar("userId", { length: 255 }).notNull(),
+    timestamp: timestamp("timestamp").defaultNow(),
   },
   (balance) => ({
-    userIdIndex: uniqueIndex("userId_idx").on(balance.userId),
+    idIndex: uniqueIndex("idId_idx").on(balance.id),
   })
 );
 

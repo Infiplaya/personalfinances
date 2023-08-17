@@ -6,14 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export function Overview({ data }: { data: OverviewData }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Overview - Last 7 days</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col lg:flex-row justify-between gap-5">
-          <div className="flex-1 space-y-4">
-            <p className="text-base font-medium">Incomes</p>
+    <div className="flex gap-10">
+      <div className="flex-1">
+        <Card>
+          <CardHeader>
+            <CardTitle>Incomes</CardTitle>
+          </CardHeader>
+          <CardContent>
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={data.incomes}>
                 <XAxis
@@ -30,17 +29,18 @@ export function Overview({ data }: { data: OverviewData }) {
                   axisLine={false}
                   tickFormatter={(value) => `$${value}`}
                 />
-                <Bar
-                  dataKey="amountSum"
-                  fill="#22c55e"
-                  radius={[4, 4, 0, 0]}
-                />
+                <Bar dataKey="amountSum" fill="#22c55e" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-
-          <div className="flex-1 space-y-4">
-            <p className="text-base font-medium">Spendings</p>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="flex-1">
+        <Card>
+          <CardHeader>
+            <CardTitle>Spendings</CardTitle>
+          </CardHeader>
+          <CardContent>
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={data.spendings}>
                 <XAxis
@@ -57,16 +57,12 @@ export function Overview({ data }: { data: OverviewData }) {
                   axisLine={false}
                   tickFormatter={(value) => `$${value}`}
                 />
-                <Bar
-                  dataKey="amountSum"
-                  fill="#ef4444"
-                  radius={[4, 4, 0, 0]}
-                />
+                <Bar dataKey="amountSum" fill="#ef4444" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }
