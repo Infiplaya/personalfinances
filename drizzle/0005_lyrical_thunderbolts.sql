@@ -1,0 +1,1 @@
+ALTER TABLE `transactions` ADD `totalBalance` decimal(10,2);

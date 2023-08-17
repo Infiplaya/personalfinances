@@ -115,13 +115,13 @@ export function TransactionForm({
         />
         <FormField
           control={form.control}
-          name="quantity"
+          name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Quantity</FormLabel>
+              <FormLabel>Amount</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Quantity of transaction"
+                  placeholder="Amount of transaction"
                   {...field}
                   inputMode="numeric"
                 />

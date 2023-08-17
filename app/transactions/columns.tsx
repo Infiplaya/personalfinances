@@ -45,7 +45,7 @@ export const columns: ColumnDef<Transaction>[] = [
     ),
   },
   {
-    accessorKey: "quantity",
+    accessorKey: "amount",
     header: ({ column }) => (
       <div className="text-right">
         <Button
@@ -58,7 +58,7 @@ export const columns: ColumnDef<Transaction>[] = [
       </div>
     ),
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("quantity"));
+      const amount = parseFloat(row.getValue("amount"));
       const formatted = moneyFormat(amount);
 
       return <div className="text-right font-medium">{formatted}</div>;

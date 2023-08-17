@@ -1,0 +1,1 @@
+ALTER TABLE `transactions` MODIFY COLUMN `totalBalance` decimal(10,2) DEFAULT '0.00';

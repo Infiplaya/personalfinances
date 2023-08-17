@@ -1,6 +1,7 @@
 import { InferModel, relations } from "drizzle-orm";
 import {
   decimal,
+  double,
   int,
   mysqlEnum,
   mysqlTable,
@@ -18,7 +19,7 @@ export const transactions = mysqlTable(
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }),
     description: text("description"),
-    quantity: decimal("quantity", { precision: 10, scale: 2 }),
+    amount: decimal("amount", { precision: 10, scale: 2 }),
     userId: varchar("userId", { length: 255 }).notNull(),
     categoryId: int("categoryId").notNull(),
     type: mysqlEnum("type", ["expense", "income"]).notNull(),
@@ -41,6 +42,25 @@ export const categories = mysqlTable(
   })
 );
 
+export const balances = mysqlTable(
+  "balances",
+  {
+    id: serial("id").primaryKey(),
+    totalBalance: double("totalBalance", { precision: 10, scale: 2 }).default(0.00),
+    userId: varchar("userId", { length: 255 }).notNull(),
+  },
+  (balance) => ({
+    userIdIndex: uniqueIndex("userId_idx").on(balance.userId),
+  })
+);
+
+export const balancesRelations = relations(balances, ({ one }) => ({
+  user: one(users, {
+    fields: [balances.userId],
+    references: [users.id],
+  }),
+}));
+
 export const categoriesRelations = relations(categories, ({ many }) => ({
   transactions: many(transactions),
 }));
@@ -56,7 +76,5 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   }),
 }));
 
-export type Category = InferModel<typeof categories>
-export type Transaction = InferModel<typeof transactions>
-
-
+export type Category = InferModel<typeof categories>;
+export type Transaction = InferModel<typeof transactions>;

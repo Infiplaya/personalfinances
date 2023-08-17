@@ -1,7 +1,7 @@
 import { TransactionsToast } from "@/components/transactions-toast";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db";
-import { Transaction, transactions } from "@/db/schema/finances";
+import { balances, Transaction, transactions } from "@/db/schema/finances";
 import { like, sql } from "drizzle-orm";
 import Link from "next/link";
 import { columns } from "./columns";
@@ -17,7 +17,7 @@ type Column =
   | "id"
   | "name"
   | "description"
-  | "quantity"
+  | "amount"
   | "userId"
   | "categoryId"
   | "type"

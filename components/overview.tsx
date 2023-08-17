@@ -31,7 +31,7 @@ export function Overview({ data }: { data: OverviewData }) {
                   tickFormatter={(value) => `$${value}`}
                 />
                 <Bar
-                  dataKey="quantitySum"
+                  dataKey="amountSum"
                   fill="#22c55e"
                   radius={[4, 4, 0, 0]}
                 />
@@ -58,7 +58,7 @@ export function Overview({ data }: { data: OverviewData }) {
                   tickFormatter={(value) => `$${value}`}
                 />
                 <Bar
-                  dataKey="quantitySum"
+                  dataKey="amountSum"
                   fill="#ef4444"
                   radius={[4, 4, 0, 0]}
                 />

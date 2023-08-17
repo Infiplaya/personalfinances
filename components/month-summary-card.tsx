@@ -18,43 +18,29 @@ async function getBalanceForMonth(month?: number) {
     0
   );
 
-  return await db.transaction(async (tx) => {
-    const [totalIncome] = await tx
-      .select({
-        totalIncome: sql<number>`sum(${transactions.quantity})`,
-      })
-      .from(transactions)
-      .where(
-        and(
-          eq(transactions.type, "income"),
-          gte(transactions.timestamp, startOfMonth),
-          lte(transactions.timestamp, endOfMonth)
-        )
-      );
+  const result = await db
+    .select({
+      totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,
+      totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+    })
+    .from(transactions)
+    .where(
+      and(
+        gte(transactions.timestamp, startOfMonth),
+        lte(transactions.timestamp, endOfMonth)
+      )
+    );
 
-    const [totalExpenses] = await tx
-      .select({
-        totalExpenses: sql<number>`sum(${transactions.quantity})`,
-      })
-      .from(transactions)
-      .where(
-        and(
-          eq(transactions.type, "expense"),
-          gte(transactions.timestamp, startOfMonth),
-          lte(transactions.timestamp, endOfMonth)
-        )
-      );
-
-    return {
-      totalIncome: totalIncome.totalIncome,
-      totalExpenses: totalExpenses.totalExpenses,
-    };
-  });
+  return {
+    totalExpenses: result[0].totalExpenses,
+    totalIncome: result[0].totalIncome,
+    totalBalance:
+    Number(result[0].totalIncome) - (result[0].totalExpenses),
+  };
 }
 
 export default async function MonthlyBalanceCard() {
-  const { totalIncome, totalExpenses } = await getBalanceForMonth();
-  const totalBalance = totalIncome - totalExpenses;
+  const { totalIncome, totalExpenses, totalBalance } = await getBalanceForMonth();
   return (
     <Card>
       <CardHeader>
@@ -74,7 +60,7 @@ export default async function MonthlyBalanceCard() {
           <p
             className={cn(
               "text-lg font-semibold",
-              totalBalance > 0 ? "text-green-500" : "text-red-500"
+              totalBalance > 0 ? "text-green-500 dark:text-green-400" : "text-red-500 dark:text-red-400"
             )}
           >
             {moneyFormat(totalBalance)}

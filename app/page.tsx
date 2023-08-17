@@ -1,4 +1,5 @@
-import MonthlyBalanceCard from "@/components/monthly-balance-card";
+import { BalanceChart } from "@/components/balance-chart";
+import MonthlyBalanceCard from "@/components/month-summary-card";
 import { Overview } from "@/components/overview";
 import RecentTransactions from "@/components/recent-transactions";
 import SummaryCard from "@/components/summary-card";
@@ -11,7 +12,7 @@ import { z } from "zod";
 const transactionsSchema = z.array(
   z.object({
     day_of_week: z.number().transform((val) => getDayOfWeek(val)),
-    quantitySum: z.coerce.number(),
+    amountSum: z.coerce.number().transform((val) => (val < 0 ? -val : val)),
   })
 );
 
@@ -24,7 +25,7 @@ async function getOverviewData() {
     const spendings = await tx
       .select({
         day_of_week: sql<string>`weekday(${transactions.timestamp})`,
-        quantitySum: sql<number>`sum(${transactions.quantity})`,
+        amountSum: sql<number>`sum(${transactions.amount})`,
       })
       .from(transactions)
       .where(
@@ -39,7 +40,7 @@ async function getOverviewData() {
     const incomes = await tx
       .select({
         day_of_week: sql<string>`weekday(${transactions.timestamp})`,
-        quantitySum: sql<number>`sum(${transactions.quantity})`,
+        amountSum: sql<number>`sum(${transactions.amount})`,
       })
       .from(transactions)
       .where(
@@ -58,13 +59,34 @@ async function getOverviewData() {
   });
 }
 
+async function getBalanceData() {
+  const currentDate = new Date();
+  let monthAgo = new Date(currentDate);
+  monthAgo.setDate(currentDate.getDate() - 30);
+
+  return await db
+    .select({
+      date: sql<string>`date(${transactions.timestamp})`,
+    })
+    .from(transactions)
+    .where(
+      and(
+        gte(transactions.timestamp, monthAgo),
+        lte(transactions.timestamp, currentDate)
+      )
+    )
+    .groupBy(sql`date(${transactions.timestamp})`)
+    .orderBy(sql`date(${transactions.timestamp})`);
+}
+
 export type OverviewData = UnwrapPromise<ReturnType<typeof getOverviewData>>;
 
 export default async function Home() {
   const overviewData = await getOverviewData();
+  const balance = await getBalanceData();
   return (
     <main className="container mx-auto w-full space-y-10 py-10">
-      <div className="lg:grid grid-cols-8 gap-x-10 items-center">
+      <div className="lg:grid grid-cols-8 gap-x-10">
         <div className="lg:col-span-2">
           <SummaryCard />
         </div>
@@ -75,8 +97,8 @@ export default async function Home() {
           <RecentTransactions />
         </div>
       </div>
-
       <Overview data={overviewData} />
+      <BalanceChart />
     </main>
   );
 }

@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-const decimalValidator = z.string().regex(/^\d+(\.\d{1,2})?$/, {message: "Quantity must be in numeric format, max 2 numbers after a comma"});
+const decimalValidator = z
+  .string()
+  .regex(/^\d+(\.\d{1,2})?$/, {
+    message: "Amount must be in numeric format, max 2 numbers after a comma",
+  });
 
 export const transactionFormSchema = z.object({
   name: z
@@ -10,9 +14,10 @@ export const transactionFormSchema = z.object({
     })
     .max(256, {
       message: "Name of transaction must be atmost 256 character long.",
-    }).optional(),
+    })
+    .optional(),
   description: z.string().optional(),
-  quantity: decimalValidator,
+  amount: decimalValidator,
   categoryId: z.coerce.number(),
   type: z.enum(["expense", "income"]),
 });

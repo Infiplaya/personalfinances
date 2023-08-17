@@ -13,30 +13,24 @@ import { asc, eq, sql } from "drizzle-orm";
 import { Label } from "./ui/label";
 
 async function getTotalIncomeAndExpenses() {
-  return await db.transaction(async (tx) => {
-    const [totalIncome] = await tx
-      .select({
-        totalIncome: sql<number>`sum(${transactions.quantity})`,
-      })
-      .from(transactions)
-      .where(eq(transactions.type, "income"));
-    const [totalExpenses] = await tx
-      .select({
-        totalExpenses: sql<number>`sum(${transactions.quantity})`,
-      })
-      .from(transactions)
-      .where(eq(transactions.type, "expense"));
+  const result = await db
+    .select({
+      totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,
+      totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+    })
+    .from(transactions);
 
-    return {
-      totalIncome: totalIncome.totalIncome,
-      totalExpenses: totalExpenses.totalExpenses,
-    };
-  });
+  return {
+    totalExpenses: result[0].totalExpenses,
+    totalIncome: result[0].totalIncome,
+    totalBalance:
+    Number(result[0].totalIncome) - Number(result[0].totalExpenses),
+  };
 }
 
 export default async function SummaryCard() {
-  const { totalIncome, totalExpenses } = await getTotalIncomeAndExpenses();
-  const totalBalance = totalIncome - totalExpenses;
+  const { totalExpenses, totalIncome, totalBalance } =
+    await getTotalIncomeAndExpenses();
   return (
     <Card>
       <CardHeader>
@@ -56,7 +50,9 @@ export default async function SummaryCard() {
           <p
             className={cn(
               "text-lg font-semibold",
-              totalBalance > 0 ? "text-green-500" : "text-red-500"
+              totalBalance > 0
+                ? "text-green-500 dark:text-green-400"
+                : "text-red-500 dark:text-red-400"
             )}
           >
             {moneyFormat(totalBalance)}
