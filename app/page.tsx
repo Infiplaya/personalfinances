@@ -13,8 +13,9 @@ import { z } from "zod";
 
 const overviewSchema = z.array(
   z.object({
-    day: z.number().transform((val) => getDayOfWeek(Number(val))),
-    amountSum: z.string(),
+    totalIncome: z.string(),
+    totalExpenses: z.string(),
+    day: z.number().transform((val) => getDayOfWeek(val)),
   })
 );
 
@@ -23,44 +24,23 @@ async function getOverviewData(userId: string) {
   const sevenDaysAgo = new Date(currentDate);
   sevenDaysAgo.setDate(currentDate.getDate() - 7);
 
-  return await db.transaction(async (tx) => {
-    const spendings = await tx
-      .select({
-        day: sql<number>`weekday(${transactions.timestamp})`,
-        amountSum: sql<number>`sum(${transactions.amount})`,
-      })
-      .from(transactions)
-      .where(
-        and(
-          gte(transactions.timestamp, sevenDaysAgo),
-          lte(transactions.timestamp, currentDate),
-          eq(transactions.type, "expense"),
-          eq(transactions.userId, userId)
-        )
+  const result = await db
+    .select({
+      day: sql<number>`weekday(${transactions.timestamp})`,
+      totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,
+      totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+    })
+    .from(transactions)
+    .where(
+      and(
+        gte(transactions.timestamp, sevenDaysAgo),
+        lte(transactions.timestamp, currentDate),
+        eq(transactions.userId, userId)
       )
-      .groupBy(sql`weekday(${transactions.timestamp})`);
+    )
+    .groupBy(sql`weekday(${transactions.timestamp})`);
 
-    const incomes = await tx
-      .select({
-        day: sql<string>`weekday(${transactions.timestamp})`,
-        amountSum: sql<number>`sum(${transactions.amount})`,
-      })
-      .from(transactions)
-      .where(
-        and(
-          gte(transactions.timestamp, sevenDaysAgo),
-          lte(transactions.timestamp, currentDate),
-          eq(transactions.type, "income"),
-          eq(transactions.userId, userId)
-        )
-      )
-      .groupBy(sql`weekday(${transactions.timestamp})`);
-
-    return {
-      incomes: overviewSchema.parse(incomes),
-      spendings: overviewSchema.parse(spendings),
-    };
-  });
+  return overviewSchema.parse(result);
 }
 
 async function getBalanceData(userId: string) {

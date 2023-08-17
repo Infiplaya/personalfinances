@@ -8,29 +8,33 @@ import {
 } from "@/components/ui/card";
 import { db } from "@/db";
 import { transactions } from "@/db/schema/finances";
+import { authOptions } from "@/lib/auth/auth";
 import { cn, moneyFormat } from "@/lib/utils";
-import { asc, eq, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+import { getServerSession } from "next-auth";
 import { Label } from "./ui/label";
 
-async function getTotalIncomeAndExpenses() {
+async function getTotalIncomeAndExpenses(userId: string) {
   const result = await db
     .select({
       totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,
       totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
     })
-    .from(transactions);
+    .from(transactions)
+    .where(eq(transactions.userId, userId));
 
   return {
     totalExpenses: result[0].totalExpenses,
     totalIncome: result[0].totalIncome,
     totalBalance:
-    Number(result[0].totalIncome) - Number(result[0].totalExpenses),
+      Number(result[0].totalIncome) - Number(result[0].totalExpenses),
   };
 }
 
 export default async function SummaryCard() {
+  const session = await getServerSession(authOptions);
   const { totalExpenses, totalIncome, totalBalance } =
-    await getTotalIncomeAndExpenses();
+    await getTotalIncomeAndExpenses(session?.user.id as string);
   return (
     <Card>
       <CardHeader>

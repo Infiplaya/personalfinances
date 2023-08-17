@@ -14,7 +14,7 @@ export function Overview({ data }: { data: OverviewData }) {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={data.incomes}>
+              <BarChart data={data}>
                 <XAxis
                   dataKey="day"
                   stroke="#888888"
@@ -29,7 +29,7 @@ export function Overview({ data }: { data: OverviewData }) {
                   axisLine={false}
                   tickFormatter={(value) => `$${value}`}
                 />
-                <Bar dataKey="amountSum" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="totalIncome" fill="#22c55e" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -42,7 +42,7 @@ export function Overview({ data }: { data: OverviewData }) {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={data.spendings}>
+              <BarChart data={data}>
                 <XAxis
                   dataKey="day"
                   stroke="#888888"
@@ -57,7 +57,7 @@ export function Overview({ data }: { data: OverviewData }) {
                   axisLine={false}
                   tickFormatter={(value) => `$${value}`}
                 />
-                <Bar dataKey="amountSum" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="totalExpenses" fill="#ef4444" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

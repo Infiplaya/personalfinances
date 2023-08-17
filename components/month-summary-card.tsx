@@ -1,11 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/db";
 import { transactions } from "@/db/schema/finances";
+import { authOptions } from "@/lib/auth/auth";
 import { cn, moneyFormat } from "@/lib/utils";
 import { and, eq, gte, lte, sql } from "drizzle-orm";
+import { getServerSession } from "next-auth";
 import { Label } from "./ui/label";
 
-async function getBalanceForMonth(month?: number) {
+async function getBalanceForMonth(userId: string, month?: number) {
   const currentDate = new Date();
   const startOfMonth = new Date(
     currentDate.getFullYear(),
@@ -27,20 +29,23 @@ async function getBalanceForMonth(month?: number) {
     .where(
       and(
         gte(transactions.timestamp, startOfMonth),
-        lte(transactions.timestamp, endOfMonth)
+        lte(transactions.timestamp, endOfMonth),
+        eq(transactions.userId, userId)
       )
     );
 
   return {
     totalExpenses: result[0].totalExpenses,
     totalIncome: result[0].totalIncome,
-    totalBalance:
-    Number(result[0].totalIncome) - (result[0].totalExpenses),
+    totalBalance: Number(result[0].totalIncome) - result[0].totalExpenses,
   };
 }
 
 export default async function MonthlyBalanceCard() {
-  const { totalIncome, totalExpenses, totalBalance } = await getBalanceForMonth();
+  const session = await getServerSession(authOptions);
+  const { totalIncome, totalExpenses, totalBalance } = await getBalanceForMonth(
+    session?.user.id as string
+  );
   return (
     <Card>
       <CardHeader>
@@ -60,7 +65,9 @@ export default async function MonthlyBalanceCard() {
           <p
             className={cn(
               "text-lg font-semibold",
-              totalBalance > 0 ? "text-green-500 dark:text-green-400" : "text-red-500 dark:text-red-400"
+              totalBalance > 0
+                ? "text-green-500 dark:text-green-400"
+                : "text-red-500 dark:text-red-400"
             )}
           >
             {moneyFormat(totalBalance)}
