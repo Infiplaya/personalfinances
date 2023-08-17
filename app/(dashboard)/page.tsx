@@ -75,15 +75,12 @@ export default async function Home() {
       <SuccessToast message="Successfully logged in! Welcome back" />
       <div className="lg:grid grid-cols-12 gap-x-10">
         <div className="lg:col-span-3">
-          {/* @ts-expect-error Server Component */}
           <SummaryCard />
         </div>
         <div className="lg:col-span-3">
-          {/* @ts-expect-error Server Component */}
           <MonthlyBalanceCard />
         </div>
         <div className="lg:col-span-6">
-          {/* @ts-expect-error Server Component */}
           <RecentTransactions />
         </div>
       </div>
