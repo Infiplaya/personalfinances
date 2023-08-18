@@ -14,7 +14,7 @@ export function Sidebar() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="block w-full rounded-md px-3 py-1 pl-6 hover:bg-gray-100 dark:hover:bg-white/10"
+                className="block w-full rounded-md text-sm px-3 py-2 pl-6 hover:bg-gray-100 dark:hover:bg-white/10"
               >
                 {link.label}
               </Link>

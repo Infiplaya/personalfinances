@@ -137,9 +137,11 @@ export const columns: ColumnDef<TransactionWithCategory>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <AlertDialogTrigger>Delete</AlertDialogTrigger>
-              </DropdownMenuItem>
+
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem>Delete</DropdownMenuItem>
+              </AlertDialogTrigger>
+
               <DropdownMenuItem>
                 <Link href={`/transactions/${transaction.id}`}>
                   View details
@@ -152,25 +154,23 @@ export const columns: ColumnDef<TransactionWithCategory>[] = [
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
+                This action cannot be undone. This will permanently delete this transaction from the database.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction>
-                <form
-                  className="w-full"
-                  action={() => {
-                    deleteTransaction(transaction.id);
-                    toast.success('Succesfully deleted this transaction.');
-                  }}
-                >
-                  <Button type="submit" className="w-full">
+              <form
+                action={() => {
+                  deleteTransaction(transaction.id);
+                  toast.success('Succesfully deleted this transaction.');
+                }}
+              >
+                <AlertDialogAction asChild>
+                  <Button type="submit">
                     Delete
                   </Button>
-                </form>
-              </AlertDialogAction>
+                </AlertDialogAction>
+              </form>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
