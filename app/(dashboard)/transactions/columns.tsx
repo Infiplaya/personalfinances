@@ -78,7 +78,7 @@ export const columns: ColumnDef<TransactionWithCategory>[] = [
       const category = row.getValue('category') as Category;
 
       return (
-        <div className="font-medium">{category.name}</div>
+        <div className="font-medium">{category ? category.name : 'blank'}</div>
       );
     },
   },
