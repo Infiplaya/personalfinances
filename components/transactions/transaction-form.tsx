@@ -4,177 +4,187 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Button } from '@/components/ui/button';
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 import { Category } from '@/db/schema/finances';
 import {
-    TransactionForm,
-    transactionFormSchema,
+  TransactionForm,
+  transactionFormSchema,
 } from '@/lib/validation/transaction';
 import { Textarea } from '../ui/textarea';
 import { createNewTransaction } from '@/app/actions';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { CheckIcon } from 'lucide-react';
+import { CaretSortIcon } from '@radix-ui/react-icons';
+import { cn } from '@/lib/utils';
 
 export function TransactionForm({
-    categories,
-    closeModal,
+  categories,
+  closeModal,
+  type,
 }: {
-    categories: Category[];
-    closeModal?: () => void;
+  categories: Category[];
+  closeModal?: () => void;
+  type: 'expense' | 'income';
 }) {
-    const form = useForm<TransactionForm>({
-        resolver: zodResolver(transactionFormSchema),
-    });
+  const form = useForm<TransactionForm>({
+    resolver: zodResolver(transactionFormSchema),
+    defaultValues: {
+        type: type
+    }
+  });
 
-    const router = useRouter();
+  const router = useRouter();
 
-    return (
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(async (data) => {
-                    const error = await createNewTransaction(data);
-                    if (error) {
-                        toast.error(error);
-                    } else {
-                        if (closeModal) closeModal();
-                        toast.success('Created new transaction!');
-                    }
-                })}
-                className="space-y-8"
-            >
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Name (optional)</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+  return (
+    <Form {...form}>
+      <h3 className="py-4 font-semibold">Add new {type}</h3>
+      <form
+        onSubmit={form.handleSubmit(async (data) => {
+          const error = await createNewTransaction(data);
+          if (error) {
+            toast.error(error);
+          } else {
+            if (closeModal) closeModal();
+            toast.success('Created new transaction!');
+          }
+        })}
+        className="space-y-8"
+      >
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Amount of transaction"
+                  {...field}
+                  inputMode="numeric"
                 />
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Short description (optional)</FormLabel>
-                            <FormControl>
-                                <Textarea className="resize-none" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="categoryId"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Category</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                defaultValue={
-                                    field.value
-                                        ? field.value.toString()
-                                        : undefined
-                                }
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Category of transaction" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {categories.map((c) => (
-                                        <SelectItem
-                                            key={c.id}
-                                            value={c.id.toString()}
-                                        >
-                                            {c.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="amount"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Amount</FormLabel>
-                            <FormControl>
-                                <Input
-                                    placeholder="Amount of transaction"
-                                    {...field}
-                                    inputMode="numeric"
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name (optional)</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Short description (optional)</FormLabel>
+              <FormControl>
+                <Textarea className="resize-none" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-                <FormField
-                    control={form.control}
-                    name="type"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Transaction Type</FormLabel>
-                            <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                            >
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a transaction type" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="income">
-                                        Income
-                                    </SelectItem>
-                                    <SelectItem value="expense">
-                                        Expense
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div className="inline-flex w-full items-center justify-between">
+        <FormField
+          control={form.control}
+          name="categoryId"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Category</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
                     <Button
-                        type="submit"
-                        disabled={form.formState.isSubmitting}
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        'w-full justify-between',
+                        !field.value && 'text-muted-foreground'
+                      )}
                     >
-                        {form.formState.isSubmitting ? 'Submitting' : 'Submit'}
+                      {field.value
+                        ? categories.find(
+                            (category) => category.id === field.value
+                          )?.name
+                        : 'Select category'}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
-                </div>
-            </form>
-        </Form>
-    );
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput
+                      placeholder={`Search ${type}`}
+                      className="h-9"
+                    />
+                    <CommandEmpty>No category found.</CommandEmpty>
+                    <CommandGroup>
+                      {categories.map((category) => (
+                        <CommandItem
+                          value={category.name}
+                          key={category.id}
+                          onSelect={() => {
+                            form.setValue('categoryId', category.id);
+                          }}
+                        >
+                          {category.name}
+                          <CheckIcon
+                            className={cn(
+                              'ml-auto h-4 w-4',
+                              category.id === field.value
+                                ? 'opacity-100'
+                                : 'opacity-0'
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="inline-flex w-full items-center justify-between">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? 'Submitting' : 'Submit'}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
 }

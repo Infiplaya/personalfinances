@@ -5,20 +5,49 @@ import { TransactionForm } from '@/components/transactions/transaction-form';
 import { Category } from '@/db/schema/finances';
 import { useState } from 'react';
 import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function TransactionDialog({ categories }: { categories: Category[] }) {
-    const [open, setOpen] = useState(false);
-    return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger>
-                <Button>New Transaction</Button>
-            </DialogTrigger>
-            <DialogContent>
-                <TransactionForm
-                    categories={categories}
-                    closeModal={() => setOpen(false)}
-                />
-            </DialogContent>
-        </Dialog>
-    );
+  const [open, setOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
+    'expense'
+  );
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button>New Transaction </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Choose Type</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setSelectedType('expense')}>
+            <DialogTrigger className="w-full text-left">Expense</DialogTrigger>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setSelectedType('income')}>
+            <DialogTrigger className="w-full text-left">Income</DialogTrigger>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DialogContent>
+        <TransactionForm
+          categories={
+            selectedType === 'expense'
+              ? categories.filter((c) => c.type === 'expense')
+              : categories.filter((c) => c.type === 'income')
+          }
+          type={selectedType}
+          closeModal={() => setOpen(false)}
+        />
+      </DialogContent>
+    </Dialog>
+  );
 }

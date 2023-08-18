@@ -35,7 +35,7 @@ export const categories = mysqlTable(
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
-    description: text("description"),
+    type: mysqlEnum("type", ["expense", "income"]).notNull().default("expense"),
   },
   (categories) => ({
     nameIndex: uniqueIndex("name_idx").on(categories.name),
