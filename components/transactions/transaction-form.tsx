@@ -52,11 +52,9 @@ export function TransactionForm({
   const form = useForm<TransactionForm>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: {
-        type: type
-    }
+      type: type,
+    },
   });
-
-  const router = useRouter();
 
   return (
     <Form {...form}>
@@ -119,7 +117,7 @@ export function TransactionForm({
 
         <FormField
           control={form.control}
-          name="categoryId"
+          name="categoryName"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Category</FormLabel>
@@ -136,7 +134,7 @@ export function TransactionForm({
                     >
                       {field.value
                         ? categories.find(
-                            (category) => category.id === field.value
+                            (category) => category.name === field.value
                           )?.name
                         : 'Select category'}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -154,16 +152,16 @@ export function TransactionForm({
                       {categories.map((category) => (
                         <CommandItem
                           value={category.name}
-                          key={category.id}
+                          key={category.name}
                           onSelect={() => {
-                            form.setValue('categoryId', category.id);
+                            form.setValue('categoryName', category.name);
                           }}
                         >
                           {category.name}
                           <CheckIcon
                             className={cn(
                               'ml-auto h-4 w-4',
-                              category.id === field.value
+                              category.name === field.value
                                 ? 'opacity-100'
                                 : 'opacity-0'
                             )}

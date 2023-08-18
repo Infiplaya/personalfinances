@@ -1,10 +1,10 @@
-"use client";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import debounce from "lodash.debounce";
-import { Loader2 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import React, { useTransition } from "react";
+'use client';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import debounce from 'lodash.debounce';
+import { Loader2 } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import React, { useTransition } from 'react';
 
 export default function SearchTable() {
   const [isPending, startTransition] = useTransition();
@@ -15,12 +15,12 @@ export default function SearchTable() {
     const params = new URLSearchParams(window.location.search);
 
     if (term) {
-      params.set("name", term);
+      params.set('name', term);
     } else {
-      params.delete("name");
+      params.delete('name');
     }
-    params.delete("page");
-    params.delete("sort");
+    params.delete('page');
+    params.delete('sort');
 
     startTransition(() => {
       router.replace(`${pathname}?${params.toString()}`);
@@ -30,14 +30,15 @@ export default function SearchTable() {
 
   return (
     <div className="my-6">
-      <Label>Search Transactions</Label>
-      <div className="flex items-center mt-3">
+      <div className="flex items-center">
         <Input
           placeholder="Search by name..."
           onChange={(event) => handleDebouncedSearch(event.target.value)}
           className="max-w-sm"
         />
-        <div className="ml-4 -mt-2 w-4 h-4 text-gray-800 dark:text-gray-200">{isPending && <Loader2 />}</div>
+        <div className="-mt-2 ml-4 h-4 w-4 text-gray-800 dark:text-gray-200">
+          {isPending && <Loader2 />}
+        </div>
       </div>
     </div>
   );

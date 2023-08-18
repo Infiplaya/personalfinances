@@ -21,7 +21,7 @@ export const transactions = mysqlTable(
     description: text("description"),
     amount: decimal("amount", { precision: 10, scale: 2 }),
     userId: varchar("userId", { length: 255 }).notNull(),
-    categoryId: int("categoryId").notNull(),
+    categoryName: varchar("categoryName", { length: 255 }).notNull(),
     type: mysqlEnum("type", ["expense", "income"]).notNull(),
     timestamp: timestamp("timestamp").defaultNow(),
   },
@@ -72,8 +72,8 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     references: [users.id],
   }),
   category: one(categories, {
-    fields: [transactions.categoryId],
-    references: [categories.id],
+    fields: [transactions.categoryName],
+    references: [categories.name],
   }),
 }));
 

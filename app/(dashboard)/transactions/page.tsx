@@ -3,7 +3,17 @@ import { db } from '@/db';
 import { categories, Transaction, transactions } from '@/db/schema/finances';
 import { authOptions } from '@/lib/auth/auth';
 import { UnwrapPromise } from '@/lib/utils';
-import { eq, InferModel, like, sql } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  inArray,
+  InferModel,
+  like,
+  sql,
+} from 'drizzle-orm';
+import { L } from 'drizzle-orm/select.types.d-7da7fae0';
 import { getServerSession } from 'next-auth';
 import { columns } from './columns';
 import { DataTable } from './data-table';
@@ -20,12 +30,12 @@ type Column =
   | 'description'
   | 'amount'
   | 'userId'
-  | 'categoryId'
-  | 'category'
+  | 'categoryName'
   | 'type'
   | 'timestamp'
   | undefined;
 type Order = 'asc' | 'desc' | undefined;
+
 
 async function getTransactions(
   limit: number,
@@ -33,51 +43,37 @@ async function getTransactions(
   name: string | string[] | undefined,
   column: Column,
   order: Order,
+  categoriesFilter: string[],
+  typesFilter: any,
   userId: string
 ) {
-  const result = await db.query.transactions.findMany({
-    limit: limit,
-    offset: offset,
-    where: (transactions, { eq, and }) => {
-      if (typeof name === 'string') {
-        return and(
-          like(transactions.name, `%${name}%`),
-          eq(transactions.userId, userId)
-        );
-      } else {
-        return eq(transactions.userId, userId);
-      }
-    },
-    with: {
-      category: {
-        columns: {
-          name: true,
-        },
-      },
-    },
-    orderBy:
-      column === 'category'
-        ? (categories, { asc, desc }) => {
-            if (order === 'asc') {
-              return [asc(categories['name'])];
-            } else {
-              return [desc(categories['name'])];
-            }
-          }
-        : (transactions, { asc, desc }) => {
-            if (column && column in transactions) {
-              if (order === 'asc') {
-                return [asc(transactions[column])];
-              } else {
-                return [desc(transactions[column])];
-              }
-            } else {
-              return [desc(transactions.id)];
-            }
-          },
-  });
+  return await db
+    .select()
+    .from(transactions)
+    .limit(limit)
+    .offset(offset)
+    .where(
+      and(
+        typeof name === 'string'
+          ? like(transactions.name, `%${name}%`)
+          : undefined,
 
-  return result;
+        eq(transactions.userId, userId),
+        categoriesFilter.length > 0
+          ? inArray(transactions.categoryName, categoriesFilter)
+          : undefined,
+        typesFilter.length > 0
+          ? inArray(transactions.type, typesFilter)
+          : undefined
+      )
+    )
+    .orderBy(
+      column && column in transactions
+        ? order === 'asc'
+          ? asc(transactions[column])
+          : desc(transactions[column])
+        : desc(transactions.id)
+    );
 }
 
 export type TransactionWithCategory = UnwrapPromise<
@@ -98,8 +94,17 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   const page = searchParams['page'] ?? '1';
   const per_page = searchParams['per_page'] ?? '10';
-  const name = searchParams['name'];
-  const sort = searchParams['sort'];
+  const { sort, name, category, type } = searchParams;
+
+  const categoriesFilter =
+    typeof category === 'string'
+      ? (category.toLowerCase().split('.') as Transaction['categoryName'][])
+      : [];
+
+  const typesFilter =
+    typeof type === 'string'
+      ? (type.toLowerCase().split('.') as Transaction['type'][])
+      : [];
 
   const limit = typeof per_page === 'string' ? Number(per_page) : 1;
   const offset =
@@ -123,8 +128,11 @@ export default async function TransactionsPage({ searchParams }: Props) {
     name,
     column,
     order,
+    categoriesFilter,
+    typesFilter,
     session?.user.id as string
   );
+
   const transactionsCount = await countTransactions(session?.user.id as string);
 
   const categoriesData = await db.select().from(categories);
@@ -135,6 +143,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
         <TransactionDialog categories={categoriesData} />
       </div>
       <DataTable
+        categories={categoriesData}
         columns={columns}
         data={transactions}
         count={transactionsCount}

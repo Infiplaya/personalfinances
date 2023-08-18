@@ -18,7 +18,7 @@ export const transactionFormSchema = z.object({
     .optional(),
   description: z.string().optional(),
   amount: decimalValidator,
-  categoryId: z.coerce.number(),
+  categoryName: z.string(),
   type: z.enum(["expense", "income"]),
 });
 

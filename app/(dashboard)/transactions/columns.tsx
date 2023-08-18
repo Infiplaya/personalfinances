@@ -30,9 +30,8 @@ import Link from 'next/link';
 import { dateFormat, moneyFormat } from '@/lib/utils';
 import { deleteTransaction } from '@/app/actions';
 import { toast } from 'sonner';
-import { TransactionWithCategory } from './page';
 
-export const columns: ColumnDef<TransactionWithCategory>[] = [
+export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -62,7 +61,7 @@ export const columns: ColumnDef<TransactionWithCategory>[] = [
     ),
   },
   {
-    accessorKey: 'category',
+    accessorKey: 'categoryName',
     header: ({ column }) => (
       <div>
         <Button
@@ -73,14 +72,7 @@ export const columns: ColumnDef<TransactionWithCategory>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       </div>
-    ),
-    cell: ({ row }) => {
-      const category = row.getValue('category') as Category;
-
-      return (
-        <div className="font-medium">{category ? category.name : 'blank'}</div>
-      );
-    },
+    )
   },
   {
     accessorKey: 'amount',
@@ -154,7 +146,8 @@ export const columns: ColumnDef<TransactionWithCategory>[] = [
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete this transaction from the database.
+                This action cannot be undone. This will permanently delete this
+                transaction from the database.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -166,9 +159,7 @@ export const columns: ColumnDef<TransactionWithCategory>[] = [
                 }}
               >
                 <AlertDialogAction asChild>
-                  <Button type="submit">
-                    Delete
-                  </Button>
+                  <Button type="submit">Delete</Button>
                 </AlertDialogAction>
               </form>
             </AlertDialogFooter>
