@@ -30,17 +30,20 @@ export function LoginForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(async (data) => {
-          console.log(data);
           try {
             const res = await signIn("credentials", {
               redirect: false,
               email: data.email,
               password: data.password,
             });
-            console.log(res);
+
 
             if (!res?.error) {
               router.push("/?success=true");
+            } else {
+              toast.error("Invalid Credentials! Try Again.")
+              form.setValue("email", "");
+              form.setValue("password", "");
             }
           } catch (e) {
             console.log(e);
