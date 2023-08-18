@@ -7,7 +7,7 @@ import { CardTitleWithTooltip } from './card-title-with-tooltip';
 
 export function Overview({ data }: { data: OverviewData }) {
     return (
-        <div className="flex gap-10">
+        <div className="lg:flex lg:gap-10 space-y-10 lg:space-y-0">
             <div className="flex-1">
                 <Card>
                     <CardHeader>

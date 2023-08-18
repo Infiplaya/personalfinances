@@ -40,7 +40,6 @@ export function TransactionForm({
     categories: Category[];
     closeModal?: () => void;
 }) {
-    const [error, setError] = useState('');
     const form = useForm<TransactionForm>({
         resolver: zodResolver(transactionFormSchema),
     });
@@ -167,16 +166,13 @@ export function TransactionForm({
                         </FormItem>
                     )}
                 />
-                <div className="inline-flex justify-between items-center w-full">
+                <div className="inline-flex w-full items-center justify-between">
                     <Button
                         type="submit"
                         disabled={form.formState.isSubmitting}
                     >
                         {form.formState.isSubmitting ? 'Submitting' : 'Submit'}
                     </Button>
-                    <p className="text-rose-500 text-sm dark:text-rose-400">
-                        {error}
-                    </p>
                 </div>
             </form>
         </Form>

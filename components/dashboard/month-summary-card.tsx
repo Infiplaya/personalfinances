@@ -49,7 +49,7 @@ export default async function MonthlyBalanceCard() {
     return (
         <Card>
             <CardHeader>
-                <CardTitleWithTooltip message='Summary of incomes and spendings this month.'>
+                <CardTitleWithTooltip message="Summary of incomes and spendings this month.">
                     <CardTitle>This Month</CardTitle>
                 </CardTitleWithTooltip>
             </CardHeader>

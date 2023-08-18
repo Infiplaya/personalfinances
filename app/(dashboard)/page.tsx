@@ -63,9 +63,9 @@ export default async function Home() {
     const overviewData = await getOverviewData(session?.user.id as string);
     const balanceData = await getBalanceData(session?.user.id as string);
     return (
-        <main className="py-10 space-y-10">
+        <main className="space-y-10 py-10">
             <SuccessToast message="Successfully logged in! Welcome back" />
-            <div className="lg:grid grid-cols-12 gap-x-10">
+            <div className="grid-cols-12 gap-x-10 space-y-10 lg:grid lg:space-y-0">
                 <div className="lg:col-span-3">
                     <SummaryCard />
                 </div>
