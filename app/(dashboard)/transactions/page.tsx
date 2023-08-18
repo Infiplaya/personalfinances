@@ -2,7 +2,8 @@ import { TransactionDialog } from '@/components/transactions/transaction-dialog'
 import { db } from '@/db';
 import { categories, Transaction, transactions } from '@/db/schema/finances';
 import { authOptions } from '@/lib/auth/auth';
-import { eq, like, sql } from 'drizzle-orm';
+import { UnwrapPromise } from '@/lib/utils';
+import { eq, InferModel, like, sql } from 'drizzle-orm';
 import { getServerSession } from 'next-auth';
 import { columns } from './columns';
 import { DataTable } from './data-table';
@@ -20,6 +21,7 @@ type Column =
   | 'amount'
   | 'userId'
   | 'categoryId'
+  | 'category'
   | 'type'
   | 'timestamp'
   | undefined;
@@ -33,7 +35,7 @@ async function getTransactions(
   order: Order,
   userId: string
 ) {
-  return await db.query.transactions.findMany({
+  const result = await db.query.transactions.findMany({
     limit: limit,
     offset: offset,
     where: (transactions, { eq, and }) => {
@@ -47,21 +49,40 @@ async function getTransactions(
       }
     },
     with: {
-      category: true,
+      category: {
+        columns: {
+          name: true,
+        },
+      },
     },
-    orderBy: (transactions, { asc, desc }) => {
-      if (column && column in transactions) {
-        if (order === 'asc') {
-          return [asc(transactions[column])];
-        } else {
-          return [desc(transactions[column])];
-        }
-      } else {
-        return [desc(transactions.id)];
-      }
-    },
+    orderBy:
+      column === 'category'
+        ? (categories, { asc, desc }) => {
+            if (order === 'asc') {
+              return [asc(categories['name'])];
+            } else {
+              return [desc(categories['name'])];
+            }
+          }
+        : (transactions, { asc, desc }) => {
+            if (column && column in transactions) {
+              if (order === 'asc') {
+                return [asc(transactions[column])];
+              } else {
+                return [desc(transactions[column])];
+              }
+            } else {
+              return [desc(transactions.id)];
+            }
+          },
   });
+
+  return result;
 }
+
+export type TransactionWithCategory = UnwrapPromise<
+  ReturnType<typeof getTransactions>
+>[number];
 
 async function countTransactions(userId: string) {
   const count = await db

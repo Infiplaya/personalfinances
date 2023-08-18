@@ -1,22 +1,23 @@
-"use server";
+'use server';
 
-import { db } from "@/db";
-import { users } from "@/db/schema/auth";
-import { balances, transactions } from "@/db/schema/finances";
-import { authOptions } from "@/lib/auth/auth";
-import { TransactionForm } from "@/lib/validation/transaction";
-import { eq, InferModel } from "drizzle-orm";
-import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
-import { hash } from "bcryptjs";
-import { RegisterForm } from "@/lib/validation/auth";
-import { v4 as uuidv4 } from "uuid";
+import { db } from '@/db';
+import { users } from '@/db/schema/auth';
+import { balances, transactions } from '@/db/schema/finances';
+import { authOptions } from '@/lib/auth/auth';
+import { TransactionForm } from '@/lib/validation/transaction';
+import { eq, InferModel } from 'drizzle-orm';
+import { getServerSession } from 'next-auth';
+import { revalidatePath } from 'next/cache';
+import { hash } from 'bcryptjs';
+import { RegisterForm } from '@/lib/validation/auth';
+import { v4 as uuidv4 } from 'uuid';
+import { toast } from 'sonner';
 
 export async function registerUser(formData: RegisterForm) {
   try {
     const hashed_password = await hash(formData.password, 12);
 
-    type NewUser = InferModel<typeof users, "insert">;
+    type NewUser = InferModel<typeof users, 'insert'>;
     const insertUser = async (user: NewUser) => {
       return db.insert(users).values(user);
     };
@@ -43,7 +44,6 @@ export async function registerUser(formData: RegisterForm) {
   }
 }
 
-
 export async function createNewTransaction(formData: TransactionForm) {
   const session = await getServerSession(authOptions);
   if (!session?.user.id) throw new Error();
@@ -59,7 +59,7 @@ export async function createNewTransaction(formData: TransactionForm) {
     });
 
     const amount =
-      formData.type === "expense"
+      formData.type === 'expense'
         ? -Number(formData.amount)
         : Number(formData.amount);
 
@@ -73,8 +73,19 @@ export async function createNewTransaction(formData: TransactionForm) {
     // if it exist then update it
   } catch (e) {
     console.log(e);
-    return "Something went wrong! Try again later...";
+    return 'Something went wrong! Try again later...';
   }
 
-  revalidatePath("/transactions");
+  revalidatePath('/transactions');
+}
+
+export async function deleteTransaction(transactionId: number) {
+  try {
+    await db
+      .delete(transactions)
+      .where(eq(transactions.id, transactionId));
+    revalidatePath('/transactions');
+  } catch (e) {
+    console.log(e);
+  }
 }
