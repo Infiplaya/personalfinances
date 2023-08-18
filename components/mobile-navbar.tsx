@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { cn, links } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { ThemeSwitcher } from './theme-switcher';
 
 export default function MobileNavbar() {
   const [open, setOpen] = useState(false);
@@ -25,39 +26,40 @@ export default function MobileNavbar() {
       </SheetTrigger>
       <SheetContent className="w-full lg:hidden" side="right">
         <SheetHeader>
-          <SheetTitle className="text-left">
+          <div className="flex items-center justify-between px-12">
+            <SheetTitle className="text-left">
+              <Link
+                onClick={() => {
+                  router.push('/');
+                  setOpen(false);
+                }}
+                href="/"
+              >
+                Home
+              </Link>
+            </SheetTitle>
+            <ThemeSwitcher />
+          </div>
+        </SheetHeader>
+        <ScrollArea className="h-screen w-full p-4">
+          {links.map((link) => (
             <Link
+              key={link.href}
               onClick={() => {
-                router.push('/');
+                router.push(link.href.toString());
                 setOpen(false);
               }}
-              href="/"
+              className={cn(
+                'mt-4 block w-full rounded-lg py-2 pl-8 text-left text-base font-light text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-white/10',
+                path === link.href &&
+                  'bg-indigo-500/25 hover:bg-indigo-500/25 dark:bg-indigo-500/50 dark:hover:bg-indigo-500/50'
+              )}
+              href={link.href}
             >
-              Home
+              {link.label}
             </Link>
-          </SheetTitle>
-          <SheetDescription>
-            <ScrollArea className="h-screen w-full p-4">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  onClick={() => {
-                    router.push(link.href.toString());
-                    setOpen(false);
-                  }}
-                  className={cn(
-                    'mt-4 block w-full rounded-lg py-2 pl-8 text-left text-base font-light text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-white/10',
-                    path === link.href &&
-                      'bg-indigo-500/25 hover:bg-indigo-500/25 dark:bg-indigo-500/50 dark:hover:bg-indigo-500/50'
-                  )}
-                  href={link.href}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </ScrollArea>
-          </SheetDescription>
-        </SheetHeader>
+          ))}
+        </ScrollArea>
       </SheetContent>
     </Sheet>
   );
