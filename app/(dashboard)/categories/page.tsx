@@ -1,12 +1,11 @@
 export const revalidate = 24000;
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { db } from '@/db';
-import { categories } from '@/db/schema/finances';
+import { getCategories } from '@/db/queries/categories';
 import Link from 'next/link';
 
 export default async function CategoriesPage() {
-  const categoriesData = await db.select().from(categories);
+  const categoriesData = await getCategories();
   return (
     <div className="space-y-10 py-10">
       <div className="grid lg:grid-cols-2 lg:gap-x-10">

@@ -2,9 +2,8 @@ import { TransactionDialog } from '@/components/transactions/transaction-dialog'
 import { getCategories } from '@/db/queries/categories';
 
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
-import { categories, Transaction, transactions } from '@/db/schema/finances';
+import { Transaction } from '@/db/schema/finances';
 import { authOptions } from '@/lib/auth/auth';
-import { eq, sql } from 'drizzle-orm';
 import { getServerSession } from 'next-auth';
 import { columns } from './columns';
 import { DataTable } from './data-table';
