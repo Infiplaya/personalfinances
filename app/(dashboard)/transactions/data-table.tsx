@@ -76,9 +76,10 @@ export function DataTable<TData, TValue>({
   const transactionsToDelete = table
     .getRowModel()
     .rows.filter((row) => rowSelection[Number(row.id)])
-    .map((row) => row.original.id);
+    .map((row) => (row as { original: { id: number } }).original.id);
 
   const transactionsToDeleteIds = Object.values(transactionsToDelete);
+
 
   function handleSort(id: string, sortType: 'desc' | 'asc' | boolean) {
     if (id === 'select') return;
