@@ -11,18 +11,10 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
-interface PaginationControlsProps {
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-  totalPages: number;
-}
-
 export function RowsControls({}) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
-  const perPage = searchParams.get("per_page") ?? "10";
 
   function handleTableRows(value: string) {
     const params = new URLSearchParams(window.location.search);
@@ -37,7 +29,8 @@ export function RowsControls({}) {
   return (
     <Select
       onValueChange={(value) => handleTableRows(value)}
-      defaultValue={perPage}
+      defaultValue={"10"}
+      disabled={isPending}
     >
       <div className="inline-flex items-center space-x-4">
         <Label className="whitespace-nowrap">Rows Per Page</Label>

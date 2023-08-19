@@ -5,7 +5,7 @@ import { users } from '@/db/schema/auth';
 import { balances, transactions } from '@/db/schema/finances';
 import { authOptions } from '@/lib/auth/auth';
 import { TransactionForm } from '@/lib/validation/transaction';
-import { eq, InferModel } from 'drizzle-orm';
+import { eq, inArray, InferModel } from 'drizzle-orm';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { hash } from 'bcryptjs';
@@ -84,6 +84,17 @@ export async function deleteTransaction(transactionId: number) {
     await db
       .delete(transactions)
       .where(eq(transactions.id, transactionId));
+    revalidatePath('/transactions');
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function deleteTransactions(transactionsIds: number[]) {
+  try {
+    await db
+      .delete(transactions)
+      .where(inArray(transactions.id, transactionsIds));
     revalidatePath('/transactions');
   } catch (e) {
     console.log(e);

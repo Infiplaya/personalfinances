@@ -47,7 +47,6 @@ export function DataTableFacetedFilter<TData, TValue>({
 
   const newParam =
     title === 'Category' ? params.get('category') : params.get('type');
-  console.log(newParam);
   if (newParam) {
     selectedValues.add(newParam);
   }

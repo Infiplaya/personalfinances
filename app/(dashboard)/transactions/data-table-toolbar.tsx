@@ -3,15 +3,22 @@
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { DataTableFacetedFilter } from './data-table-filter';
 import { Category } from '@/db/schema/finances';
 import SearchTable from './search-table';
-import { Router } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { ChevronDown } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import { RowsControls } from './data-table-rows';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -36,8 +43,8 @@ export function DataTableToolbar<TData>({
     return filteredTypes.includes(category.type);
   });
   return (
-    <div className="flex items-center justify-between">
-      <div className="mb-3 flex flex-1 items-center space-x-2">
+    <div className="flex flex-1 items-center justify-between space-x-4">
+      <div className='flex items-center space-x-3'>
         <SearchTable />
         {table.getColumn('categoryName') && (
           <DataTableFacetedFilter
@@ -76,6 +83,36 @@ export function DataTableToolbar<TData>({
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
+      </div>
+      <div className='hidden lg:block space-x-12'>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columns
+              <ChevronDown className="ml-2 h-4 w-4 text-gray-600 dark:text-gray-400" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <RowsControls />
       </div>
     </div>
   );

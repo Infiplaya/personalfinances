@@ -10,7 +10,7 @@ interface PaginationControlsProps {
   totalPages: number;
 }
 
-export function PaginationControls({
+export function DataTablePagination({
   hasNextPage,
   hasPrevPage,
   totalPages,

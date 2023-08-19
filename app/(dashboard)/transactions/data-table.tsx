@@ -7,6 +7,7 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
+  VisibilityState,
 } from '@tanstack/react-table';
 
 import {
@@ -19,11 +20,12 @@ import {
 } from '@/components/ui/table';
 import { useState, useTransition } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import SearchTable from './search-table';
-import { PaginationControls } from './data-table-pagination';
+import { DataTablePagination } from './data-table-pagination';
 import { RowsControls } from './data-table-rows';
 import { DataTableToolbar } from './data-table-toolbar';
-import { Category } from '@/db/schema/finances';
+import { Category, Transaction } from '@/db/schema/finances';
+import { Button } from '@/components/ui/button';
+import { deleteTransactions } from '@/app/actions';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,13 +49,20 @@ export function DataTable<TData, TValue>({
   const page = searchParams?.get('page') ?? '1';
   const per_page = searchParams?.get('per_page') ?? '10';
 
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState<Record<number, boolean>>({});
+
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      columnVisibility,
+      rowSelection,
     },
     manualSorting: true,
     manualFiltering: true,
@@ -64,7 +73,15 @@ export function DataTable<TData, TValue>({
   const end = start + Number(per_page);
   const totalPages = Math.ceil(count / Number(per_page));
 
+  const transactionsToDelete = table
+    .getRowModel()
+    .rows.filter((row) => rowSelection[Number(row.id)])
+    .map((row) => row.original.id);
+
+  const transactionsToDeleteIds = Object.values(transactionsToDelete);
+
   function handleSort(id: string, sortType: 'desc' | 'asc' | boolean) {
+    if (id === 'select') return;
     const params = new URLSearchParams(window.location.search);
     params.set('sort', `${id}.${sortType == 'asc' ? 'desc' : 'asc'}`);
 
@@ -74,11 +91,22 @@ export function DataTable<TData, TValue>({
   }
   return (
     <>
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col space-x-3 lg:flex-row lg:items-center lg:justify-between">
         <DataTableToolbar table={table} categories={categories} />
-        <div className="hidden lg:block">
-          <RowsControls />
-        </div>
+        {Object.keys(rowSelection).length > 0 ? (
+          <Button
+            size="sm"
+            onClick={() =>
+              startTransition(() => {
+                deleteTransactions(transactionsToDeleteIds);
+                setRowSelection({});
+              })
+            }
+            variant="destructive"
+          >
+            Delete
+          </Button>
+        ) : null}
       </div>
 
       <div className="rounded-md border dark:border-gray-800">
@@ -140,8 +168,15 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="mt-10 flex flex-col items-center space-y-3 lg:flex-row lg:justify-between lg:space-y-0">
-        <RowsControls />
-        <PaginationControls
+        <div className="space-y-3">
+          <RowsControls />
+          <div className="flex-1 text-sm text-gray-700 dark:text-gray-200">
+            {table.getFilteredSelectedRowModel().rows.length} of{' '}
+            {table.getFilteredRowModel().rows.length} row(s) selected.
+          </div>
+        </div>
+
+        <DataTablePagination
           hasNextPage={end < count}
           hasPrevPage={start > 0}
           totalPages={totalPages}

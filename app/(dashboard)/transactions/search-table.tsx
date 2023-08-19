@@ -1,6 +1,5 @@
 'use client';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import debounce from 'lodash.debounce';
 import { Loader2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
