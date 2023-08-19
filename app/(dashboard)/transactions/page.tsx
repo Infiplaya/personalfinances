@@ -1,19 +1,10 @@
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
-import { db } from '@/db';
+import { getCategories } from '@/db/queries/categories';
+
+import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { categories, Transaction, transactions } from '@/db/schema/finances';
 import { authOptions } from '@/lib/auth/auth';
-import { UnwrapPromise } from '@/lib/utils';
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  inArray,
-  InferModel,
-  like,
-  sql,
-} from 'drizzle-orm';
-import { L } from 'drizzle-orm/select.types.d-7da7fae0';
+import { eq, sql } from 'drizzle-orm';
 import { getServerSession } from 'next-auth';
 import { columns } from './columns';
 import { DataTable } from './data-table';
@@ -23,72 +14,6 @@ interface Props {
     [key: string]: string | string[] | undefined;
   };
 }
-
-type Column =
-  | 'id'
-  | 'name'
-  | 'description'
-  | 'amount'
-  | 'userId'
-  | 'categoryName'
-  | 'type'
-  | 'timestamp'
-  | undefined;
-type Order = 'asc' | 'desc' | undefined;
-
-
-async function getTransactions(
-  limit: number,
-  offset: number,
-  name: string | string[] | undefined,
-  column: Column,
-  order: Order,
-  categoriesFilter: string[],
-  typesFilter: any,
-  userId: string
-) {
-  return await db
-    .select()
-    .from(transactions)
-    .limit(limit)
-    .offset(offset)
-    .where(
-      and(
-        typeof name === 'string'
-          ? like(transactions.name, `%${name}%`)
-          : undefined,
-
-        eq(transactions.userId, userId),
-        categoriesFilter.length > 0
-          ? inArray(transactions.categoryName, categoriesFilter)
-          : undefined,
-        typesFilter.length > 0
-          ? inArray(transactions.type, typesFilter)
-          : undefined
-      )
-    )
-    .orderBy(
-      column && column in transactions
-        ? order === 'asc'
-          ? asc(transactions[column])
-          : desc(transactions[column])
-        : desc(transactions.id)
-    );
-}
-
-export type TransactionWithCategory = UnwrapPromise<
-  ReturnType<typeof getTransactions>
->[number];
-
-async function countTransactions(userId: string) {
-  const count = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(transactions)
-    .where(eq(transactions.userId, userId));
-
-  return count[0].count;
-}
-
 export default async function TransactionsPage({ searchParams }: Props) {
   const session = await getServerSession(authOptions);
 
@@ -135,7 +60,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   const transactionsCount = await countTransactions(session?.user.id as string);
 
-  const categoriesData = await db.select().from(categories);
+  const categoriesData = await getCategories();
 
   return (
     <main className="mx-auto py-10">

@@ -41,4 +41,8 @@ export const links = [
     href: '/transactions',
     label: 'Transactions',
   },
+  {
+    href: '/categories',
+    label: 'Categories',
+  }
 ];
