@@ -46,12 +46,12 @@ export function DataTableFacetedFilter<TData, TValue>({
   const params = new URLSearchParams(window.location.search);
 
   const newParam =
-      title === 'Category' ? params.get('category') : params.get('type');
-    console.log(newParam)
-    if (newParam) {
-      selectedValues.add(newParam);
-    }
-    
+    title === 'Category' ? params.get('category') : params.get('type');
+  console.log(newParam);
+  if (newParam) {
+    selectedValues.add(newParam);
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -104,6 +104,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                 return (
                   <CommandItem
                     key={option.name}
+                    disabled={isPending}
                     onSelect={() => {
                       if (isSelected) {
                         selectedValues.delete(option.name);
