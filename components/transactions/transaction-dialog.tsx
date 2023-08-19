@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { PlusCircle } from 'lucide-react';
 
 export function TransactionDialog({ categories }: { categories: Category[] }) {
   const [open, setOpen] = useState(false);
@@ -23,7 +24,8 @@ export function TransactionDialog({ categories }: { categories: Category[] }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <Button>New Transaction </Button>
+          <Button className="hidden lg:block">New Transaction </Button>
+          <PlusCircle className="lg:hidden" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Choose Type</DropdownMenuLabel>

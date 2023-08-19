@@ -44,7 +44,7 @@ export function DataTableToolbar<TData>({
   });
   return (
     <div className="flex flex-1 items-center justify-between space-x-4">
-      <div className='flex items-center space-x-3'>
+      <div className='lg:flex items-center lg:space-x-3 mb-6 lg:mb-0'>
         <SearchTable />
         {table.getColumn('categoryName') && (
           <DataTableFacetedFilter

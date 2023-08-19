@@ -46,3 +46,20 @@ export const links = [
     label: 'Categories',
   }
 ];
+
+export function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[\s]+/g, '-') // Replace spaces with hyphens
+    .replace(/[^\w\-]+/g, '') // Remove non-word characters except hyphens
+    .replace(/\-\-+/g, '-') // Replace consecutive hyphens with a single hyphen
+    .trim(); // Remove leading and trailing spaces
+}
+
+// Function to unslugify a string
+export function unslugify(slug: string): string {
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}

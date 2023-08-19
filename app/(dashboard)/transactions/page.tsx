@@ -63,7 +63,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   return (
     <main className="mx-auto py-10">
-      <div className="my-6 flex w-full justify-end">
+      <div className="px-3 flex w-full lg:my-6 justify-end">
         <TransactionDialog categories={categoriesData} />
       </div>
       <DataTable
