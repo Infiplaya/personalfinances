@@ -2,7 +2,6 @@ export const revalidate = 24000;
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getCategories } from '@/db/queries/categories';
-import { slugify } from '@/lib/utils';
 import Link from 'next/link';
 
 export default async function CategoriesPage() {
@@ -20,7 +19,7 @@ export default async function CategoriesPage() {
                 c.type === 'income' ? (
                   <Link
                     key={c.id}
-                    href={`/categories/${slugify(c.name)}`}
+                    href={`/categories/${c.id}`}
                     className="block rounded-md py-2 pl-6 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     {c.name}
@@ -40,7 +39,7 @@ export default async function CategoriesPage() {
                 c.type === 'expense' ? (
                   <Link
                     key={c.id}
-                    href={`/categories/${slugify(c.name)}`}
+                    href={`/categories/${c.id}`}
                     className="block rounded-md py-2 pl-6 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     {c.name}
