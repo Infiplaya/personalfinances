@@ -62,6 +62,7 @@ specifiers:
   typescript: 5.1.6
   undici: ^5.23.0
   uuid: ^9.0.0
+  vaul: ^0.3.7
   zod: ^3.21.4
 
 dependencies:
@@ -117,6 +118,7 @@ dependencies:
   typescript: 5.1.6
   undici: 5.23.0
   uuid: 9.0.0
+  vaul: 0.3.7_gltvt74xzh7f5lvw2hzxriz5bu
   zod: 3.21.4
 
 devDependencies:
@@ -6006,6 +6008,20 @@ packages:
   /uuid/9.0.0:
     resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
+    dev: false
+
+  /vaul/0.3.7_gltvt74xzh7f5lvw2hzxriz5bu:
+    resolution: {integrity: sha512-1XrxVz5A6b4k1xYCLF63SQ8A4Fepwt71CkAcIUCXosgjZyj9kRWYsTov6ca2cI6FV20dXOJnlIdMycZvavYJlg==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      '@radix-ui/react-dialog': 1.0.4_gltvt74xzh7f5lvw2hzxriz5bu
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
     dev: false
 
   /victory-vendor/36.6.11:

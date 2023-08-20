@@ -64,6 +64,7 @@
     "typescript": "5.1.6",
     "undici": "^5.23.0",
     "uuid": "^9.0.0",
+    "vaul": "^0.3.7",
     "zod": "^3.21.4"
   },
   "devDependencies": {

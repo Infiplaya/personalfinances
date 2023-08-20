@@ -25,17 +25,21 @@ export function TransactionDialog({ categories }: { categories: Category[] }) {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Button className="hidden lg:block">New Transaction </Button>
-          <PlusCircle className="lg:hidden" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Choose Type</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setSelectedType('expense')}>
-            <DialogTrigger className="w-full text-left">Expense</DialogTrigger>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setSelectedType('income')}>
-            <DialogTrigger className="w-full text-left">Income</DialogTrigger>
-          </DropdownMenuItem>
+          <DialogTrigger className="w-full text-left" asChild>
+            <DropdownMenuItem onClick={() => setSelectedType('expense')}>
+              Expense
+            </DropdownMenuItem>
+          </DialogTrigger>
+
+          <DialogTrigger className="w-full text-left" asChild>
+            <DropdownMenuItem onClick={() => setSelectedType('income')}>
+              Income
+            </DropdownMenuItem>
+          </DialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
 

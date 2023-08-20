@@ -1,3 +1,4 @@
+import { TransactionDrawer } from '@/components/drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
 
@@ -63,8 +64,11 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   return (
     <main className="mx-auto py-10">
-      <div className="px-3 flex w-full lg:my-6 justify-end">
+      <div className="flex w-full justify-end px-3 lg:my-6">
         <TransactionDialog categories={categoriesData} />
+        <div className="lg:hidden">
+          <TransactionDrawer categories={categoriesData} />
+        </div>
       </div>
       <DataTable
         categories={categoriesData}
