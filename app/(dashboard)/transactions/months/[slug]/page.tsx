@@ -1,22 +1,9 @@
-
-
 import { TransactionDrawer } from '@/components/drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
 import { TransactionByMonth } from './transactions-by-month';
 
-interface Props {
-    searchParams: {
-      [key: string]: string | string[] | undefined;
-    };
-  }
-
-export default async function TransactionsPage({ searchParams }: Props) {
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-
-  const month = Number(searchParams['month']) ?? currentMonth;
-
+export default async function MonthPage({params}: {params: {slug: string}}) {
   const categoriesData = await getCategories();
 
   return (
@@ -27,7 +14,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
           <TransactionDrawer categories={categoriesData} />
         </div>
       </div>
-      <TransactionByMonth month={month} />
+      <TransactionByMonth month={currentMonth} />
     </main>
   );
 }

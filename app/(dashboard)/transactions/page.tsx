@@ -5,7 +5,9 @@ import { getCategories } from '@/db/queries/categories';
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { authOptions } from '@/lib/auth/auth';
+import { getMonth } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
+import Link from 'next/link';
 import { columns } from './columns';
 import { DataTable } from './data-table';
 
@@ -59,11 +61,15 @@ export default async function TransactionsPage({ searchParams }: Props) {
   );
 
   const transactionsCount = await countTransactions(session?.user.id as string);
+  
 
   const categoriesData = await getCategories();
 
   return (
     <main className="mx-auto py-10">
+      <Link href={`/transactions/months`}>
+      Months Summary
+      </Link>
       <div className="flex w-full justify-end px-3 lg:my-6">
         <TransactionDialog categories={categoriesData} />
         <div className="lg:hidden">

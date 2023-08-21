@@ -4,7 +4,11 @@ import { Overview } from '@/components/dashboard/overview';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
 import SummaryCard from '@/components/dashboard/summary-card';
 import { SuccessToast } from '@/components/success-toast';
-import { getBalanceData, getOverviewData } from '@/db/queries/transactions';
+import {
+  getBalanceData,
+  getBalanceForMonth,
+  getOverviewData,
+} from '@/db/queries/transactions';
 import { authOptions } from '@/lib/auth/auth';
 import { getServerSession } from 'next-auth';
 
@@ -12,6 +16,13 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   const overviewData = await getOverviewData(session?.user.id as string);
   const balanceData = await getBalanceData(session?.user.id as string);
+
+  const currentMonth = new Date().getMonth();
+
+  const currentMonthData = await getBalanceForMonth(
+    session?.user.id,
+    currentMonth,
+  );
 
   return (
     <main className="space-y-10 py-10">
@@ -21,7 +32,7 @@ export default async function Home() {
           <SummaryCard />
         </div>
         <div className="lg:col-span-3">
-          <MonthlyBalanceCard />
+          <MonthlyBalanceCard month={currentMonthData} />
         </div>
         <div className="lg:col-span-6">
           <RecentTransactions />

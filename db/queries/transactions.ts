@@ -113,13 +113,28 @@ export async function getTransactionsByMonth(month: number) {
   return await db
     .select()
     .from(transactions)
-    .limit(6)
     .where(
       and(
         eq(transactions.userId, session.user.id),
         eq(sql`MONTH(${transactions.timestamp})`, month)
       )
     );
+}
+
+export async function getSummariesForMonths() {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error();
+
+  return await db
+    .select({
+      month: sql<number>`MONTH(${transactions.timestamp})`,
+      totalIncome: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,
+      totalExpenses: sql<string>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+      totalBalance: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+    })
+    .from(transactions)
+    .where(and(eq(transactions.userId, session.user.id)))
+    .groupBy(sql`MONTH(${transactions.timestamp})`);
 }
 
 export async function countTransactions(userId: string) {
@@ -129,4 +144,40 @@ export async function countTransactions(userId: string) {
     .where(eq(transactions.userId, userId));
 
   return count[0].count;
+}
+
+export async function getBalanceForMonth(userId: string, month?: number) {
+  const currentDate = new Date();
+  const startOfMonth = new Date(
+    currentDate.getFullYear(),
+    month ? month : currentDate.getMonth(),
+    1
+  );
+  const endOfMonth = new Date(
+    currentDate.getFullYear(),
+    month ? month : currentDate.getMonth() + 1,
+    0
+  );
+
+  const result = await db
+    .select({
+      totalIncome: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,
+      totalExpenses: sql<string>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+      totalBalance: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+    })
+    .from(transactions)
+    .where(
+      and(
+        gte(transactions.timestamp, startOfMonth),
+        lte(transactions.timestamp, endOfMonth),
+        eq(transactions.userId, userId)
+      )
+    );
+
+  return {
+    month: month || new Date().getMonth(),
+    totalExpenses: result[0].totalExpenses,
+    totalIncome: result[0].totalIncome,
+    totalBalance: result[0].totalBalance
+  };
 }
