@@ -5,6 +5,8 @@ import { balances, transactions } from '@/db/schema/finances';
 import { and, asc, desc, eq, gte, inArray, like, lte, sql } from 'drizzle-orm';
 import { overviewSchema } from '@/lib/validation/data';
 import { UnwrapPromise } from '@/lib/utils';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/auth';
 
 export async function getOverviewData(userId: string) {
   const currentDate = new Date();
@@ -101,6 +103,22 @@ export async function getTransactions(
           ? asc(transactions[column])
           : desc(transactions[column])
         : desc(transactions.id)
+    );
+}
+
+export async function getTransactionsByMonth(month: number) {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error();
+
+  return await db
+    .select()
+    .from(transactions)
+    .limit(6)
+    .where(
+      and(
+        eq(transactions.userId, session.user.id),
+        eq(sql`MONTH(${transactions.timestamp})`, month)
+      )
     );
 }
 

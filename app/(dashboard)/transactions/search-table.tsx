@@ -28,8 +28,9 @@ export default function SearchTable() {
   const handleDebouncedSearch = debounce(handleSearch, 300);
 
   return (
-    <div className="my-6">
-      <div className="flex items-center">
+    <div className="my-6 w-full
+    ">
+      <div className="flex w-full items-center">
         <Input
           placeholder="Search by name..."
           onChange={(event) => handleDebouncedSearch(event.target.value)}

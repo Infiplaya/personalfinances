@@ -1,6 +1,8 @@
+import { TransactionItem } from '@/components/transaction-item';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
 import { categories } from '@/db/schema/finances';
+import { moneyFormat } from '@/lib/utils';
 import { eq } from 'drizzle-orm';
 import Link from 'next/link';
 
@@ -19,7 +21,6 @@ export default async function CategoriesPage({
   params: { id: number };
 }) {
   const category = await getCategory(params.id);
-  console.log(category);
   return (
     <main className="space-y-10 py-10">
       {category ? (
@@ -29,9 +30,7 @@ export default async function CategoriesPage({
           </CardHeader>
           <CardContent>
             {category.transactions.map((t) => (
-              <Link key={t.id} href={`/transactions/${t.id}`}>
-                {t.name}
-              </Link>
+              <TransactionItem key={t.id} transaction={t} />
             ))}
           </CardContent>
         </Card>
