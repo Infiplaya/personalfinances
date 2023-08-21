@@ -52,7 +52,7 @@ export function DataTablePagination({
       </Button>
 
       <div>
-        {page} / {totalPages}
+        {page} of {totalPages}
       </div>
 
       <Button

@@ -43,7 +43,7 @@ export function TransactionDrawer({ categories }: { categories: Category[] }) {
       </DropdownMenu>
       <Drawer.Portal className="">
         <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-        <Drawer.Content className="fixed bottom-0 left-0 right-0 top-20 flex max-h-[82vh] flex-col rounded-t-[10px] bg-white">
+        <Drawer.Content className="fixed bottom-0 left-0 right-0 top-20 flex max-h-[82vh] bg-gray-50 dark:bg-gray-950 flex-col rounded-t-[10px]">
           <div className="mx-auto flex w-full max-w-md flex-col overflow-auto rounded-t-[10px] p-4">
             <TransactionForm
               categories={

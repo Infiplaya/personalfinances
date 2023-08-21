@@ -13,7 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { PlusCircle } from 'lucide-react';
 
 export function TransactionDialog({ categories }: { categories: Category[] }) {
   const [open, setOpen] = useState(false);

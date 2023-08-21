@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({
   }
   return (
     <>
-      <div className="flex flex-col space-x-3 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex space-x-3 items-center lg:flex-row lg:items-center lg:justify-between">
         <DataTableToolbar table={table} categories={categories} />
         {Object.keys(rowSelection).length > 0 ? (
           <Button
