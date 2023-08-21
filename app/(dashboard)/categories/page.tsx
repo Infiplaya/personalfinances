@@ -8,7 +8,7 @@ export default async function CategoriesPage() {
   const categoriesData = await getCategories();
   return (
     <div className="space-y-10 py-10">
-      <div className="grid lg:grid-cols-2 lg:gap-x-10">
+      <div className="grid lg:grid-cols-2 space-y-10 lg:space-y-0 lg:gap-x-10">
         <Card>
           <CardHeader>
             <CardTitle>Categories of Incomes</CardTitle>

@@ -12,6 +12,7 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   const overviewData = await getOverviewData(session?.user.id as string);
   const balanceData = await getBalanceData(session?.user.id as string);
+
   return (
     <main className="space-y-10 py-10">
       <SuccessToast message="Successfully logged in! Welcome back" />

@@ -1,6 +1,8 @@
-import { db } from "@/db";
-import { transactions } from "@/db/schema/finances";
-import { eq } from "drizzle-orm";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { db } from '@/db';
+import { transactions } from '@/db/schema/finances';
+import { moneyFormat } from '@/lib/utils';
+import { eq } from 'drizzle-orm';
 
 async function getTransaction(transactionId: number) {
   return await db.query.transactions.findFirst({
@@ -16,6 +18,31 @@ export default async function TransactionsPage({
 }: {
   params: { id: string };
 }) {
-  const data = await getTransaction(Number(params.id));
-  return <div className="py-10">{JSON.stringify(data)}</div>;
+  const transaction = await getTransaction(Number(params.id));
+
+  if (!transaction) {
+    return <Card>No Transaction</Card>;
+  }
+  return (
+    <div className="py-10">
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            {transaction.amount
+              ? moneyFormat(Number(transaction.amount))
+              : null}
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <div className='pb-4'>
+            <p>{transaction?.name}</p>
+            <p>{transaction?.description}</p>
+          </div>
+          <p>Category: {transaction?.categoryName}</p>
+          <p>Type: {transaction?.type}</p>
+        </CardContent>
+      </Card>
+    </div>
+  );
 }

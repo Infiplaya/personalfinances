@@ -19,17 +19,17 @@ export function dateFormat(date: Date) {
 export type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
 
 const dayOfWeek = [
-  'Sunday',
   'Monday',
   'Tuesday',
   'Wednesday',
   'Thursday',
   'Friday',
   'Saturday',
+  'Sunday',
 ];
 
 export function getDayOfWeek(day: number) {
-  return dayOfWeek[day - 1];
+  return dayOfWeek[day];
 }
 
 export const links = [
