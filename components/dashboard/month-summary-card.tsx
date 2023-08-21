@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn, moneyFormat } from '@/lib/utils';
+import { cn, getMonth, moneyFormat } from '@/lib/utils';
 import { Label } from '../ui/label';
 import { CardTitleWithTooltip } from './card-title-with-tooltip';
 
@@ -15,6 +15,7 @@ export default function MonthlyBalanceCard({ month }: { month: Month }) {
     <Card key={month.month}>
       <CardHeader>
         <CardTitleWithTooltip
+          link={`/transactions/months/${getMonth(month.month)}`}
           message={`Summary of incomes and spendings in ${month.month}`}
         >
           <CardTitle>{month.month}</CardTitle>

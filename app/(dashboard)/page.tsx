@@ -20,8 +20,8 @@ export default async function Home() {
   const currentMonth = new Date().getMonth();
 
   const currentMonthData = await getBalanceForMonth(
-    session?.user.id,
-    currentMonth,
+    session?.user.id as string,
+    currentMonth
   );
 
   return (

@@ -1,6 +1,7 @@
 import { TransactionDrawer } from '@/components/drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
+import { getMonthIndex } from '@/lib/utils';
 import { TransactionByMonth } from './transactions-by-month';
 
 export default async function MonthPage({params}: {params: {slug: string}}) {
@@ -14,7 +15,7 @@ export default async function MonthPage({params}: {params: {slug: string}}) {
           <TransactionDrawer categories={categoriesData} />
         </div>
       </div>
-      <TransactionByMonth month={currentMonth} />
+      <TransactionByMonth month={getMonthIndex(params.slug)} />
     </main>
   );
 }
