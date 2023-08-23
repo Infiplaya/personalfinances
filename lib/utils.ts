@@ -33,23 +33,32 @@ export function getDayOfWeek(day: number) {
 }
 
 const months = [
-  "January", "February", "March",
-  "April", "May", "June",
-  "July", "August", "September",
-  "October", "November", "December"
+  'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
 ];
 
-
-export function getMonth(monthNumber: number) {
+export function getMonth(monthNumber: number, upper = false) {
   if (monthNumber >= 0 && monthNumber < months.length) {
-      return months[monthNumber].toLowerCase();
+    return upper ? months[monthNumber] : months[monthNumber].toLowerCase();
   } else {
-      return "Invalid Month Number";
+    return 'Invalid Month Number';
   }
 }
 
 export function getMonthIndex(monthName: string): number {
-  const index = months.findIndex(month => month.toLowerCase() === monthName.toLowerCase());
+  const index = months.findIndex(
+    (month) => month.toLowerCase() === monthName.toLowerCase()
+  );
   return index !== -1 ? index : -1; // Return -1 for invalid month name
 }
 
@@ -65,5 +74,5 @@ export const links = [
   {
     href: '/categories',
     label: 'Categories',
-  }
+  },
 ];

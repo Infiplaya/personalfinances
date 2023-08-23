@@ -149,9 +149,10 @@ export async function countTransactions(userId: string) {
 export async function getBalanceForMonth(userId: string, month?: number) {
   const currentDate = new Date();
   
-  const currentMonth = month ? month + 1 : currentDate.getMonth();
+  const currentMonth = month ? month + 1 : currentDate.getMonth() + 1;
 
-  console.log(currentMonth);
+  console.log(currentMonth)
+
 
   const result = await db
     .select({
@@ -168,7 +169,7 @@ export async function getBalanceForMonth(userId: string, month?: number) {
     );
 
   return {
-    month: month || new Date().getMonth(),
+    month: month || new Date().getMonth() + 1,
     totalExpenses: result[0].totalExpenses,
     totalIncome: result[0].totalIncome,
     totalBalance: result[0].totalBalance

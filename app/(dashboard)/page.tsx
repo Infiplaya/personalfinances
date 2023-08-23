@@ -11,6 +11,7 @@ import {
 } from '@/db/queries/transactions';
 import { authOptions } from '@/lib/auth/auth';
 import { getServerSession } from 'next-auth';
+import { Suspense } from 'react';
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -21,8 +22,8 @@ export default async function Home() {
 
   const currentMonthData = await getBalanceForMonth(
     session?.user.id as string,
-    currentMonth
   );
+
 
   return (
     <main className="space-y-10 py-10">
@@ -38,8 +39,11 @@ export default async function Home() {
           <RecentTransactions />
         </div>
       </div>
+      <Suspense fallback={<div>Loading...</div>}> 
       <Overview data={overviewData} />
       <BalanceChart data={balanceData} />
+      </Suspense>
+      
     </main>
   );
 }

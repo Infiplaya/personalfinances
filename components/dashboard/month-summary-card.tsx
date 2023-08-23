@@ -18,7 +18,7 @@ export default function MonthlyBalanceCard({ month }: { month: Month }) {
           link={`/transactions/months/${getMonth(month.month)}`}
           message={`Summary of incomes and spendings in ${month.month}`}
         >
-          <CardTitle>{month.month}</CardTitle>
+          <CardTitle>{getMonth(month.month, true)}</CardTitle>
         </CardTitleWithTooltip>
       </CardHeader>
       <CardContent className="space-y-3">

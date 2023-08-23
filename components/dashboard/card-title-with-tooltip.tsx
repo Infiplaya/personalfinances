@@ -33,9 +33,14 @@ export function CardTitleWithTooltip({
         </TooltipProvider>
       </div>
       {link ? (
-        <Link href={link} className="inline-flex items-center text-xs space-x-1">
-          <span>More </span>
-          <ChevronRight className="h-4 w-4 text-gray-700 dark:text-gray-300" />{' '}
+        <Link
+          href={link}
+          className="group inline-flex items-center space-x-[1px]  text-xs"
+        >
+          <span className="transition-color group-hover:text-indigo-500 dark:group-hover:text-indigo-400 ">
+            More{' '}
+          </span>
+          <ChevronRight className="transition-color h-4 w-4 text-gray-700 group-hover:text-indigo-500 dark:text-gray-300 dark:group-hover:text-indigo-400" />{' '}
         </Link>
       ) : null}
     </div>

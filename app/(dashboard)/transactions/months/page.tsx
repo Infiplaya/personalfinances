@@ -4,8 +4,6 @@ import { getSummariesForMonths } from '@/db/queries/transactions';
 export default async function MonthPage() {
   const monthData = await getSummariesForMonths();
 
-  console.log(monthData);
-
   return (
     <main className="mx-auto py-10">
       {monthData.map((m) => (

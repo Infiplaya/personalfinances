@@ -11,7 +11,6 @@ import { revalidatePath } from 'next/cache';
 import { hash } from 'bcryptjs';
 import { RegisterForm } from '@/lib/validation/auth';
 import { v4 as uuidv4 } from 'uuid';
-import { toast } from 'sonner';
 
 export async function registerUser(formData: RegisterForm) {
   try {
