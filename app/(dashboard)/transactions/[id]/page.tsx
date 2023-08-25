@@ -5,8 +5,6 @@ import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
 import { eq } from 'drizzle-orm';
 
-export const revalidate = '24000';
-
 async function getTransaction(transactionId: number) {
   return await db.query.transactions.findFirst({
     where: eq(transactions.id, transactionId),
