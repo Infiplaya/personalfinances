@@ -20,7 +20,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface DataTableFacetedFilter<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -45,16 +45,14 @@ export function DataTableFacetedFilter<TData, TValue>({
 
   const params = new URLSearchParams(window.location.search);
 
-  const newParam =
-    title === 'Category' ? params.get('category') : params.get('type');
-  if (newParam) {
-    selectedValues.add(newParam);
-  }
-
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 mr-3 lg:mr-0 border-dashed">
+        <Button
+          variant="outline"
+          size="sm"
+          className="mr-3 h-8 border-dashed lg:mr-0"
+        >
           <PlusCircledIcon className="mr-2 h-4 w-4" />
           {title}
           {selectedValues?.size > 0 && (
@@ -99,6 +97,7 @@ export function DataTableFacetedFilter<TData, TValue>({
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
               {options.map((option) => {
+                console.log(selectedValues);
                 const isSelected = selectedValues.has(option.name);
                 return (
                   <CommandItem
