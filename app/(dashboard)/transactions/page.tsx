@@ -57,10 +57,9 @@ export default async function TransactionsPage({ searchParams }: Props) {
     order,
     categoriesFilter,
     typesFilter,
-    session?.user.id as string
   );
 
-  const transactionsCount = await countTransactions(session?.user.id as string);
+  const transactionsCount = await countTransactions();
   
 
   const categoriesData = await getCategories();

@@ -35,7 +35,6 @@ import {
 } from '@/lib/validation/transaction';
 import { Textarea } from '../ui/textarea';
 import { createNewTransaction } from '@/app/actions';
-import { useRouter } from 'next/navigation';
 import { CheckIcon } from 'lucide-react';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
