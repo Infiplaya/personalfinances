@@ -1,8 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
+import { getAllTransactionsIds, getTransactions } from '@/db/queries/transactions';
 import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
 import { eq } from 'drizzle-orm';
+
+export const revalidate = '24000';
 
 async function getTransaction(transactionId: number) {
   return await db.query.transactions.findFirst({
@@ -11,6 +14,12 @@ async function getTransaction(transactionId: number) {
       category: true,
     },
   });
+}
+
+export async function generateStaticParams() {
+  const result = await getAllTransactionsIds();
+
+  return result.map((t) => t.id);
 }
 
 export default async function TransactionsPage({
@@ -35,7 +44,7 @@ export default async function TransactionsPage({
         </CardHeader>
 
         <CardContent>
-          <div className='pb-4'>
+          <div className="pb-4">
             <p>{transaction?.name}</p>
             <p>{transaction?.description}</p>
           </div>

@@ -8,10 +8,25 @@ import { UnwrapPromise } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 
-export async function getOverviewData(userId: string) {
+export async function getAllTransactionsIds() {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error();
+
+  return await db
+    .select({
+      id: transactions.id,
+    })
+    .from(transactions)
+    .where(eq(transactions.userId, session.user.id));
+}
+
+export async function getOverviewData() {
   const currentDate = new Date();
   const sevenDaysAgo = new Date(currentDate);
   sevenDaysAgo.setDate(currentDate.getDate() - 7);
+
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error();
 
   const result = await db
     .select({
@@ -24,7 +39,7 @@ export async function getOverviewData(userId: string) {
       and(
         gte(transactions.timestamp, sevenDaysAgo),
         lte(transactions.timestamp, currentDate),
-        eq(transactions.userId, userId)
+        eq(transactions.userId, session.user.id)
       )
     )
     .groupBy(sql`weekday(${transactions.timestamp})`);
@@ -34,10 +49,13 @@ export async function getOverviewData(userId: string) {
 
 export type OverviewData = UnwrapPromise<ReturnType<typeof getOverviewData>>;
 
-export async function getBalanceData(userId: string) {
+export async function getBalanceData() {
   const currentDate = new Date();
   let monthAgo = new Date(currentDate);
   monthAgo.setDate(currentDate.getDate() - 30);
+
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error();
 
   return await db
     .select({
@@ -49,7 +67,7 @@ export async function getBalanceData(userId: string) {
       and(
         gte(balances.timestamp, monthAgo),
         lte(balances.timestamp, currentDate),
-        eq(balances.userId, userId)
+        eq(balances.userId, session.user.id)
       )
     );
 }
@@ -74,9 +92,11 @@ export async function getTransactions(
   column: Column,
   order: Order,
   categoriesFilter: string[],
-  typesFilter: any,
-  userId: string
+  typesFilter: any
 ) {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error();
+
   return await db
     .select()
     .from(transactions)
@@ -88,7 +108,7 @@ export async function getTransactions(
           ? like(transactions.name, `%${name}%`)
           : undefined,
 
-        eq(transactions.userId, userId),
+        eq(transactions.userId, session.user.id),
         categoriesFilter.length > 0
           ? inArray(transactions.categoryName, categoriesFilter)
           : undefined,
@@ -137,22 +157,24 @@ export async function getSummariesForMonths() {
     .groupBy(sql`MONTH(${transactions.timestamp})`);
 }
 
-export async function countTransactions(userId: string) {
+export async function countTransactions() {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error();
+
   const count = await db
     .select({ count: sql<number>`count(*)` })
     .from(transactions)
-    .where(eq(transactions.userId, userId));
+    .where(eq(transactions.userId, session.user.id));
 
   return count[0].count;
 }
 
-export async function getBalanceForMonth(userId: string, month?: number) {
+export async function getBalanceForMonth(month?: number) {
   const currentDate = new Date();
-  
   const currentMonth = month ? month + 1 : currentDate.getMonth() + 1;
 
-  console.log(currentMonth)
-
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error();
 
   const result = await db
     .select({
@@ -164,7 +186,7 @@ export async function getBalanceForMonth(userId: string, month?: number) {
     .where(
       and(
         eq(sql`MONTH(${transactions.timestamp})`, currentMonth),
-        eq(transactions.userId, userId)
+        eq(transactions.userId, session.user.id)
       )
     );
 
@@ -172,6 +194,6 @@ export async function getBalanceForMonth(userId: string, month?: number) {
     month: month || new Date().getMonth() + 1,
     totalExpenses: result[0].totalExpenses,
     totalIncome: result[0].totalIncome,
-    totalBalance: result[0].totalBalance
+    totalBalance: result[0].totalBalance,
   };
 }

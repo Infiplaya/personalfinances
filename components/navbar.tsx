@@ -16,7 +16,7 @@ export default async function Navbar() {
           <SignOut />
         ) : (
           <div className="inline-flex items-center space-x-4">
-            <SignIn /> <Link href="/signup">Register</Link>
+            <Link href="/signin">Sign In</Link> <Link href="/signup">Register</Link>
           </div>
         )}
         <ThemeSwitcher />

@@ -5,24 +5,23 @@ import RecentTransactions from '@/components/dashboard/recent-transactions';
 import SummaryCard from '@/components/dashboard/summary-card';
 import { SuccessToast } from '@/components/success-toast';
 import {
+  getAllTransactionsIds,
   getBalanceData,
   getBalanceForMonth,
   getOverviewData,
 } from '@/db/queries/transactions';
-import { authOptions } from '@/lib/auth/auth';
-import { getServerSession } from 'next-auth';
 import { Suspense } from 'react';
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
-  const overviewData = await getOverviewData(session?.user.id as string);
-  const balanceData = await getBalanceData(session?.user.id as string);
+  const overviewData = getOverviewData();
+  const balanceData = getBalanceData();
+  const currentMonthData = getBalanceForMonth();
 
-  const currentMonth = new Date().getMonth();
-
-  const currentMonthData = await getBalanceForMonth(
-    session?.user.id as string,
-  );
+  const [month, overview, balance] = await Promise.all([
+    currentMonthData,
+    overviewData,
+    balanceData,
+  ]);
 
 
   return (
@@ -30,20 +29,21 @@ export default async function Home() {
       <SuccessToast message="Successfully logged in! Welcome back" />
       <div className="grid-cols-12 gap-x-10 space-y-10 lg:grid lg:space-y-0">
         <div className="lg:col-span-3">
-          <SummaryCard />
+          <Suspense fallback={<div>Loading...</div>}>
+            <SummaryCard />
+          </Suspense>
         </div>
         <div className="lg:col-span-3">
-          <MonthlyBalanceCard month={currentMonthData} />
+          <MonthlyBalanceCard month={month} />
         </div>
         <div className="lg:col-span-6">
-          <RecentTransactions />
+          <Suspense fallback={<div>Loading...</div>}>
+            <RecentTransactions />
+          </Suspense>
         </div>
       </div>
-      <Suspense fallback={<div>Loading...</div>}> 
-      <Overview data={overviewData} />
-      <BalanceChart data={balanceData} />
-      </Suspense>
-      
+      <Overview data={overview} />
+      <BalanceChart data={balance} />
     </main>
   );
 }
