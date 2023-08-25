@@ -15,7 +15,12 @@ async function getTransaction(transactionId: number) {
 }
 
 export async function generateStaticParams() {
-  return await getAllTransactionsIds();
+  const transactions = await getAllTransactionsIds();
+
+  return transactions.map((t) => ({
+    id: t.id.toString(),
+  }))
+
 }
 
 export default async function TransactionsPage({
