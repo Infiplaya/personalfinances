@@ -63,7 +63,7 @@ specifiers:
   undici: ^5.23.0
   uuid: ^9.0.0
   vaul: ^0.3.7
-  zod: ^3.22.2
+  zod: ^3.21.4
 
 dependencies:
   '@auth/core': 0.11.1
@@ -96,7 +96,7 @@ dependencies:
   dlx: 0.2.1
   dotenv: 16.3.1
   drizzle-orm: 0.28.3_z6igbr6bnd74lx4momllgm7gfq
-  drizzle-zod: 0.5.0_j4yim4csgnqceoq2wab3vilyry
+  drizzle-zod: 0.5.0_rjbufwu7gnboc5agbhehetzqfy
   esbuild: 0.19.2
   eslint-config-next: 13.4.13_qj3u6ezxe2airdzjq3nyoxe24m
   lodash.debounce: 4.0.8
@@ -119,7 +119,7 @@ dependencies:
   undici: 5.23.0
   uuid: 9.0.0
   vaul: 0.3.7_gltvt74xzh7f5lvw2hzxriz5bu
-  zod: 3.22.2
+  zod: 3.21.4
 
 devDependencies:
   '@types/bcryptjs': 2.4.2
@@ -3249,14 +3249,14 @@ packages:
       '@planetscale/database': 1.11.0
     dev: false
 
-  /drizzle-zod/0.5.0_j4yim4csgnqceoq2wab3vilyry:
+  /drizzle-zod/0.5.0_rjbufwu7gnboc5agbhehetzqfy:
     resolution: {integrity: sha512-gIOXclphhaleYFEGZFxSyJBoiPRyksGyIPgmgWz6a+j5JeaOrOf1QOPjf1p5AHYA+1O3Q01ondGOZfgObxBTsg==}
     peerDependencies:
       drizzle-orm: '>=0.23.13'
       zod: '*'
     dependencies:
       drizzle-orm: 0.28.3_z6igbr6bnd74lx4momllgm7gfq
-      zod: 3.22.2
+      zod: 3.21.4
     dev: false
 
   /electron-to-chromium/1.4.499:

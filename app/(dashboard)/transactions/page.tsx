@@ -1,3 +1,4 @@
+import { DataTable } from '@/components/data-table/data-table';
 import { TransactionDrawer } from '@/components/drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
@@ -5,12 +6,9 @@ import { getCategories } from '@/db/queries/categories';
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { authOptions } from '@/lib/auth/auth';
-import { getMonth } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { columns } from './columns';
-import { DataTable } from './data-table';
-
 interface Props {
   searchParams: {
     [key: string]: string | string[] | undefined;

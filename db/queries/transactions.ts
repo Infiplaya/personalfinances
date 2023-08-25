@@ -8,16 +8,18 @@ import { UnwrapPromise } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 
-export async function getAllTransactionsIds() {
+async function validateSession() {
   const session = await getServerSession(authOptions);
-  if (!session) throw new Error();
+  if (!session) throw new Error('User not authenticated');
+  return session;
+}
 
+export async function getAllTransactionsIds() {
   return await db
     .select({
       id: transactions.id,
     })
     .from(transactions)
-    .where(eq(transactions.userId, session.user.id));
 }
 
 export async function getOverviewData() {
@@ -25,9 +27,7 @@ export async function getOverviewData() {
   const sevenDaysAgo = new Date(currentDate);
   sevenDaysAgo.setDate(currentDate.getDate() - 7);
 
-  const session = await getServerSession(authOptions);
-  if (!session) throw new Error();
-
+  const session = await validateSession();
   const result = await db
     .select({
       day: sql<number>`weekday(${transactions.timestamp})`,
@@ -54,9 +54,7 @@ export async function getBalanceData() {
   let monthAgo = new Date(currentDate);
   monthAgo.setDate(currentDate.getDate() - 30);
 
-  const session = await getServerSession(authOptions);
-  if (!session) throw new Error();
-
+  const session = await validateSession();
   return await db
     .select({
       totalBalance: sql<number>`${balances.totalBalance}`,
@@ -94,9 +92,7 @@ export async function getTransactions(
   categoriesFilter: string[],
   typesFilter: any
 ) {
-  const session = await getServerSession(authOptions);
-  if (!session) throw new Error();
-
+  const session = await validateSession();
   return await db
     .select()
     .from(transactions)
@@ -127,9 +123,7 @@ export async function getTransactions(
 }
 
 export async function getTransactionsByMonth(month: number) {
-  const session = await getServerSession(authOptions);
-  if (!session) throw new Error();
-
+  const session = await validateSession();
   return await db
     .select()
     .from(transactions)
@@ -142,9 +136,7 @@ export async function getTransactionsByMonth(month: number) {
 }
 
 export async function getSummariesForMonths() {
-  const session = await getServerSession(authOptions);
-  if (!session) throw new Error();
-
+  const session = await validateSession();
   return await db
     .select({
       month: sql<number>`MONTH(${transactions.timestamp})`,
@@ -158,9 +150,7 @@ export async function getSummariesForMonths() {
 }
 
 export async function countTransactions() {
-  const session = await getServerSession(authOptions);
-  if (!session) throw new Error();
-
+  const session = await validateSession();
   const count = await db
     .select({ count: sql<number>`count(*)` })
     .from(transactions)
@@ -173,9 +163,7 @@ export async function getBalanceForMonth(month?: number) {
   const currentDate = new Date();
   const currentMonth = month ? month + 1 : currentDate.getMonth() + 1;
 
-  const session = await getServerSession(authOptions);
-  if (!session) throw new Error();
-
+  const session = await validateSession();
   const result = await db
     .select({
       totalIncome: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,

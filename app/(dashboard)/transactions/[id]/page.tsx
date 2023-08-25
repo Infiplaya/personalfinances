@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
-import { getAllTransactionsIds, getTransactions } from '@/db/queries/transactions';
+import { getAllTransactionsIds } from '@/db/queries/transactions';
 import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
 import { eq } from 'drizzle-orm';
