@@ -1,11 +1,18 @@
 'use client';
 
 import { OverviewData } from '@/db/queries/transactions';
+import { moneyFormat } from '@/lib/utils';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { CardTitleWithTooltip } from './card-title-with-tooltip';
 
-export function Overview({ data }: { data: OverviewData }) {
+export function Overview({
+  data,
+  currencyCode,
+}: {
+  data: OverviewData;
+  currencyCode: string;
+}) {
   console.log(data);
   return (
     <div className="space-y-10 lg:flex lg:gap-10 lg:space-y-0">
@@ -31,7 +38,9 @@ export function Overview({ data }: { data: OverviewData }) {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) =>
+                    `${moneyFormat(value, currencyCode)}`
+                  }
                 />
                 <Bar
                   dataKey="totalIncome"

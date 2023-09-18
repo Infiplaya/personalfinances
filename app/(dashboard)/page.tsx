@@ -44,8 +44,8 @@ export default async function Home() {
           </Suspense>
         </div>
       </div>
-      <Overview data={overview} />
-      <BalanceChart data={balance} />
+      <Overview data={overview} currencyCode={code} />
+      <BalanceChart data={balance} currencyCode={code} />
     </main>
   );
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { moneyFormat } from '@/lib/utils';
 import {
   Area,
   AreaChart,
@@ -12,7 +13,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { CardTitleWithTooltip } from './card-title-with-tooltip';
 
-export function BalanceChart({ data }: { data: any }) {
+export function BalanceChart({ data, currencyCode }: { data: any, currencyCode: string }) {
   return (
     <Card>
       <CardHeader>
@@ -43,7 +44,7 @@ export function BalanceChart({ data }: { data: any }) {
               fontSize={12}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(value) => `$${value}`}
+              tickFormatter={(value) => `${moneyFormat(value, currencyCode)}`}
             />
             <CartesianGrid strokeDasharray="3 3" />
             <ChartTooltip />
