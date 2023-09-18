@@ -1,8 +1,8 @@
 import { DataTable } from '@/components/data-table/data-table';
-import { TransactionDrawer } from '@/components/drawer';
+import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
-import { getCurrencies } from '@/db/queries/currencies';
+import { getCurrencies, getUserPrefferedCurrency } from '@/db/queries/currencies';
 
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
@@ -62,15 +62,17 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   const currenciesData = await getCurrencies();
 
+  const currentCurrency = await getUserPrefferedCurrency();
+
   return (
     <main className="mx-auto py-10">
       <Link href={`/transactions/months`}>
       Months Summary
       </Link>
       <div className="flex w-full justify-end px-3 lg:my-6">
-        <TransactionDialog categories={categoriesData} currencies={currenciesData} />
+        <TransactionDialog categories={categoriesData} currencies={currenciesData} currentCurrency={currentCurrency.currencyCode} />
         <div className="lg:hidden">
-          <TransactionDrawer categories={categoriesData} currencies={currenciesData} />
+          <TransactionDrawer categories={categoriesData} currencies={currenciesData} currentCurrency={currentCurrency.currencyCode} />
         </div>
       </div>
       <DataTable

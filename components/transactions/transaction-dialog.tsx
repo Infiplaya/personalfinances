@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function TransactionDialog({ categories, currencies }: { categories: Category[], currencies: Currency[] }) {
+export function TransactionDialog({ categories, currencies, currentCurrency }: { categories: Category[], currencies: Currency[], currentCurrency: string }) {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'expense'
@@ -52,6 +52,7 @@ export function TransactionDialog({ categories, currencies }: { categories: Cate
           currencies={currencies}
           type={selectedType}
           closeModal={() => setOpen(false)}
+          currentCurrency={currentCurrency}
         />
       </DialogContent>
     </Dialog>

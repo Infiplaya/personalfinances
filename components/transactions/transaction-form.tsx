@@ -42,11 +42,13 @@ import { cn } from '@/lib/utils';
 export function TransactionForm({
   categories,
   currencies,
+  currentCurrency,
   closeModal,
   type,
 }: {
   categories: Category[];
   currencies: Currency[];
+  currentCurrency: string;
   closeModal?: () => void;
   type: 'expense' | 'income';
 }) {
@@ -54,6 +56,7 @@ export function TransactionForm({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: {
       type: type,
+      currencyCode: currentCurrency.toUpperCase(),
     },
   });
 
@@ -112,7 +115,7 @@ export function TransactionForm({
                         ? currencies.find(
                             (c) => c.code === field.value
                           )?.code
-                        : null}
+                        : currentCurrency.toUpperCase()}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>

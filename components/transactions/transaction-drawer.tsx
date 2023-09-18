@@ -3,7 +3,7 @@
 import { Category, Currency } from '@/db/schema/finances';
 import { useState } from 'react';
 import { Drawer } from 'vaul';
-import { TransactionForm } from './transactions/transaction-form';
+import { TransactionForm } from './transaction-form';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { PlusCircle } from 'lucide-react';
 
-export function TransactionDrawer({ categories, currencies }: { categories: Category[], currencies: Currency[] }) {
+export function TransactionDrawer({ categories, currencies, currentCurrency }: { categories: Category[], currencies: Currency[], currentCurrency: string }) {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'expense'
@@ -53,6 +53,7 @@ export function TransactionDrawer({ categories, currencies }: { categories: Cate
                   : categories.filter((c) => c.type === 'income')
               }
               type={selectedType}
+              currentCurrency={currentCurrency}
               closeModal={() => setOpen(false)}
             />
           </div>

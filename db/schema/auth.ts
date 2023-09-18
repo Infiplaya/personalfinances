@@ -8,7 +8,7 @@ import {
 } from "drizzle-orm/mysql-core";
 import type { AdapterAccount } from "@auth/core/adapters";
 import { relations } from "drizzle-orm";
-import { balances, transactions } from "./finances";
+import { balances, transactions, currencies } from "./finances";
 
 export const users = mysqlTable("users", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
@@ -17,6 +17,7 @@ export const users = mysqlTable("users", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   password: varchar("password", { length: 255 }),
   image: varchar("image", { length: 255 }),
+  currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
 });
 
 export const accounts = mysqlTable(
@@ -63,4 +64,5 @@ export const verificationTokens = mysqlTable(
 export const usersRelations = relations(users, ({ many, one }) => ({
   transactions: many(transactions),
   balance: one(balances),
+  currency: one(currencies),
 }));

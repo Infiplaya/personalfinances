@@ -14,10 +14,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  authModal,
 }: {
   children: ReactNode;
-  authModal: ReactNode;
 }) {
   return (
     <html lang="en" className="h-full">

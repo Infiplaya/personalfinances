@@ -25,6 +25,7 @@ export async function registerUser(formData: RegisterForm) {
       id: uuidv4(),
       name: formData.name,
       password: hashed_password,
+      currencyCode: 'USD',
       email: formData.email.toLowerCase(),
     };
     await insertUser(newUser);
@@ -95,6 +96,25 @@ export async function deleteTransactions(transactionsIds: number[]) {
       .delete(transactions)
       .where(inArray(transactions.id, transactionsIds));
     revalidatePath('/transactions');
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function changePrefferedCurrency(currencyCode: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user.id) throw new Error();
+
+  console.log(currencyCode);
+
+  try {
+    await db.update(users).set({
+      currencyCode: currencyCode
+    }).where(
+      eq(users.id, session.user.id)
+    )
+
+    revalidatePath('/');
   } catch (e) {
     console.log(e);
   }

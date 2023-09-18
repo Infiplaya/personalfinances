@@ -21,7 +21,7 @@ export const transactions = mysqlTable(
     amount: decimal('amount', { precision: 10, scale: 2 }),
     userId: varchar('userId', { length: 255 }).notNull(),
     categoryName: varchar('categoryName', { length: 255 }).notNull(),
-    currencyCode: varchar('currencyCode', { length: 255 }).notNull(),
+    currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
     type: mysqlEnum('type', ['expense', 'income']).notNull(),
     timestamp: timestamp('timestamp').defaultNow(),
   },
@@ -82,6 +82,7 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
 
 export const currenciesRelations = relations(currencies, ({ many }) => ({
   transactions: many(transactions),
+  users: many(users),
 }));
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({

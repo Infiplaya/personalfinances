@@ -1,4 +1,4 @@
-import { TransactionDrawer } from '@/components/drawer';
+import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
 import { getMonthIndex } from '@/lib/utils';
