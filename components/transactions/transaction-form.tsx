@@ -28,7 +28,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { Category } from '@/db/schema/finances';
+import { Category, Currency } from '@/db/schema/finances';
 import {
   TransactionForm,
   transactionFormSchema,
@@ -41,10 +41,12 @@ import { cn } from '@/lib/utils';
 
 export function TransactionForm({
   categories,
+  currencies,
   closeModal,
   type,
 }: {
   categories: Category[];
+  currencies: Currency[];
   closeModal?: () => void;
   type: 'expense' | 'income';
 }) {
@@ -70,6 +72,7 @@ export function TransactionForm({
         })}
         className="space-y-8"
       >
+        <fieldset className='flex justify-between items-center'>
         <FormField
           control={form.control}
           name="amount"
@@ -87,6 +90,71 @@ export function TransactionForm({
             </FormItem>
           )}
         />
+
+<FormField
+          control={form.control}
+          name="currencyCode"
+          render={({ field }) => (
+            <FormItem className="flex mt-2.5 flex-col">
+              <FormLabel>Currency</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        'w-full justify-between',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      {field.value
+                        ? currencies.find(
+                            (c) => c.code === field.value
+                          )?.code
+                        : null}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput
+                      placeholder={`Search ${type}`}
+                      className="h-9"
+                    />
+                    <CommandEmpty>No currency found.</CommandEmpty>
+                    <CommandGroup>
+                      {currencies.map((currency) => (
+                        <CommandItem
+                          value={currency.code}
+                          key={currency.code}
+                          onSelect={() => {
+                            form.setValue('currencyCode', currency.code);
+                          }}
+                        >
+                          {currency.code}
+                          <CheckIcon
+                            className={cn(
+                              'ml-auto h-4 w-4',
+                              currency.code === field.value
+                                ? 'opacity-100'
+                                : 'opacity-0'
+                            )}
+                          />
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         </fieldset>
+
+
         <FormField
           control={form.control}
           name="name"
@@ -100,6 +168,8 @@ export function TransactionForm({
             </FormItem>
           )}
         />
+       
+        
         <FormField
           control={form.control}
           name="description"

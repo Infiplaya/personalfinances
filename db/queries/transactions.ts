@@ -81,6 +81,7 @@ type Column =
   | 'categoryName'
   | 'type'
   | 'timestamp'
+  | 'currencyCode'
   | undefined;
 
 export async function getTransactions(

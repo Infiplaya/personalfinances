@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { TransactionForm } from '@/components/transactions/transaction-form';
-import { Category } from '@/db/schema/finances';
+import { Category, Currency } from '@/db/schema/finances';
 import { useState } from 'react';
 import { Button } from '../ui/button';
 import {
@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function TransactionDialog({ categories }: { categories: Category[] }) {
+export function TransactionDialog({ categories, currencies }: { categories: Category[], currencies: Currency[] }) {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'expense'
@@ -49,6 +49,7 @@ export function TransactionDialog({ categories }: { categories: Category[] }) {
               ? categories.filter((c) => c.type === 'expense')
               : categories.filter((c) => c.type === 'income')
           }
+          currencies={currencies}
           type={selectedType}
           closeModal={() => setOpen(false)}
         />

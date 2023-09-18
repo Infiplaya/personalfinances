@@ -2,11 +2,10 @@ import { DataTable } from '@/components/data-table/data-table';
 import { TransactionDrawer } from '@/components/drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
+import { getCurrencies } from '@/db/queries/currencies';
 
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
-import { authOptions } from '@/lib/auth/auth';
-import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { columns } from './columns';
 interface Props {
@@ -15,7 +14,6 @@ interface Props {
   };
 }
 export default async function TransactionsPage({ searchParams }: Props) {
-  const session = await getServerSession(authOptions);
 
   const page = searchParams['page'] ?? '1';
   const per_page = searchParams['per_page'] ?? '10';
@@ -62,15 +60,17 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   const categoriesData = await getCategories();
 
+  const currenciesData = await getCurrencies();
+
   return (
     <main className="mx-auto py-10">
       <Link href={`/transactions/months`}>
       Months Summary
       </Link>
       <div className="flex w-full justify-end px-3 lg:my-6">
-        <TransactionDialog categories={categoriesData} />
+        <TransactionDialog categories={categoriesData} currencies={currenciesData} />
         <div className="lg:hidden">
-          <TransactionDrawer categories={categoriesData} />
+          <TransactionDrawer categories={categoriesData} currencies={currenciesData} />
         </div>
       </div>
       <DataTable
