@@ -13,6 +13,7 @@ export default async function Navbar() {
   const session = await getServerSession(authOptions);
   const currenciesData = await getCurrencies();
   const currentCurrency = await getUserPrefferedCurrency();
+
   return (
     <nav className="sticky top-0 inline-flex w-full items-center justify-end border-b border-gray-200 bg-white px-10 py-4 dark:border-gray-800 dark:bg-black">
       <div className="inline-flex space-x-8">
@@ -23,7 +24,7 @@ export default async function Navbar() {
             <Link href="/signin">Sign In</Link> <Link href="/signup">Register</Link>
           </div>
         )}
-        <CurrencyDropdown currencies={currenciesData} currentCurrency={currentCurrency.currencyCode} />
+        <CurrencyDropdown currencies={currenciesData} currentCurrency={currentCurrency} />
         <ThemeSwitcher />
         <MobileNavbar />
       </div>

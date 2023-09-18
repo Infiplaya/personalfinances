@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { CardTitleWithTooltip } from './card-title-with-tooltip';
 
 export function Overview({ data }: { data: OverviewData }) {
+  console.log(data);
   return (
     <div className="space-y-10 lg:flex lg:gap-10 lg:space-y-0">
       <div className="flex-1">

@@ -4,8 +4,8 @@ import { Overview } from '@/components/dashboard/overview';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
 import SummaryCard from '@/components/dashboard/summary-card';
 import { SuccessToast } from '@/components/success-toast';
+import { getUserPrefferedCurrency } from '@/db/queries/currencies';
 import {
-  getAllTransactionsIds,
   getBalanceData,
   getBalanceForMonth,
   getOverviewData,
@@ -16,11 +16,13 @@ export default async function Home() {
   const overviewData = getOverviewData();
   const balanceData = getBalanceData();
   const currentMonthData = getBalanceForMonth();
+  const currencyCode = getUserPrefferedCurrency();
 
-  const [month, overview, balance] = await Promise.all([
+  const [month, overview, balance, code] = await Promise.all([
     currentMonthData,
     overviewData,
     balanceData,
+    currencyCode
   ]);
 
 
@@ -34,7 +36,7 @@ export default async function Home() {
           </Suspense>
         </div>
         <div className="lg:col-span-3">
-          <MonthlyBalanceCard month={month} />
+          <MonthlyBalanceCard month={month} currencyCode={code} />
         </div>
         <div className="lg:col-span-6">
           <Suspense fallback={<div>Loading...</div>}>

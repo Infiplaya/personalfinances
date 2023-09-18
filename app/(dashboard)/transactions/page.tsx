@@ -72,13 +72,13 @@ export default async function TransactionsPage({ searchParams }: Props) {
         <TransactionDialog
           categories={categoriesData}
           currencies={currenciesData}
-          currentCurrency={currentCurrency.currencyCode}
+          currentCurrency={currentCurrency}
         />
         <div className="lg:hidden">
           <TransactionDrawer
             categories={categoriesData}
             currencies={currenciesData}
-            currentCurrency={currentCurrency.currencyCode}
+            currentCurrency={currentCurrency}
           />
         </div>
       </div>

@@ -10,13 +10,22 @@ interface Month {
   totalBalance: string;
 }
 
-export default function MonthlyBalanceCard({ month }: { month: Month }) {
+export default function MonthlyBalanceCard({
+  month,
+  currencyCode,
+}: {
+  month: Month;
+  currencyCode: string;
+}) {
   return (
     <Card key={month.month}>
       <CardHeader>
         <CardTitleWithTooltip
           link={`/transactions/months/${getMonth(month.month)}`}
-          message={`Summary of incomes and spendings in ${getMonth(month.month, true)}`}
+          message={`Summary of incomes and spendings in ${getMonth(
+            month.month,
+            true
+          )}`}
         >
           <CardTitle>{getMonth(month.month, true)}</CardTitle>
         </CardTitleWithTooltip>
@@ -25,13 +34,13 @@ export default function MonthlyBalanceCard({ month }: { month: Month }) {
         <div>
           <Label>Income</Label>
           <p className="text-lg font-semibold">
-            {moneyFormat(Number(month.totalIncome))}
+            {moneyFormat(Number(month.totalIncome), currencyCode)}
           </p>
         </div>
         <div>
           <Label>Expenses</Label>
           <p className="text-lg font-semibold">
-            {moneyFormat(Number(month.totalExpenses))}
+            {moneyFormat(Number(month.totalExpenses), currencyCode)}
           </p>
         </div>
         <div>
@@ -44,7 +53,7 @@ export default function MonthlyBalanceCard({ month }: { month: Month }) {
                 : 'text-red-500 dark:text-red-400'
             )}
           >
-            {moneyFormat(Number(month.totalBalance))}
+            {moneyFormat(Number(month.totalBalance), currencyCode)}
           </p>
         </div>
       </CardContent>

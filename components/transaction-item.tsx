@@ -17,7 +17,7 @@ export function TransactionItem({ transaction }: { transaction: Transaction }) {
                 : 'text-green-500 dark:text-green-400'
             )}
           >
-            {moneyFormat(Number(transaction.amount))}
+            {moneyFormat(Number(transaction.amount), transaction.currencyCode)}
           </span>
           <span>{dateFormat(transaction.timestamp as Date)}</span>
         </div>

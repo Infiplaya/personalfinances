@@ -64,5 +64,8 @@ export const verificationTokens = mysqlTable(
 export const usersRelations = relations(users, ({ many, one }) => ({
   transactions: many(transactions),
   balance: one(balances),
-  currency: one(currencies),
+  currency: one(currencies, {
+    fields: [users.currencyCode],
+    references: [currencies.code],
+  }),
 }));

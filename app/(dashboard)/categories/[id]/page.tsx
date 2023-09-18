@@ -2,9 +2,7 @@ import { TransactionItem } from '@/components/transaction-item';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
 import { categories } from '@/db/schema/finances';
-import { moneyFormat } from '@/lib/utils';
 import { eq } from 'drizzle-orm';
-import Link from 'next/link';
 
 async function getCategory(id: number) {
   return await db.query.categories.findFirst({

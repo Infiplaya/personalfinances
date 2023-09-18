@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
+import { getUserPrefferedCurrency } from '@/db/queries/currencies';
 import { getAllTransactionsIds } from '@/db/queries/transactions';
 import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
@@ -19,8 +20,7 @@ export async function generateStaticParams() {
 
   return transactions.map((t) => ({
     id: t.id.toString(),
-  }))
-
+  }));
 }
 
 export default async function TransactionsPage({
@@ -39,7 +39,10 @@ export default async function TransactionsPage({
         <CardHeader>
           <CardTitle>
             {transaction.amount
-              ? moneyFormat(Number(transaction.amount))
+              ? moneyFormat(
+                  Number(transaction.amount),
+                  transaction.currencyCode
+                )
               : null}
           </CardTitle>
         </CardHeader>

@@ -15,6 +15,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { CardTitleWithTooltip } from './card-title-with-tooltip';
+import { getUserPrefferedCurrency } from '@/db/queries/currencies';
 
 async function getTotalIncomeAndExpenses(userId: string) {
   const result = await db
@@ -37,6 +38,8 @@ export default async function SummaryCard() {
   const session = await getServerSession(authOptions);
   const { totalExpenses, totalIncome, totalBalance } =
     await getTotalIncomeAndExpenses(session?.user.id as string);
+
+  const currentCurrency = await getUserPrefferedCurrency();
   return (
     <Card>
       <CardHeader>
@@ -47,11 +50,11 @@ export default async function SummaryCard() {
       <CardContent className="space-y-3">
         <div>
           <Label>Income</Label>
-          <p className="text-lg font-semibold">{moneyFormat(totalIncome)}</p>
+          <p className="text-lg font-semibold">{moneyFormat(totalIncome, currentCurrency)}</p>
         </div>
         <div>
           <Label>Expenses</Label>
-          <p className="text-lg font-semibold">{moneyFormat(totalExpenses)}</p>
+          <p className="text-lg font-semibold">{moneyFormat(totalExpenses, currentCurrency)}</p>
         </div>
         <div>
           <Label>Balance</Label>
@@ -63,7 +66,7 @@ export default async function SummaryCard() {
                 : 'text-red-500 dark:text-red-400'
             )}
           >
-            {moneyFormat(totalBalance)}
+            {moneyFormat(totalBalance, currentCurrency)}
           </p>
         </div>
       </CardContent>

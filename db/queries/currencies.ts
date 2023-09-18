@@ -18,5 +18,5 @@ export async function getUserPrefferedCurrency() {
   const result = await db.select({
     currencyCode: users.currencyCode
   }).from(users).where(eq(users.id, session.user.id));
-  return result[0];
+  return result[0].currencyCode;
 }
