@@ -68,7 +68,7 @@
     "undici": "^5.24.0",
     "uuid": "^9.0.1",
     "vaul": "^0.3.7",
-    "zod": "^3.22.2"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.4",

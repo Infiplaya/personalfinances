@@ -2,7 +2,10 @@ import { DataTable } from '@/components/data-table/data-table';
 import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
-import { getCurrencies, getUserPrefferedCurrency } from '@/db/queries/currencies';
+import {
+  getCurrencies,
+  getUserPrefferedCurrency,
+} from '@/db/queries/currencies';
 
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
@@ -14,7 +17,6 @@ interface Props {
   };
 }
 export default async function TransactionsPage({ searchParams }: Props) {
-
   const page = searchParams['page'] ?? '1';
   const per_page = searchParams['per_page'] ?? '10';
   const { sort, name, category, type } = searchParams;
@@ -52,11 +54,10 @@ export default async function TransactionsPage({ searchParams }: Props) {
     column,
     order,
     categoriesFilter,
-    typesFilter,
+    typesFilter
   );
 
   const transactionsCount = await countTransactions();
-  
 
   const categoriesData = await getCategories();
 
@@ -66,13 +67,19 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   return (
     <main className="mx-auto py-10">
-      <Link href={`/transactions/months`}>
-      Months Summary
-      </Link>
+      <Link href={`/transactions/months`}>Months Summary</Link>
       <div className="flex w-full justify-end px-3 lg:my-6">
-        <TransactionDialog categories={categoriesData} currencies={currenciesData} currentCurrency={currentCurrency.currencyCode} />
+        <TransactionDialog
+          categories={categoriesData}
+          currencies={currenciesData}
+          currentCurrency={currentCurrency.currencyCode}
+        />
         <div className="lg:hidden">
-          <TransactionDrawer categories={categoriesData} currencies={currenciesData} currentCurrency={currentCurrency.currencyCode} />
+          <TransactionDrawer
+            categories={categoriesData}
+            currencies={currenciesData}
+            currentCurrency={currentCurrency.currencyCode}
+          />
         </div>
       </div>
       <DataTable
