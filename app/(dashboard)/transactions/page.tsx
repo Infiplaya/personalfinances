@@ -4,7 +4,7 @@ import { TransactionDialog } from '@/components/transactions/transaction-dialog'
 import { getCategories } from '@/db/queries/categories';
 import {
   getCurrencies,
-  getUserPrefferedCurrency,
+  getCurrentCurrency,
 } from '@/db/queries/currencies';
 
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
@@ -63,7 +63,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   const currenciesData = await getCurrencies();
 
-  const currentCurrency = await getUserPrefferedCurrency();
+  const currentCurrency = await getCurrentCurrency();
 
   return (
     <main className="mx-auto py-10">

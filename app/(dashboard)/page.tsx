@@ -4,7 +4,7 @@ import { Overview } from '@/components/dashboard/overview';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
 import SummaryCard from '@/components/dashboard/summary-card';
 import { SuccessToast } from '@/components/success-toast';
-import { getUserPrefferedCurrency } from '@/db/queries/currencies';
+import { getCurrentCurrency } from '@/db/queries/currencies';
 import {
   getBalanceData,
   getBalanceForMonth,
@@ -16,15 +16,14 @@ export default async function Home() {
   const overviewData = getOverviewData();
   const balanceData = getBalanceData();
   const currentMonthData = getBalanceForMonth();
-  const currencyCode = getUserPrefferedCurrency();
+  const currencyCode = getCurrentCurrency();
 
   const [month, overview, balance, code] = await Promise.all([
     currentMonthData,
     overviewData,
     balanceData,
-    currencyCode
+    currencyCode,
   ]);
-
 
   return (
     <main className="space-y-10 py-10">

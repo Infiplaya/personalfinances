@@ -5,7 +5,7 @@ import { getMonthIndex } from '@/lib/utils';
 import { TransactionByMonth } from './transactions-by-month';
 import {
   getCurrencies,
-  getUserPrefferedCurrency,
+  getCurrentCurrency,
 } from '@/db/queries/currencies';
 
 export default async function MonthPage({
@@ -15,7 +15,7 @@ export default async function MonthPage({
 }) {
   const categoriesData = await getCategories();
   const currenciesData = await getCurrencies();
-  const currentCurrency = await getUserPrefferedCurrency();
+  const currentCurrency = await getCurrentCurrency();
 
   console.log(getMonthIndex(params.slug));
 

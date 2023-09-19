@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
-import { getUserPrefferedCurrency } from '@/db/queries/currencies';
 import { getAllTransactionsIds } from '@/db/queries/transactions';
 import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';

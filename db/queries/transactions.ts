@@ -7,6 +7,7 @@ import { overviewSchema } from '@/lib/validation/data';
 import { UnwrapPromise } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
+import { cache } from 'react';
 
 async function validateSession() {
   const session = await getServerSession(authOptions);
@@ -14,7 +15,7 @@ async function validateSession() {
   return session;
 }
 
-export async function getAllTransactionsIds() {
+export async function selectAllTransactionsIds() {
   return await db
     .select({
       id: transactions.id,
@@ -22,7 +23,9 @@ export async function getAllTransactionsIds() {
     .from(transactions)
 }
 
-export async function getOverviewData() {
+export const getAllTransactionsIds = cache(selectAllTransactionsIds);
+
+export async function calculateOverviewData() {
   const currentDate = new Date();
   const sevenDaysAgo = new Date(currentDate);
   sevenDaysAgo.setDate(currentDate.getDate() - 7);
@@ -47,9 +50,11 @@ export async function getOverviewData() {
   return overviewSchema.parse(result);
 }
 
-export type OverviewData = UnwrapPromise<ReturnType<typeof getOverviewData>>;
+export type OverviewData = UnwrapPromise<ReturnType<typeof calculateOverviewData>>;
 
-export async function getBalanceData() {
+export const getOverviewData = cache(calculateOverviewData);
+
+export async function calculateBalanceData() {
   const currentDate = new Date();
   let monthAgo = new Date(currentDate);
   monthAgo.setDate(currentDate.getDate() - 30);
@@ -70,6 +75,8 @@ export async function getBalanceData() {
     );
 }
 
+export const getBalanceData = cache(calculateBalanceData);
+
 type Order = 'asc' | 'desc' | undefined;
 
 type Column =
@@ -84,7 +91,7 @@ type Column =
   | 'currencyCode'
   | undefined;
 
-export async function getTransactions(
+export async function selectTransactions(
   limit: number,
   offset: number,
   name: string | string[] | undefined,
@@ -123,7 +130,9 @@ export async function getTransactions(
     );
 }
 
-export async function getTransactionsByMonth(month: number) {
+export const getTransactions = cache(selectTransactions);
+
+export async function selectTransactionsByMonth(month: number) {
   const session = await validateSession();
   return await db
     .select()
@@ -136,7 +145,9 @@ export async function getTransactionsByMonth(month: number) {
     );
 }
 
-export async function getSummariesForMonths() {
+export const getTransactionsByMonth = cache(selectTransactionsByMonth);
+
+export async function calculateSummariesForMonths() {
   const session = await validateSession();
   return await db
     .select({
@@ -150,6 +161,8 @@ export async function getSummariesForMonths() {
     .groupBy(sql`MONTH(${transactions.timestamp})`);
 }
 
+export const getSummariesForMonths = cache(calculateSummariesForMonths);
+
 export async function countTransactions() {
   const session = await validateSession();
   const count = await db
@@ -160,7 +173,9 @@ export async function countTransactions() {
   return count[0].count;
 }
 
-export async function getBalanceForMonth(month?: number) {
+export const getTransactionsCount = cache(countTransactions);
+
+export async function calculateBalanceForMonth(month?: number) {
   const currentDate = new Date();
   const currentMonth = month ? month + 1 : currentDate.getMonth() + 1;
 
@@ -186,3 +201,5 @@ export async function getBalanceForMonth(month?: number) {
     totalBalance: result[0].totalBalance,
   };
 }
+
+export const getBalanceForMonth = cache(calculateBalanceForMonth);

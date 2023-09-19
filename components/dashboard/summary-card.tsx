@@ -4,18 +4,11 @@ import { transactions } from '@/db/schema/finances';
 import { authOptions } from '@/lib/auth/auth';
 import { cn, moneyFormat } from '@/lib/utils';
 import { eq, sql } from 'drizzle-orm';
-import { Info } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import { Label } from '../ui/label';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { CardTitleWithTooltip } from './card-title-with-tooltip';
-import { getUserPrefferedCurrency } from '@/db/queries/currencies';
+import { getCurrentCurrency } from '@/db/queries/currencies';
 
 async function getTotalIncomeAndExpenses(userId: string) {
   const result = await db
@@ -39,7 +32,7 @@ export default async function SummaryCard() {
   const { totalExpenses, totalIncome, totalBalance } =
     await getTotalIncomeAndExpenses(session?.user.id as string);
 
-  const currentCurrency = await getUserPrefferedCurrency();
+  const currentCurrency = await getCurrentCurrency();
   return (
     <Card>
       <CardHeader>
@@ -50,11 +43,15 @@ export default async function SummaryCard() {
       <CardContent className="space-y-3">
         <div>
           <Label>Income</Label>
-          <p className="text-lg font-semibold">{moneyFormat(totalIncome, currentCurrency)}</p>
+          <p className="text-lg font-semibold">
+            {moneyFormat(totalIncome, currentCurrency)}
+          </p>
         </div>
         <div>
           <Label>Expenses</Label>
-          <p className="text-lg font-semibold">{moneyFormat(totalExpenses, currentCurrency)}</p>
+          <p className="text-lg font-semibold">
+            {moneyFormat(totalExpenses, currentCurrency)}
+          </p>
         </div>
         <div>
           <Label>Balance</Label>
