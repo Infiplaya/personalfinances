@@ -59,7 +59,7 @@ export function getMonthIndex(monthName: string): number {
   const index = months.findIndex(
     (month) => month.toLowerCase() === monthName.toLowerCase()
   );
-  return index !== -1 ? index : -1; // Return -1 for invalid month name
+  return index !== -1 ? index : -1;
 }
 
 export const links = [

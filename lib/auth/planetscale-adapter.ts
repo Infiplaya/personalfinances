@@ -1,97 +1,105 @@
-import { and, eq } from "drizzle-orm"
-import crypto from 'node:crypto'
-import { users, accounts, sessions, verificationTokens } from '@/db/schema/auth'
-import type { DbClient } from '@/db'
-import type { Adapter } from "@auth/core/adapters"
+import { and, eq } from 'drizzle-orm';
+import crypto from 'node:crypto';
+import {
+  users,
+  accounts,
+  sessions,
+  verificationTokens,
+} from '@/db/schema/auth';
+import type { DbClient } from '@/db';
+import type { Adapter } from '@auth/core/adapters';
 
-export const defaultSchema = { users, accounts, sessions, verificationTokens }
-export type DefaultSchema = typeof defaultSchema
-interface CustomSchema extends DefaultSchema { }
+export const defaultSchema = { users, accounts, sessions, verificationTokens };
+export type DefaultSchema = typeof defaultSchema;
+interface CustomSchema extends DefaultSchema {}
 export function PlanetScaleAdapter(
   client: DbClient,
   _schema?: Partial<CustomSchema>
 ): Adapter {
   return {
     createUser: async (data) => {
-      const id = crypto.randomUUID()
-      await client.insert(users).values({ ...data, id })
+      const id = crypto.randomUUID();
+      await client.insert(users).values({ ...data, id, currencyCode: 'USD' });
       return client
         .select()
         .from(users)
         .where(eq(users.id, id))
-        .then((res) => res[0])
+        .then((res) => res[0]);
     },
     getUser: async (data) => {
-      const user = await client
-        .select()
-        .from(users)
-        .where(eq(users.id, data))
-        .then((res) => res[0]) ?? null
-      return user
+      const user =
+        (await client
+          .select()
+          .from(users)
+          .where(eq(users.id, data))
+          .then((res) => res[0])) ?? null;
+      return user;
     },
     getUserByEmail: async (data) => {
-      const email = await client
-        .select()
-        .from(users)
-        .where(eq(users.email, data))
-        .then((res) => res[0]) ?? null
-      return email
+      const email =
+        (await client
+          .select()
+          .from(users)
+          .where(eq(users.email, data))
+          .then((res) => res[0])) ?? null;
+      return email;
     },
     createSession: async (data) => {
-      await client.insert(sessions).values(data)
+      await client.insert(sessions).values(data);
 
       const session = await client
         .select()
         .from(sessions)
         .where(eq(sessions.sessionToken, data.sessionToken))
-        .then((res) => res[0])
-      return session
+        .then((res) => res[0]);
+      return session;
     },
     getSessionAndUser: async (data) => {
-      const sessionAndUser = await client
-        .select({
-          session: sessions,
-          user: users,
-        })
-        .from(sessions)
-        .where(eq(sessions.sessionToken, data))
-        .innerJoin(users, eq(users.id, sessions.userId))
-        .then((res) => res[0]) ?? null
+      const sessionAndUser =
+        (await client
+          .select({
+            session: sessions,
+            user: users,
+          })
+          .from(sessions)
+          .where(eq(sessions.sessionToken, data))
+          .innerJoin(users, eq(users.id, sessions.userId))
+          .then((res) => res[0])) ?? null;
 
-      return sessionAndUser
+      return sessionAndUser;
     },
     updateUser: async (data) => {
       if (!data.id) {
-        throw new Error("No user id.")
+        throw new Error('No user id.');
       }
 
-      await client
-        .update(users)
-        .set(data)
-        .where(eq(users.id, data.id))
+      await client.update(users).set(data).where(eq(users.id, data.id));
       const user = await client
         .select()
         .from(users)
         .where(eq(users.id, data.id))
-        .then((res) => res[0])
-      return user
+        .then((res) => res[0]);
+      return user;
     },
     updateSession: async (data) => {
       await client
         .update(sessions)
         .set(data)
-        .where(eq(sessions.sessionToken, data.sessionToken))
+        .where(eq(sessions.sessionToken, data.sessionToken));
 
       const session = await client
         .select()
         .from(sessions)
         .where(eq(sessions.sessionToken, data.sessionToken))
-        .then((res) => res[0])
-      return session
+        .then((res) => res[0]);
+      return session;
     },
     linkAccount: async (rawAccount) => {
-      const account = await client.insert(accounts).values(rawAccount).then((res) => res.rows[0])
-      account
+      const account = await client
+        .insert(accounts)
+        .values(rawAccount)
+        .then((res) => res.rows[0]);
+      account;
     },
     getUserByAccount: async (account) => {
       const dbAccount = await client
@@ -104,23 +112,23 @@ export function PlanetScaleAdapter(
           )
         )
         .leftJoin(users, eq(accounts.userId, users.id))
-        .then((res) => res[0])
+        .then((res) => res[0]);
 
-      return dbAccount?.users
+      return dbAccount?.users;
     },
     deleteSession: async (sessionToken) => {
       await client
         .delete(sessions)
-        .where(eq(sessions.sessionToken, sessionToken))
+        .where(eq(sessions.sessionToken, sessionToken));
     },
     createVerificationToken: async (token) => {
-      await client.insert(verificationTokens).values(token)
+      await client.insert(verificationTokens).values(token);
 
       return client
         .select()
         .from(verificationTokens)
         .where(eq(verificationTokens.identifier, token.identifier))
-        .then((res) => res[0])
+        .then((res) => res[0]);
     },
     useVerificationToken: async (token) => {
       try {
@@ -134,7 +142,7 @@ export function PlanetScaleAdapter(
                 eq(verificationTokens.token, token.token)
               )
             )
-            .then((res) => res[0])) ?? null
+            .then((res) => res[0])) ?? null;
 
         await client
           .delete(verificationTokens)
@@ -143,18 +151,18 @@ export function PlanetScaleAdapter(
               eq(verificationTokens.identifier, token.identifier),
               eq(verificationTokens.token, token.token)
             )
-          )
+          );
 
-        return deletedToken
+        return deletedToken;
       } catch (err) {
-        throw new Error("No verification token found.")
+        throw new Error('No verification token found.');
       }
     },
     deleteUser: async (id) => {
       await client
         .delete(users)
         .where(eq(users.id, id))
-        .then((res) => res.rows[0])
+        .then((res) => res.rows[0]);
     },
     unlinkAccount: async (account) => {
       await client
@@ -164,9 +172,9 @@ export function PlanetScaleAdapter(
             eq(accounts.providerAccountId, account.providerAccountId),
             eq(accounts.provider, account.provider)
           )
-        )
+        );
 
-      return undefined
+      return undefined;
     },
-  }
+  };
 }
