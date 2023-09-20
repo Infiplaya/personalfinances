@@ -1,9 +1,6 @@
 'use client';
 
 import { OverviewData } from '@/db/queries/transactions';
-import { moneyFormat } from '@/lib/utils';
-
-import { CardTitleWithTooltip } from './card-title-with-tooltip';
 import { OverviewCard } from './overview-card';
 
 export function Overview({

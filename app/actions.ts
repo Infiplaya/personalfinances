@@ -11,6 +11,7 @@ import { revalidatePath } from 'next/cache';
 import { hash } from 'bcryptjs';
 import { RegisterForm } from '@/lib/validation/auth';
 import { v4 as uuidv4 } from 'uuid';
+import { convertCurrency, fetchExchangeRates } from '@/lib/utils';
 
 export async function registerUser(formData: RegisterForm) {
   try {
@@ -53,15 +54,20 @@ export async function createNewTransaction(formData: TransactionForm) {
       userId: session.user.id,
     });
 
+
+    const exchangeRates = await fetchExchangeRates();
+    
     // grab user balance if it exist
     const userBalance = await db.query.balances.findFirst({
       where: eq(balances.userId, session.user.id),
     });
 
-    const amount =
+    let amount =
       formData.type === 'expense'
         ? -Number(formData.amount)
         : Number(formData.amount);
+
+    amount = convertCurrency(amount, formData.currencyCode, 'USD', exchangeRates);
 
     await db.insert(balances).values({
       userId: session.user.id,
@@ -70,7 +76,6 @@ export async function createNewTransaction(formData: TransactionForm) {
         : amount,
     });
 
-    // if it exist then update it
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';
@@ -104,8 +109,6 @@ export async function deleteTransactions(transactionsIds: number[]) {
 export async function changePrefferedCurrency(currencyCode: string) {
   const session = await getServerSession(authOptions);
   if (!session?.user.id) throw new Error();
-
-  console.log(currencyCode);
 
   try {
     await db.update(users).set({

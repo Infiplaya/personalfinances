@@ -31,7 +31,6 @@ export function CurrencyDropdown({
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  console.log(currentCurrency)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

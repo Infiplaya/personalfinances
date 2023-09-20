@@ -17,7 +17,6 @@ export default async function MonthPage({
   const currenciesData = await getCurrencies();
   const currentCurrency = await getCurrentCurrency();
 
-  console.log(getMonthIndex(params.slug));
 
   return (
     <main className="mx-auto py-10">

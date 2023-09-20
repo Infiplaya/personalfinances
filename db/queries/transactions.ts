@@ -49,7 +49,7 @@ export async function calculateOverviewData(preferredCurrency: string) {
         eq(transactions.userId, user.id)
       )
     );
-
+    
     const convertedResult = result.map((row) => ({
       day: row.day,
       transactionAmount: convertCurrency(
@@ -220,7 +220,6 @@ async function calculateTotalIncomeAndExpenses(
 ) {
   const exchangeRates = await fetchExchangeRates();
 
-  const currentDate = new Date();
   const currentMonth = month ? month + 1 : null;
 
   const session = await validateSession();
@@ -268,8 +267,6 @@ async function calculateTotalIncomeAndExpenses(
     totalBalance,
     month
   };
-
-  console.log(summaryObject)
 
   return summaryObject
 }

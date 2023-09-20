@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
+import next from 'next';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -77,8 +78,12 @@ export const links = [
   },
 ];
 
-
-export function convertCurrency(amount: number, fromCurrency: string, toCurrency: string, exchangeRates: Record<string, number>) {
+export function convertCurrency(
+  amount: number,
+  fromCurrency: string,
+  toCurrency: string,
+  exchangeRates: Record<string, number>
+) {
   if (fromCurrency === toCurrency) {
     return amount;
   }
@@ -88,9 +93,11 @@ export function convertCurrency(amount: number, fromCurrency: string, toCurrency
 }
 
 export async function fetchExchangeRates(): Promise<Record<string, number>> {
-  const res = await fetch("https://api.exchangerate.host/latest");
+  const res = await fetch('https://api.exchangerate.host/latest', {
+    next: { revalidate: 240000 },
+  });
 
   const data = await res.json();
 
-  return data.rates
+  return data.rates;
 }
