@@ -1,5 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
-import next from 'next';
+import exchangeRateData from '../exchange-rates.json';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -92,12 +92,21 @@ export function convertCurrency(
   return amount * exchangeRate;
 }
 
+export async function findExchangeRate(
+  fromCurrency: string,
+  toCurrency: string
+) {
+  if (fromCurrency === toCurrency) {
+    return 1;
+  }
+
+  const exchangeRates = await fetchExchangeRates();
+
+  console.log(exchangeRates);
+
+  return (exchangeRates[toCurrency] / exchangeRates[fromCurrency]);
+}
+
 export async function fetchExchangeRates(): Promise<Record<string, number>> {
-  const res = await fetch('https://api.exchangerate.host/latest', {
-    next: { revalidate: 240000 },
-  });
-
-  const data = await res.json();
-
-  return data.rates;
+  return exchangeRateData;
 }

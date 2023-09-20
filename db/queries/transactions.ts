@@ -3,7 +3,7 @@
 import { db } from '@/db';
 import { balances, transactions } from '@/db/schema/finances';
 import { and, asc, desc, eq, gte, inArray, like, lte, sql } from 'drizzle-orm';
-import { convertCurrency, fetchExchangeRates, UnwrapPromise } from '@/lib/utils';
+import { convertCurrency, fetchExchangeRates, findExchangeRate, UnwrapPromise } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 import { cache } from 'react';
@@ -93,15 +93,17 @@ export type OverviewData = UnwrapPromise<
 
 export const getOverviewData = cache(calculateOverviewData);
 
-export async function calculateBalanceData() {
+export async function calculateBalanceData(preferredCurrency: string) {
   const currentDate = new Date();
   let monthAgo = new Date(currentDate);
   monthAgo.setDate(currentDate.getDate() - 30);
 
+  const exchangeRate = await findExchangeRate('USD', preferredCurrency);
+
   const session = await validateSession();
   return await db
     .select({
-      totalBalance: sql<number>`${balances.totalBalance}`,
+      totalBalance: sql<number>`ROUND(${balances.totalBalance} * ${exchangeRate}, 2)`,
       date: sql<string>`date(${balances.timestamp})`,
     })
     .from(balances)

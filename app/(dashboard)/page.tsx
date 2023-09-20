@@ -15,7 +15,7 @@ import { Suspense } from 'react';
 export default async function Home() {
   const currencyCode = await getCurrentCurrency();
   const overviewData = getOverviewData(currencyCode);
-  const balanceData = getBalanceData();
+  const balanceData = getBalanceData(currencyCode);
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
