@@ -15,8 +15,6 @@ export async function selectCurrencies() {
 export const getCurrencies = cache(selectCurrencies);
 
 async function selectCurrentCurrency() {
-  console.log('hi')
-
   const session = await getServerSession(authOptions);
   if (!session?.user.id) throw new Error();
 

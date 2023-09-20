@@ -5,7 +5,7 @@ import { CardTitleWithTooltip } from './card-title-with-tooltip';
 
 interface Month {
   month: number;
-  totalIncome: string;
+  totalIncomes: string;
   totalExpenses: string;
   totalBalance: string;
 }
@@ -34,7 +34,7 @@ export default function MonthlyBalanceCard({
         <div>
           <Label>Income</Label>
           <p className="text-lg font-semibold">
-            {moneyFormat(Number(month.totalIncome), currencyCode)}
+            {moneyFormat(Number(month.totalIncomes), currencyCode)}
           </p>
         </div>
         <div>

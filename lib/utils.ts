@@ -49,7 +49,7 @@ const months = [
 
 export function getMonth(monthNumber: number, upper = false) {
   if (monthNumber >= 0 && monthNumber < months.length) {
-    return upper ? months[monthNumber] : months[monthNumber].toLowerCase();
+    return upper ? months[monthNumber + 1] : months[monthNumber].toLowerCase();
   } else {
     return 'Invalid Month Number';
   }
@@ -76,3 +76,21 @@ export const links = [
     label: 'Categories',
   },
 ];
+
+
+export function convertCurrency(amount: number, fromCurrency: string, toCurrency: string, exchangeRates: Record<string, number>) {
+  if (fromCurrency === toCurrency) {
+    return amount;
+  }
+
+  const exchangeRate = exchangeRates[toCurrency] / exchangeRates[fromCurrency];
+  return amount * exchangeRate;
+}
+
+export async function fetchExchangeRates(): Promise<Record<string, number>> {
+  const res = await fetch("https://api.exchangerate.host/latest");
+
+  const data = await res.json();
+
+  return data.rates
+}

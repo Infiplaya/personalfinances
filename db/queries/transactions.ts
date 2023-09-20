@@ -3,8 +3,7 @@
 import { db } from '@/db';
 import { balances, transactions } from '@/db/schema/finances';
 import { and, asc, desc, eq, gte, inArray, like, lte, sql } from 'drizzle-orm';
-import { overviewSchema } from '@/lib/validation/data';
-import { UnwrapPromise } from '@/lib/utils';
+import { convertCurrency, fetchExchangeRates, UnwrapPromise } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 import { cache } from 'react';
@@ -20,37 +19,77 @@ export async function selectAllTransactionsIds() {
     .select({
       id: transactions.id,
     })
-    .from(transactions)
+    .from(transactions);
 }
 
 export const getAllTransactionsIds = cache(selectAllTransactionsIds);
 
-export async function calculateOverviewData() {
+
+export async function calculateOverviewData(preferredCurrency: string) {
   const currentDate = new Date();
   const sevenDaysAgo = new Date(currentDate);
   sevenDaysAgo.setDate(currentDate.getDate() - 7);
 
-  const session = await validateSession();
+  const { user } = await validateSession();
+
+  const exchangeRates = await fetchExchangeRates();
+
   const result = await db
     .select({
       day: sql<number>`weekday(${transactions.timestamp})`,
-      totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,
-      totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+      transactionAmount: sql<number>`transactions.amount`,
+      currency: sql<string>`transactions.currencyCode`,
+      transactionType: sql<string>`transactions.type`,
     })
     .from(transactions)
     .where(
       and(
         gte(transactions.timestamp, sevenDaysAgo),
         lte(transactions.timestamp, currentDate),
-        eq(transactions.userId, session.user.id)
+        eq(transactions.userId, user.id)
       )
-    )
-    .groupBy(sql`weekday(${transactions.timestamp})`);
+    );
 
-  return overviewSchema.parse(result);
+    const convertedResult = result.map((row) => ({
+      day: row.day,
+      transactionAmount: convertCurrency(
+        Number(row.transactionAmount),
+        row.currency,
+        preferredCurrency,
+        exchangeRates
+      ),
+      transactionType: row.transactionType,
+    }));
+
+
+    const dailyTotals: { day: number; totalIncome: number; totalExpenses: number }[] = [];
+
+convertedResult.forEach((row) => {
+  const day = row.day;
+  const existingTotal = dailyTotals.find((item) => item.day === day);
+
+  if (!existingTotal) {
+    dailyTotals.push({
+      day,
+      totalIncome: row.transactionType === 'income' ? row.transactionAmount : 0,
+      totalExpenses: row.transactionType === 'expense' ? row.transactionAmount : 0,
+    });
+  } else {
+    if (row.transactionType === 'income') {
+      existingTotal.totalIncome += row.transactionAmount;
+    } else if (row.transactionType === 'expense') {
+      existingTotal.totalExpenses += row.transactionAmount;
+    }
+  }
+});
+
+  return dailyTotals;
+
 }
 
-export type OverviewData = UnwrapPromise<ReturnType<typeof calculateOverviewData>>;
+export type OverviewData = UnwrapPromise<
+  ReturnType<typeof calculateOverviewData>
+>;
 
 export const getOverviewData = cache(calculateOverviewData);
 
@@ -175,31 +214,64 @@ export async function countTransactions() {
 
 export const getTransactionsCount = cache(countTransactions);
 
-export async function calculateBalanceForMonth(month?: number) {
+async function calculateTotalIncomeAndExpenses(
+  preferredCurrency: string,
+  month?: number
+) {
+  const exchangeRates = await fetchExchangeRates();
+
   const currentDate = new Date();
-  const currentMonth = month ? month + 1 : currentDate.getMonth() + 1;
+  const currentMonth = month ? month + 1 : null;
 
   const session = await validateSession();
+
   const result = await db
     .select({
-      totalIncome: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END)`,
-      totalExpenses: sql<string>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
-      totalBalance: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.amount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END)`,
+      month: sql<number>`MONTH(${transactions.timestamp})`, 
+      transactionAmount: sql<number>`transactions.amount`,
+      currency: sql<string>`transactions.currencyCode`,
+      transactionType: sql<string>`transactions.type`,
     })
     .from(transactions)
-    .where(
-      and(
-        eq(sql`MONTH(${transactions.timestamp})`, currentMonth),
-        eq(transactions.userId, session.user.id)
-      )
-    );
+    .where(month ? and(
+      eq(sql`MONTH(${transactions.timestamp})`, currentMonth),
+      eq(transactions.userId, session.user.id)
+    ) : eq(transactions.userId, session.user.id));
 
-  return {
-    month: month || new Date().getMonth() + 1,
-    totalExpenses: result[0].totalExpenses,
-    totalIncome: result[0].totalIncome,
-    totalBalance: result[0].totalBalance,
+  const convertedResult = result.map((row) => ({
+    month: row.month,
+    transactionAmount: convertCurrency(
+      Number(row.transactionAmount),
+      row.currency,
+      preferredCurrency,
+      exchangeRates
+    ),
+    transactionType: row.transactionType,
+  }));
+
+  let totalIncomes = 0;
+  let totalExpenses = 0;
+
+  convertedResult.forEach((transaction) => {
+    if (transaction.transactionType === 'income') {
+      totalIncomes += transaction.transactionAmount;
+    } else if (transaction.transactionType === 'expense') {
+      totalExpenses += transaction.transactionAmount;
+    }
+  });
+
+  const totalBalance = totalIncomes - totalExpenses;
+
+  const summaryObject = {
+    totalIncomes,
+    totalExpenses,
+    totalBalance,
+    month
   };
+
+  console.log(summaryObject)
+
+  return summaryObject
 }
 
-export const getBalanceForMonth = cache(calculateBalanceForMonth);
+export const getTotalIncomeAndExpenses= cache(calculateTotalIncomeAndExpenses);

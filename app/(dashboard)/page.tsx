@@ -7,22 +7,24 @@ import { SuccessToast } from '@/components/success-toast';
 import { getCurrentCurrency } from '@/db/queries/currencies';
 import {
   getBalanceData,
-  getBalanceForMonth,
   getOverviewData,
+  getTotalIncomeAndExpenses,
 } from '@/db/queries/transactions';
 import { Suspense } from 'react';
 
 export default async function Home() {
-  const overviewData = getOverviewData();
+  const currencyCode = await getCurrentCurrency();
+  const overviewData = getOverviewData(currencyCode);
   const balanceData = getBalanceData();
-  const currentMonthData = getBalanceForMonth();
-  const currencyCode = getCurrentCurrency();
 
-  const [month, overview, balance, code] = await Promise.all([
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentMonthData = getTotalIncomeAndExpenses(currencyCode, currentMonth)
+
+  const [month, overview, balance] = await Promise.all([
     currentMonthData,
     overviewData,
     balanceData,
-    currencyCode,
   ]);
 
   return (
@@ -35,7 +37,7 @@ export default async function Home() {
           </Suspense>
         </div>
         <div className="lg:col-span-3">
-          <MonthlyBalanceCard month={month} currencyCode={code} />
+          <MonthlyBalanceCard month={month} currencyCode={currencyCode} />
         </div>
         <div className="lg:col-span-6">
           <Suspense fallback={<div>Loading...</div>}>
@@ -43,8 +45,8 @@ export default async function Home() {
           </Suspense>
         </div>
       </div>
-      <Overview data={overview} currencyCode={code} />
-      <BalanceChart data={balance} currencyCode={code} />
+      <Overview data={overview} currencyCode={currencyCode} />
+      <BalanceChart data={balance} currencyCode={currencyCode} />
     </main>
   );
 }
