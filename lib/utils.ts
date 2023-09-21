@@ -50,7 +50,7 @@ const months = [
 
 export function getMonth(monthNumber: number, upper = false) {
   if (monthNumber >= 0 && monthNumber < months.length) {
-    return upper ? months[monthNumber + 1] : months[monthNumber].toLowerCase();
+    return upper ? months[monthNumber] : months[monthNumber].toLowerCase();
   } else {
     return 'Invalid Month Number';
   }

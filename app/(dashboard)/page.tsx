@@ -1,5 +1,4 @@
 import { BalanceChart } from '@/components/dashboard/balance-chart';
-import MonthlyBalanceCard from '@/components/dashboard/month-summary-card';
 import { Overview } from '@/components/dashboard/overview';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
 import SummaryCard from '@/components/dashboard/summary-card';
@@ -8,7 +7,6 @@ import { getCurrentCurrency } from '@/db/queries/currencies';
 import {
   getBalanceData,
   getOverviewData,
-  getTotalIncomeAndExpenses,
 } from '@/db/queries/transactions';
 import { Suspense } from 'react';
 
@@ -19,16 +17,8 @@ export default async function Home() {
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
-  const currentMonthData = getTotalIncomeAndExpenses(
-    currencyCode,
-    currentMonth
-  );
 
-  const [month, overview, balance] = await Promise.all([
-    currentMonthData,
-    overviewData,
-    balanceData,
-  ]);
+  const [overview, balance] = await Promise.all([overviewData, balanceData]);
 
   return (
     <main className="space-y-10 py-10">

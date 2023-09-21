@@ -1,15 +1,14 @@
-import MonthlyBalanceCard from '@/components/dashboard/month-summary-card';
+import MonthSummaryCard from '@/components/dashboard/month-summary-card';
 import { getCurrentCurrency } from '@/db/queries/currencies';
 import { getSummariesForMonths } from '@/db/queries/transactions';
 
-export default async function MonthPage() {
+export default async function MonthsPage() {
   const monthData = await getSummariesForMonths();
-  const currentCurrency = await getCurrentCurrency();
 
   return (
     <main className="mx-auto py-10">
       {monthData.map((m) => (
-        <MonthlyBalanceCard month={m} key={m.month} currencyCode={currentCurrency} />
+        <MonthSummaryCard monthData={m} key={m.month} />
       ))}
     </main>
   );
