@@ -102,9 +102,7 @@ export async function findExchangeRate(
 
   const exchangeRates = await fetchExchangeRates();
 
-  console.log(exchangeRates);
-
-  return (exchangeRates[toCurrency] / exchangeRates[fromCurrency]);
+  return exchangeRates[toCurrency] / exchangeRates[fromCurrency];
 }
 
 export async function fetchExchangeRates(): Promise<Record<string, number>> {

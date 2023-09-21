@@ -19,7 +19,10 @@ export default async function Home() {
 
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
-  const currentMonthData = getTotalIncomeAndExpenses(currencyCode, currentMonth)
+  const currentMonthData = getTotalIncomeAndExpenses(
+    currencyCode,
+    currentMonth
+  );
 
   const [month, overview, balance] = await Promise.all([
     currentMonthData,
@@ -37,7 +40,9 @@ export default async function Home() {
           </Suspense>
         </div>
         <div className="lg:col-span-3">
-          <MonthlyBalanceCard month={month} currencyCode={currencyCode} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <SummaryCard currentMonth={currentMonth} />
+          </Suspense>
         </div>
         <div className="lg:col-span-6">
           <Suspense fallback={<div>Loading...</div>}>
