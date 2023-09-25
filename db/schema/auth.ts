@@ -59,7 +59,7 @@ export const profiles = mysqlTable(
     currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
   },
   (profiles) => ({
-    nameIndex: uniqueIndex('name_idx').on(profiles.name),
+    profileNameIndex: uniqueIndex('profileName_idx').on(profiles.name, profiles.id),
   })
 );
 

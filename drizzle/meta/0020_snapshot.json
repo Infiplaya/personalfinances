@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "d529ce89-1447-45ea-9ea3-67900daabcc0",
+  "id": "0d3e4a14-977e-4f7b-bb33-c404c8352397",
   "prevId": "737fbf1f-a701-45ea-909f-199369f33590",
   "tables": {
     "accounts": {
@@ -138,10 +138,11 @@
         }
       },
       "indexes": {
-        "name_idx": {
-          "name": "name_idx",
+        "profileName_idx": {
+          "name": "profileName_idx",
           "columns": [
-            "name"
+            "name",
+            "id"
           ],
           "isUnique": true
         }
