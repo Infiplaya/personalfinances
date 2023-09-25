@@ -5,6 +5,7 @@ import {
   primaryKey,
   varchar,
   text,
+  uniqueIndex,
 } from 'drizzle-orm/mysql-core';
 import type { AdapterAccount } from '@auth/core/adapters';
 import { relations } from 'drizzle-orm';
@@ -49,12 +50,18 @@ export const sessions = mysqlTable('sessions', {
   expires: timestamp('expires', { mode: 'date' }).notNull(),
 });
 
-export const profiles = mysqlTable('profiles', {
-  id: varchar('id', { length: 255 }).notNull().primaryKey(),
-  userId: varchar('userId', { length: 255 }).notNull(),
-  name: varchar('name', { length: 255 }).notNull(),
-  currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
-});
+export const profiles = mysqlTable(
+  'profiles',
+  {
+    id: varchar('id', { length: 255 }).notNull().primaryKey(),
+    userId: varchar('userId', { length: 255 }).notNull(),
+    name: varchar('name', { length: 255 }).notNull(),
+    currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
+  },
+  (profiles) => ({
+    nameIndex: uniqueIndex('name_idx').on(profiles.name),
+  })
+);
 
 export const verificationTokens = mysqlTable(
   'verificationToken',

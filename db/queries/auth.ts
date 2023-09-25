@@ -5,7 +5,7 @@ import { validateSession } from './transactions';
 import { profiles, users } from '../schema/auth';
 import { and, eq } from 'drizzle-orm';
 
-export async function getCurrentProfile() {
+export async function selectCurrentProfile() {
   const { user } = await validateSession();
 
   const userProfile = await db
@@ -22,12 +22,14 @@ export async function getCurrentProfile() {
     .where(
       and(
         eq(profiles.userId, user.id),
-        eq(profiles.name, currentProfileName ? currentProfileName : 'default')
+        eq(profiles.name, currentProfileName ? currentProfileName : 'xd')
       )
     );
 
   return currentProfile[0];
 }
+
+export const getCurrentProfile = cache(selectCurrentProfile);
 
 export async function selectUserProfiles() {
   const { user } = await validateSession();

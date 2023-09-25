@@ -39,7 +39,6 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: u.id,
-          currentProfile: u.currentProfile,
           randomKey: u.randomKey,
         };
       }
@@ -77,7 +76,6 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          currentProfile: user.currentProfile,
           randomKey: 'xdddddddd',
         };
       },

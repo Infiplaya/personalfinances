@@ -141,6 +141,13 @@
       "when": 1695645131778,
       "tag": "0019_grey_mysterio",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "5",
+      "when": 1695669884467,
+      "tag": "0020_foamy_grey_gargoyle",
+      "breakpoints": true
     }
   ]
 }
