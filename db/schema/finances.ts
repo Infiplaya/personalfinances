@@ -10,7 +10,7 @@ import {
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core';
-import { users } from './auth';
+import { profiles, users } from './auth';
 
 export const transactions = mysqlTable(
   'transactions',
@@ -19,7 +19,7 @@ export const transactions = mysqlTable(
     name: varchar('name', { length: 256 }),
     description: text('description'),
     amount: decimal('amount', { precision: 10, scale: 2 }),
-    userId: varchar('userId', { length: 255 }).notNull(),
+    profileId: varchar('profileId', { length: 255 }).notNull(),
     categoryName: varchar('categoryName', { length: 255 }).notNull(),
     currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
     type: mysqlEnum('type', ['expense', 'income']).notNull(),
@@ -61,7 +61,7 @@ export const balances = mysqlTable(
     totalBalance: double('totalBalance', { precision: 10, scale: 2 }).default(
       0.0
     ),
-    userId: varchar('userId', { length: 255 }).notNull(),
+    profileId: varchar('profileId', { length: 255 }).notNull(),
     timestamp: timestamp('timestamp').defaultNow(),
   },
   (balance) => ({
@@ -70,9 +70,9 @@ export const balances = mysqlTable(
 );
 
 export const balancesRelations = relations(balances, ({ one }) => ({
-  user: one(users, {
-    fields: [balances.userId],
-    references: [users.id],
+  profile: one(profiles, {
+    fields: [balances.profileId],
+    references: [profiles.id],
   }),
 }));
 
@@ -82,13 +82,13 @@ export const categoriesRelations = relations(categories, ({ many }) => ({
 
 export const currenciesRelations = relations(currencies, ({ many }) => ({
   transactions: many(transactions),
-  users: many(users),
+  profiles: many(profiles),
 }));
 
 export const transactionsRelations = relations(transactions, ({ one }) => ({
-  user: one(users, {
-    fields: [transactions.userId],
-    references: [users.id],
+  profile: one(profiles, {
+    fields: [transactions.profileId],
+    references: [profiles.id],
   }),
   category: one(categories, {
     fields: [transactions.categoryName],
@@ -96,7 +96,7 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   }),
   currency: one(currencies, {
     fields: [transactions.currencyCode],
-    references: [currencies.code], 
+    references: [currencies.code],
   }),
 }));
 

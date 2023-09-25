@@ -1,24 +1,25 @@
-import type { DefaultSession, NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import { db } from "../../db/index";
-import { PlanetScaleAdapter } from "./planetscale-adapter";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcryptjs";
+import type { DefaultSession, NextAuthOptions } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import { db } from '../../db/index';
+import { PlanetScaleAdapter } from './planetscale-adapter';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { compare } from 'bcryptjs';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string;
-    } & DefaultSession["user"];
+      currentProfile: string;
+    } & DefaultSession['user'];
   }
 }
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/signin",
+    signIn: '/signin',
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   adapter: PlanetScaleAdapter(db),
   callbacks: {
@@ -38,6 +39,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: u.id,
+          currentProfile: u.currentProfile,
           randomKey: u.randomKey,
         };
       }
@@ -46,14 +48,14 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     CredentialsProvider({
-      name: "Sign in",
+      name: 'Sign in',
       credentials: {
         email: {
-          label: "Email",
-          type: "email",
-          placeholder: "example@example.com",
+          label: 'Email',
+          type: 'email',
+          placeholder: 'example@example.com',
         },
-        password: { label: "Password", type: "password" },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
@@ -75,7 +77,8 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.name,
-          randomKey: "Hey cool",
+          currentProfile: user.currentProfile,
+          randomKey: 'xdddddddd',
         };
       },
     }),

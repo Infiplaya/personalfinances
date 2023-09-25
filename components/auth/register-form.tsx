@@ -12,14 +12,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { Category } from "@/db/schema/finances";
 
 import { registerUser } from "@/app/actions";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RegisterForm, registerFormSchema } from "@/lib/validation/auth";
-import { signIn } from "next-auth/react";
 
 export function RegisterForm() {
   const [error, setError] = useState("");

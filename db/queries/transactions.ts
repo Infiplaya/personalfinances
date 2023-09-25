@@ -13,8 +13,9 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 import { cache } from 'react';
 import { getCurrentCurrency } from './currencies';
+import { getCurrentProfile } from './auth';
 
-async function validateSession() {
+export async function validateSession() {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error('User not authenticated');
   return session;
@@ -35,7 +36,7 @@ export async function calculateOverviewData(preferredCurrency: string) {
   const sevenDaysAgo = new Date(currentDate);
   sevenDaysAgo.setDate(currentDate.getDate() - 7);
 
-  const { user } = await validateSession();
+  const currentProfile = await getCurrentProfile();
 
   const exchangeRates = await fetchExchangeRates();
 
@@ -51,7 +52,7 @@ export async function calculateOverviewData(preferredCurrency: string) {
       and(
         gte(transactions.timestamp, sevenDaysAgo),
         lte(transactions.timestamp, currentDate),
-        eq(transactions.userId, user.id)
+        eq(transactions.profileId, currentProfile.id)
       )
     );
 
@@ -109,6 +110,8 @@ export async function calculateBalanceData(preferredCurrency: string) {
 
   const exchangeRate = await findExchangeRate('USD', preferredCurrency);
 
+  const currentProfile = await getCurrentProfile();
+
   const session = await validateSession();
   return await db
     .select({
@@ -120,7 +123,7 @@ export async function calculateBalanceData(preferredCurrency: string) {
       and(
         gte(balances.timestamp, monthAgo),
         lte(balances.timestamp, currentDate),
-        eq(balances.userId, session.user.id)
+        eq(balances.profileId, currentProfile.id)
       )
     );
 }
@@ -134,7 +137,7 @@ type Column =
   | 'name'
   | 'description'
   | 'amount'
-  | 'userId'
+  | 'profileId'
   | 'categoryName'
   | 'type'
   | 'timestamp'
@@ -150,7 +153,7 @@ export async function selectTransactions(
   categoriesFilter: string[],
   typesFilter: any
 ) {
-  const session = await validateSession();
+  const currentProfile = await getCurrentProfile();
   return await db
     .select()
     .from(transactions)
@@ -162,7 +165,7 @@ export async function selectTransactions(
           ? like(transactions.name, `%${name}%`)
           : undefined,
 
-        eq(transactions.userId, session.user.id),
+        eq(transactions.profileId, currentProfile.id),
         categoriesFilter.length > 0
           ? inArray(transactions.categoryName, categoriesFilter)
           : undefined,
@@ -183,13 +186,13 @@ export async function selectTransactions(
 export const getTransactions = cache(selectTransactions);
 
 export async function selectTransactionsByMonth(month: number) {
-  const session = await validateSession();
+  const currentProfile = await getCurrentProfile();
   return await db
     .select()
     .from(transactions)
     .where(
       and(
-        eq(transactions.userId, session.user.id),
+        eq(transactions.profileId, currentProfile.id),
         eq(sql`MONTH(${transactions.timestamp})`, month)
       )
     );
@@ -200,7 +203,7 @@ export const getTransactionsByMonth = cache(selectTransactionsByMonth);
 export async function calculateSummariesForMonths() {
   const prefferedCurrency = await getCurrentCurrency();
   const exchangeRates = await fetchExchangeRates();
-  const session = await validateSession();
+  const currentProfile = await getCurrentProfile();
   const result = await db
     .select({
       month: sql<number>`MONTH(${transactions.timestamp})`,
@@ -209,7 +212,7 @@ export async function calculateSummariesForMonths() {
       transactionType: transactions.type,
     })
     .from(transactions)
-    .where(and(eq(transactions.userId, session.user.id)));
+    .where(and(eq(transactions.profileId, currentProfile.id)));
 
   const convertedResult = result.map((row) => ({
     month: row.month,
@@ -265,11 +268,11 @@ export async function calculateSummariesForMonths() {
 export const getSummariesForMonths = cache(calculateSummariesForMonths);
 
 export async function countTransactions() {
-  const session = await validateSession();
+  const currentProfile = await getCurrentProfile();
   const count = await db
     .select({ count: sql<number>`count(*)` })
     .from(transactions)
-    .where(eq(transactions.userId, session.user.id));
+    .where(eq(transactions.profileId, currentProfile.id));
 
   return count[0].count;
 }
@@ -284,7 +287,7 @@ async function calculateTotalIncomeAndExpenses(
 
   const currentMonth = month ? month + 1 : null;
 
-  const session = await validateSession();
+  const currentProfile = await getCurrentProfile();
 
   const result = await db
     .select({
@@ -297,9 +300,9 @@ async function calculateTotalIncomeAndExpenses(
       month
         ? and(
             eq(sql`MONTH(${transactions.timestamp})`, currentMonth),
-            eq(transactions.userId, session.user.id)
+            eq(transactions.profileId, currentProfile.id)
           )
-        : eq(transactions.userId, session.user.id)
+        : eq(transactions.profileId, currentProfile.id)
     );
 
   const convertedResult = result.map((row) => ({
@@ -337,3 +340,19 @@ async function calculateTotalIncomeAndExpenses(
 }
 
 export const getTotalIncomeAndExpenses = cache(calculateTotalIncomeAndExpenses);
+
+async function selectRecentTransactions() {
+  const currentProfile = await getCurrentProfile();
+
+  return await db.query.transactions.findMany({
+    limit: 6,
+    orderBy: (transactions, { desc }) => [desc(transactions.timestamp)],
+    with: {
+      category: true,
+    },
+    where: (transactions, { eq }) =>
+      eq(transactions.profileId, currentProfile.id),
+  });
+}
+
+export const getRecentTransactions = cache(selectRecentTransactions);

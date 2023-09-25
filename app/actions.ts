@@ -1,17 +1,17 @@
 'use server';
 
 import { db } from '@/db';
-import { users } from '@/db/schema/auth';
+import { profiles, users } from '@/db/schema/auth';
 import { balances, transactions } from '@/db/schema/finances';
-import { authOptions } from '@/lib/auth/auth';
 import { TransactionForm } from '@/lib/validation/transaction';
 import { eq, inArray, InferModel } from 'drizzle-orm';
-import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { hash } from 'bcryptjs';
-import { RegisterForm } from '@/lib/validation/auth';
+import { NewProfileForm, RegisterForm } from '@/lib/validation/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { convertCurrency, fetchExchangeRates } from '@/lib/utils';
+import { getCurrentProfile } from '@/db/queries/auth';
+import { validateSession } from '@/db/queries/transactions';
 
 export async function registerUser(formData: RegisterForm) {
   try {
@@ -26,10 +26,23 @@ export async function registerUser(formData: RegisterForm) {
       id: uuidv4(),
       name: formData.name,
       password: hashed_password,
-      currencyCode: 'USD',
+      currentProfile: 'default',
       email: formData.email.toLowerCase(),
     };
     await insertUser(newUser);
+
+    type NewProfile = InferModel<typeof profiles, 'insert'>;
+    const insertProfile = async (profile: NewProfile) => {
+      return db.insert(profiles).values(profile);
+    };
+
+    const newProfile: NewProfile = {
+      id: uuidv4(),
+      name: 'default',
+      currencyCode: 'USD',
+      userId: newUser.id,
+    };
+    await insertProfile(newProfile);
 
     return {
       user: {
@@ -46,20 +59,18 @@ export async function registerUser(formData: RegisterForm) {
 }
 
 export async function createNewTransaction(formData: TransactionForm) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user.id) throw new Error();
+  const currentProfile = await getCurrentProfile();
   try {
     await db.insert(transactions).values({
       ...formData,
-      userId: session.user.id,
+      profileId: currentProfile.id,
     });
 
-
     const exchangeRates = await fetchExchangeRates();
-    
+
     // grab user balance if it exist
     const userBalance = await db.query.balances.findFirst({
-      where: eq(balances.userId, session.user.id),
+      where: eq(balances.profileId, currentProfile.id),
     });
 
     let amount =
@@ -67,15 +78,19 @@ export async function createNewTransaction(formData: TransactionForm) {
         ? -Number(formData.amount)
         : Number(formData.amount);
 
-    amount = convertCurrency(amount, formData.currencyCode, 'USD', exchangeRates);
+    amount = convertCurrency(
+      amount,
+      formData.currencyCode,
+      'USD',
+      exchangeRates
+    );
 
     await db.insert(balances).values({
-      userId: session.user.id,
+      profileId: currentProfile.id,
       totalBalance: userBalance
         ? (userBalance.totalBalance as number) + amount
         : amount,
     });
-
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';
@@ -86,9 +101,7 @@ export async function createNewTransaction(formData: TransactionForm) {
 
 export async function deleteTransaction(transactionId: number) {
   try {
-    await db
-      .delete(transactions)
-      .where(eq(transactions.id, transactionId));
+    await db.delete(transactions).where(eq(transactions.id, transactionId));
     revalidatePath('/transactions');
   } catch (e) {
     console.log(e);
@@ -107,18 +120,57 @@ export async function deleteTransactions(transactionsIds: number[]) {
 }
 
 export async function changePrefferedCurrency(currencyCode: string) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user.id) throw new Error();
-
+  const currentProfile = await getCurrentProfile();
   try {
-    await db.update(users).set({
-      currencyCode: currencyCode
-    }).where(
-      eq(users.id, session.user.id)
-    )
+    await db
+      .update(profiles)
+      .set({
+        currencyCode: currencyCode,
+      })
+      .where(eq(profiles.id, currentProfile.id));
 
     revalidatePath('/');
   } catch (e) {
     console.log(e);
   }
+}
+
+export async function createNewProfile(formData: NewProfileForm) {
+  const session = await validateSession();
+  try {
+    await db.insert(profiles).values({
+      id: uuidv4(),
+      ...formData,
+      userId: session.user.id,
+    });
+  } catch (e) {
+    console.log(e);
+    return 'Something went wrong! Try again later...';
+  }
+
+  revalidatePath('/');
+}
+
+export async function changeCurrentProfile(newCurrentProfile: string) {
+  const session = await validateSession();
+  const user = await db
+    .select()
+    .from(users)
+    .where(eq(users.id, session.user.id));
+
+  try {
+    await db
+      .update(users)
+      .set({
+        currentProfile: newCurrentProfile,
+      })
+      .where(eq(users.id, session.user.id));
+
+    console.log(user);
+  } catch (e) {
+    console.log(e);
+    return 'Something went wrong! Try again later...';
+  }
+
+  revalidatePath('/');
 }
