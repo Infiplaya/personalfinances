@@ -18,7 +18,7 @@ export function ProfileOptions({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar>
-            <AvatarImage src={avatarImg} />
+            {avatarImg ? <AvatarImage src={avatarImg} /> : null}
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
