@@ -9,7 +9,6 @@ import {
 
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
-import Link from 'next/link';
 import { columns } from './columns';
 interface Props {
   searchParams: {
@@ -67,7 +66,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   return (
     <main className="mx-auto py-10">
-      <div className="flex w-full justify-end px-3 lg:my-6">
+      <div className="flex w-full justify-end space-x-6 px-3 lg:my-6">
         <TransactionDialog
           categories={categoriesData}
           currencies={currenciesData}
