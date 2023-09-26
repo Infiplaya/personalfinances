@@ -1,0 +1,1 @@
+ALTER TABLE `categories` ADD `slug` varchar(256) NOT NULL;

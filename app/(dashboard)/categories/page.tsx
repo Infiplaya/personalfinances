@@ -19,7 +19,7 @@ export default async function CategoriesPage() {
                 c.type === 'income' ? (
                   <Link
                     key={c.id}
-                    href={`/categories/${c.name}`}
+                    href={`/categories/${c.slug}`}
                     className="block rounded-md py-2 pl-6 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     {c.name}
@@ -39,7 +39,7 @@ export default async function CategoriesPage() {
                 c.type === 'expense' ? (
                   <Link
                     key={c.id}
-                    href={`/categories/${c.name}`}
+                    href={`/categories/${c.slug}`}
                     className="block rounded-md py-2 pl-6 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     {c.name}

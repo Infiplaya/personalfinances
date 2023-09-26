@@ -35,6 +35,7 @@ export const categories = mysqlTable(
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 256 }).notNull(),
+    slug: varchar('slug', { length: 256 }).notNull(),
     type: mysqlEnum('type', ['expense', 'income']).notNull().default('expense'),
   },
   (categories) => ({

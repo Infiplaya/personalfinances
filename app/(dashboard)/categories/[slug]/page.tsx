@@ -5,34 +5,34 @@ import { getCurrentProfile } from '@/db/queries/auth';
 import { transactions } from '@/db/schema/finances';
 import { and, eq } from 'drizzle-orm';
 
-async function getCategory(name: string) {
+async function getCategory(slug: string) {
   const currentProfile = await getCurrentProfile();
-  return await db
-    .select()
-    .from(transactions)
-    .where(
-      and(
-        eq(transactions.profileId, currentProfile.id),
-        eq(transactions.categoryName, name)
-      )
-    );
+  return await db.query.categories.findFirst({
+    where: (categories, { eq }) => eq(categories.slug, slug),
+    with: {
+      transactions: {
+        where: (transactions, { eq }) =>
+          eq(transactions.profileId, currentProfile.id),
+      },
+    },
+  });
 }
 
 export default async function CategoriesPage({
   params,
 }: {
-  params: { name: string };
+  params: { slug: string };
 }) {
-  const transactions = await getCategory(params.name);
+  const category = await getCategory(params.slug);
   return (
     <main className="space-y-10 py-10">
-      {transactions ? (
+      {category ? (
         <Card>
           <CardHeader>
-            <CardTitle>{params.name}</CardTitle>
+            <CardTitle>{category.name}</CardTitle>
           </CardHeader>
           <CardContent>
-            {transactions.map((t) => (
+            {category.transactions.map((t) => (
               <TransactionItem key={t.id} transaction={t} />
             ))}
           </CardContent>

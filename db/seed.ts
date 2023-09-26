@@ -6,6 +6,8 @@ import { fetch } from 'undici';
 import 'dotenv/config';
 import { v4 as uuidv4 } from 'uuid';
 import { profiles, users } from './schema/auth';
+import slugify from 'slugify';
+import { categories } from './schema/finances';
 
 const currenciesData = [
   { code: 'USD', name: 'United States Dollar' },
@@ -35,17 +37,6 @@ const runSeed = async () => {
   });
 
   const db = drizzle(connection);
-
-  const allUsers = await db.select().from(users);
-
-  for (const u of allUsers) {
-    await db.insert(profiles).values({
-      id: uuidv4(),
-      name: 'default',
-      currencyCode: 'USD',
-      userId: u.id,
-    });
-  }
 
   process.exit(0);
 };
