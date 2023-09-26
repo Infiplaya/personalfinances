@@ -8,7 +8,7 @@ export default async function CategoriesPage() {
   const categoriesData = await getCategories();
   return (
     <div className="space-y-10 py-10">
-      <div className="grid lg:grid-cols-2 space-y-10 lg:space-y-0 lg:gap-x-10">
+      <div className="grid space-y-10 lg:grid-cols-2 lg:gap-x-10 lg:space-y-0">
         <Card>
           <CardHeader>
             <CardTitle>Categories of Incomes</CardTitle>
@@ -19,7 +19,7 @@ export default async function CategoriesPage() {
                 c.type === 'income' ? (
                   <Link
                     key={c.id}
-                    href={`/categories/${c.id}`}
+                    href={`/categories/${c.name}`}
                     className="block rounded-md py-2 pl-6 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     {c.name}
@@ -39,7 +39,7 @@ export default async function CategoriesPage() {
                 c.type === 'expense' ? (
                   <Link
                     key={c.id}
-                    href={`/categories/${c.id}`}
+                    href={`/categories/${c.name}`}
                     className="block rounded-md py-2 pl-6 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     {c.name}
