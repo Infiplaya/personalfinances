@@ -1,4 +1,5 @@
 import { TransactionItem } from '@/components/transaction-item';
+import { TransactionsTable } from '@/components/transactions/transactions-table';
 import { getTransactionsByMonth } from '@/db/queries/transactions';
 
 export async function TransactionByMonth({ month }: { month: number }) {
@@ -6,7 +7,7 @@ export async function TransactionByMonth({ month }: { month: number }) {
   return (
     <section className="mt-10">
       {transactions ? (
-        transactions.map((t) => <TransactionItem key={t.id} transaction={t} />)
+        <TransactionsTable transactions={transactions} />
       ) : (
         <div>No transactions found for this month</div>
       )}

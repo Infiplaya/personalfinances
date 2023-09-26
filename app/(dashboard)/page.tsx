@@ -19,7 +19,6 @@ export default async function Home() {
 
   return (
     <main className="space-y-10 py-10">
-      {currencyCode}
       <SuccessToast message="Successfully logged in! Welcome back" />
       <div className="grid-cols-12 gap-x-10 space-y-10 lg:grid lg:space-y-0">
         <div className="lg:col-span-3">

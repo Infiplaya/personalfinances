@@ -76,6 +76,10 @@ export const links = [
     href: '/categories',
     label: 'Categories',
   },
+  {
+    href: '/transactions/months',
+    label: 'Monthly Overviews',
+  },
 ];
 
 export function convertCurrency(

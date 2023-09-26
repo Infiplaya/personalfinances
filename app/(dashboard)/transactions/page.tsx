@@ -67,7 +67,6 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   return (
     <main className="mx-auto py-10">
-      <Link href={`/transactions/months`}>Months Summary</Link>
       <div className="flex w-full justify-end px-3 lg:my-6">
         <TransactionDialog
           categories={categoriesData}

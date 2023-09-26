@@ -3,10 +3,7 @@ import { TransactionDialog } from '@/components/transactions/transaction-dialog'
 import { getCategories } from '@/db/queries/categories';
 import { getMonthIndex } from '@/lib/utils';
 import { TransactionByMonth } from './transactions-by-month';
-import {
-  getCurrencies,
-  getCurrentCurrency,
-} from '@/db/queries/currencies';
+import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 
 export default async function MonthPage({
   params,
@@ -16,7 +13,6 @@ export default async function MonthPage({
   const categoriesData = await getCategories();
   const currenciesData = await getCurrencies();
   const currentCurrency = await getCurrentCurrency();
-
 
   return (
     <main className="mx-auto py-10">
