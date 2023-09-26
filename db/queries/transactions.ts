@@ -112,7 +112,6 @@ export async function calculateBalanceData(preferredCurrency: string) {
 
   const currentProfile = await getCurrentProfile();
 
-  const session = await validateSession();
   return await db
     .select({
       totalBalance: sql<number>`ROUND(${balances.totalBalance} * ${exchangeRate}, 2)`,

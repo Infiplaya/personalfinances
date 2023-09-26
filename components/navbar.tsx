@@ -1,26 +1,28 @@
 import Link from 'next/link';
 import React from 'react';
-import { SignOut } from './auth/sign-out';
 import { ThemeSwitcher } from './theme-switcher';
 import MobileNavbar from './mobile-navbar';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 import { CurrencyDropdown } from './currency-dropdown';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
-import { ProfileOptions } from './profile-popover';
+import { ProfileSwitcher } from './dashboard/profile-switcher';
+import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
+import { ProfileDropdown } from './dashboard/profile-dropdown';
+import { NewProfileModal } from './dashboard/new-profile-modal';
 
 export default async function Navbar() {
   const session = await getServerSession(authOptions);
   const currenciesData = await getCurrencies();
   const currentCurrency = await getCurrentCurrency();
+  const userProfiles = await getUserProfiles();
+  const currentProfile = await getCurrentProfile();
 
   return (
     <nav className="sticky top-0 inline-flex w-full items-center justify-end border-b border-gray-200 bg-white px-10 py-4 dark:border-gray-800 dark:bg-black">
-      <div className="inline-flex items-center space-x-8">
-        {session?.user ? (
-          <SignOut />
-        ) : (
-          <div className="inline-flex items-center space-x-4">
+      <div className="hidden items-center space-x-8 lg:inline-flex">
+        {session?.user ? null : (
+          <div className="inline-flex items-center space-x-4 text-xs">
             <Link href="/signin">Sign In</Link>{' '}
             <Link href="/signup">Register</Link>
           </div>
@@ -30,9 +32,18 @@ export default async function Navbar() {
           currentCurrency={currentCurrency}
         />
         <ThemeSwitcher />
-        <ProfileOptions avatarImg={session?.user.image} />
-        <MobileNavbar />
+        <ProfileSwitcher
+          profiles={userProfiles}
+          currentProfile={currentProfile}
+        >
+          <NewProfileModal />
+        </ProfileSwitcher>
+        <ProfileDropdown
+          userImg={session?.user.image}
+          username={session?.user.name}
+        />
       </div>
+      <MobileNavbar />
     </nav>
   );
 }
