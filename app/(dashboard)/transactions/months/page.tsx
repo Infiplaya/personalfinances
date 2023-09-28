@@ -6,7 +6,7 @@ export default async function MonthsPage() {
   const monthData = await getSummariesForMonths();
 
   return (
-    <main className="mx-auto py-10">
+    <main>
       {monthData.map((m) => (
         <MonthSummaryCard monthData={m} key={m.month} />
       ))}

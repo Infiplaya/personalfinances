@@ -13,12 +13,14 @@ import Link from 'next/link';
 
 export function TransactionsTable({
   transactions,
+  caption,
 }: {
   transactions: Transaction[];
+  caption: string;
 }) {
   return (
     <Table>
-      <TableCaption>A list of your transactions in this month.</TableCaption>
+      <TableCaption>{caption}</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Name</TableHead>
@@ -43,7 +45,10 @@ export function TransactionsTable({
             </TableCell>
             <TableCell className="text-right">
               {transaction.amount
-                ? moneyFormat(Number(transaction.amount), transaction.currencyCode)
+                ? moneyFormat(
+                    Number(transaction.amount),
+                    transaction.currencyCode
+                  )
                 : null}
             </TableCell>
           </TableRow>

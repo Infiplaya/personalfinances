@@ -65,7 +65,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
   const currentCurrency = await getCurrentCurrency();
 
   return (
-    <main className="mx-auto py-10">
+    <main>
       <div className="flex w-full justify-end space-x-6 px-3 lg:my-6">
         <TransactionDialog
           categories={categoriesData}

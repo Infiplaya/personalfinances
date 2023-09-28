@@ -1,4 +1,5 @@
 import { TransactionItem } from '@/components/transaction-item';
+import { TransactionsTable } from '@/components/transactions/transactions-table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
 import { getCurrentProfile } from '@/db/queries/auth';
@@ -25,18 +26,20 @@ export default async function CategoriesPage({
 }) {
   const category = await getCategory(params.slug);
   return (
-    <main className="space-y-10 py-10">
+    <main>
       {category ? (
-        <Card>
-          <CardHeader>
-            <CardTitle>{category.name}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {category.transactions.map((t) => (
-              <TransactionItem key={t.id} transaction={t} />
-            ))}
-          </CardContent>
-        </Card>
+        <>
+          <Card>
+            <CardHeader>
+              <CardTitle>{category.name}</CardTitle>
+            </CardHeader>
+            <CardContent></CardContent>
+          </Card>
+          <TransactionsTable
+            transactions={category.transactions}
+            caption={`A list of transactions in ${category.name}`}
+          />
+        </>
       ) : (
         <p>No such category transactions.</p>
       )}

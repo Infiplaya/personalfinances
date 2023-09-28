@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { cn, dateFormat, moneyFormat } from '@/lib/utils';
-import { Transaction } from '@/db/schema/finances';
 import { Badge } from './ui/badge';
+import { TransactionWithCategory } from '@/db/queries/transactions';
 
-export function TransactionItem({ transaction }: { transaction: Transaction }) {
+export function TransactionItem({ transaction }: { transaction: TransactionWithCategory }) {
   return (
     <Link
       href={`/transactions/${transaction.id}`}
@@ -11,7 +11,7 @@ export function TransactionItem({ transaction }: { transaction: Transaction }) {
     >
       <div className="flex w-full justify-between">
         <div className="inline-flex items-center space-x-4">
-          <Link href={`/categories/${transaction.categoryName}`}>
+          <Link href={`/categories/${transaction.category.slug}`}>
             <Badge variant="secondary">{transaction.categoryName}</Badge>
           </Link>
           <span

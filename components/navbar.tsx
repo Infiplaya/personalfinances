@@ -19,7 +19,7 @@ export default async function Navbar() {
   const currentProfile = await getCurrentProfile();
 
   return (
-    <nav className="sticky top-0 inline-flex w-full items-center justify-end border-b border-gray-200 bg-white px-16 py-4 dark:border-gray-800 dark:bg-black">
+    <nav className="sticky top-0 inline-flex w-full items-center justify-end border-b border-gray-200 bg-white px-16 py-3 dark:border-gray-800 dark:bg-black">
       <ProfileSwitcher profiles={userProfiles} currentProfile={currentProfile}>
         <NewProfileModal />
       </ProfileSwitcher>

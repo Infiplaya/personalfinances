@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default async function CategoriesPage() {
   const categoriesData = await getCategories();
   return (
-    <div className="space-y-10 py-10">
+    <div>
       <div className="grid space-y-10 lg:grid-cols-2 lg:gap-x-10 lg:space-y-0">
         <Card>
           <CardHeader>

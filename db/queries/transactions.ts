@@ -15,6 +15,7 @@ import { authOptions } from '@/lib/auth/auth';
 import { cache } from 'react';
 import { getCurrentCurrency } from './currencies';
 import { getCurrentProfile } from './auth';
+import { promisify } from 'util';
 
 export async function validateSession() {
   const session = await getServerSession(authOptions);
@@ -75,7 +76,7 @@ export async function calculateOverviewData(preferredCurrency: string) {
   }[] = [];
 
   convertedResult.forEach((row) => {
-    const date = row.date
+    const date = row.date;
     const existingTotal = dailyTotals.find((item) => item.date === date);
 
     if (!existingTotal) {
@@ -356,3 +357,8 @@ async function selectRecentTransactions() {
 }
 
 export const getRecentTransactions = cache(selectRecentTransactions);
+
+type TransactionsWithCategory = UnwrapPromise<
+  ReturnType<typeof selectRecentTransactions>
+>;
+export type TransactionWithCategory = TransactionsWithCategory[number];
