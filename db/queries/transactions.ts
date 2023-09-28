@@ -23,15 +23,15 @@ export async function validateSession() {
   return session;
 }
 
-export async function selectAllTransactionsIds() {
+export async function selectAllTransactionsSlugs() {
   return await db
     .select({
-      id: transactions.id,
+      slug: transactions.slug,
     })
     .from(transactions);
 }
 
-export const getAllTransactionsIds = cache(selectAllTransactionsIds);
+export const getAllTransactionsSlugs = cache(selectAllTransactionsSlugs);
 
 export async function calculateOverviewData(preferredCurrency: string) {
   const currentDate = new Date();

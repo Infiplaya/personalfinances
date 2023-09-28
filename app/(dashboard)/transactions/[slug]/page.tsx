@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
-import { getAllTransactionsIds } from '@/db/queries/transactions';
+import { getAllTransactionsSlugs } from '@/db/queries/transactions';
 import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
 import { eq } from 'drizzle-orm';
@@ -15,11 +15,7 @@ async function getTransaction(slug: string) {
 }
 
 export async function generateStaticParams() {
-  const transactions = await getAllTransactionsIds();
-
-  return transactions.map((t) => ({
-    id: t.id.toString(),
-  }));
+  return await getAllTransactionsSlugs();
 }
 
 export default async function TransactionsPage({
