@@ -73,14 +73,26 @@ export function TransactionForm({
             toast.success('Created new transaction!');
           }
         })}
-        className="space-y-8"
+        className="space-y-6"
       >
-        <fieldset className='flex justify-between items-center'>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="amount"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>Amount</FormLabel>
               <FormControl>
                 <Input
@@ -94,11 +106,11 @@ export function TransactionForm({
           )}
         />
 
-<FormField
+        <FormField
           control={form.control}
           name="currencyCode"
           render={({ field }) => (
-            <FormItem className="flex mt-2.5 flex-col">
+            <FormItem>
               <FormLabel>Currency</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -112,9 +124,7 @@ export function TransactionForm({
                       )}
                     >
                       {field.value
-                        ? currencies.find(
-                            (c) => c.code === field.value
-                          )?.code
+                        ? currencies.find((c) => c.code === field.value)?.code
                         : currentCurrency.toUpperCase()}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -151,37 +161,6 @@ export function TransactionForm({
                   </Command>
                 </PopoverContent>
               </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-         </fieldset>
-
-
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name (optional)</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-       
-        
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Short description (optional)</FormLabel>
-              <FormControl>
-                <Textarea className="resize-none" {...field} />
-              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -244,6 +223,20 @@ export function TransactionForm({
                   </Command>
                 </PopoverContent>
               </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Short description (optional)</FormLabel>
+              <FormControl>
+                <Textarea className="resize-none" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
