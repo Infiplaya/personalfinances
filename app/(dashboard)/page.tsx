@@ -32,7 +32,11 @@ export default async function Home() {
           <SummaryCard currentMonth={currentMonth} />
         </div>
         <div className="lg:col-span-4">
-          <BalanceCard currentBalance={currentBalance[0].totalBalance} />
+          <BalanceCard
+            currentBalance={
+              currentBalance.length > 0 ? currentBalance[0].totalBalance : 0
+            }
+          />
         </div>
       </div>
       <div className="grid gap-x-4 lg:grid-cols-6">
