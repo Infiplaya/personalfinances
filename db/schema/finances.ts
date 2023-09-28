@@ -10,13 +10,14 @@ import {
   uniqueIndex,
   varchar,
 } from 'drizzle-orm/mysql-core';
-import { profiles, users } from './auth';
+import { profiles } from './auth';
 
 export const transactions = mysqlTable(
   'transactions',
   {
     id: serial('id').primaryKey(),
-    name: varchar('name', { length: 256 }),
+    name: varchar('name', { length: 256 }).notNull(),
+    slug: varchar('slug', { length: 256 }).notNull(),
     description: text('description'),
     amount: decimal('amount', { precision: 10, scale: 2 }),
     profileId: varchar('profileId', { length: 255 }).notNull(),

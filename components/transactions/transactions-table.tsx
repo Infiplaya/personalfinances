@@ -33,7 +33,7 @@ export function TransactionsTable({
         {transactions.map((transaction) => (
           <TableRow key={transaction.id}>
             <Link
-              href={`/transactions/${transaction.id}`}
+              href={`/transactions/${transaction.slug}`}
               className="block"
               key={transaction.id}
             >

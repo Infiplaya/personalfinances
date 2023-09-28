@@ -5,9 +5,9 @@ import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
 import { eq } from 'drizzle-orm';
 
-async function getTransaction(transactionId: number) {
+async function getTransaction(slug: string) {
   return await db.query.transactions.findFirst({
-    where: eq(transactions.id, transactionId),
+    where: eq(transactions.slug, slug),
     with: {
       category: true,
     },
@@ -25,9 +25,9 @@ export async function generateStaticParams() {
 export default async function TransactionsPage({
   params,
 }: {
-  params: { id: string };
+  params: { slug: string };
 }) {
-  const transaction = await getTransaction(Number(params.id));
+  const transaction = await getTransaction(params.slug);
 
   if (!transaction) {
     return <Card>No Transaction</Card>;

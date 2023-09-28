@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { convertCurrency, fetchExchangeRates } from '@/lib/utils';
 import { getCurrentProfile } from '@/db/queries/auth';
 import { validateSession } from '@/db/queries/transactions';
+import slugify from 'slugify';
 
 export async function registerUser(formData: RegisterForm) {
   try {
@@ -63,6 +64,7 @@ export async function createNewTransaction(formData: TransactionForm) {
   try {
     await db.insert(transactions).values({
       ...formData,
+      slug: slugify(formData.name),
       profileId: currentProfile.id,
     });
 

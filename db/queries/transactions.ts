@@ -143,6 +143,7 @@ type Column =
   | 'type'
   | 'timestamp'
   | 'currencyCode'
+  | 'slug'
   | undefined;
 
 export async function selectTransactions(

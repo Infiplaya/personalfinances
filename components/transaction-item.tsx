@@ -6,7 +6,7 @@ import { TransactionWithCategory } from '@/db/queries/transactions';
 export function TransactionItem({ transaction }: { transaction: TransactionWithCategory }) {
   return (
     <Link
-      href={`/transactions/${transaction.id}`}
+      href={`/transactions/${transaction.slug}`}
       className="block rounded-md px-2 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-900"
     >
       <div className="flex w-full justify-between">

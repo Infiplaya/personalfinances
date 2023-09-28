@@ -170,7 +170,7 @@ export const columns: ColumnDef<Transaction>[] = [
               </AlertDialogTrigger>
 
               <DropdownMenuItem>
-                <Link href={`/transactions/${transaction.id}`}>
+                <Link href={`/transactions/${transaction.slug}`}>
                   View details
                 </Link>
               </DropdownMenuItem>
