@@ -7,6 +7,7 @@ import {
   convertCurrency,
   fetchExchangeRates,
   findExchangeRate,
+  getDayOfWeek,
   UnwrapPromise,
 } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
@@ -42,7 +43,7 @@ export async function calculateOverviewData(preferredCurrency: string) {
 
   const result = await db
     .select({
-      day: sql<number>`weekday(${transactions.timestamp})`,
+      date: sql<number>`DATE(${transactions.timestamp})`,
       transactionAmount: sql<number>`transactions.amount`,
       currency: sql<string>`transactions.currencyCode`,
       transactionType: sql<string>`transactions.type`,
@@ -57,7 +58,7 @@ export async function calculateOverviewData(preferredCurrency: string) {
     );
 
   const convertedResult = result.map((row) => ({
-    day: row.day,
+    date: row.date,
     transactionAmount: convertCurrency(
       Number(row.transactionAmount),
       row.currency,
@@ -68,18 +69,18 @@ export async function calculateOverviewData(preferredCurrency: string) {
   }));
 
   const dailyTotals: {
-    day: number;
+    date: number;
     totalIncome: number;
     totalExpenses: number;
   }[] = [];
 
   convertedResult.forEach((row) => {
-    const day = row.day;
-    const existingTotal = dailyTotals.find((item) => item.day === day);
+    const date = row.date
+    const existingTotal = dailyTotals.find((item) => item.date === date);
 
     if (!existingTotal) {
       dailyTotals.push({
-        day,
+        date,
         totalIncome:
           row.transactionType === 'income' ? row.transactionAmount : 0,
         totalExpenses:

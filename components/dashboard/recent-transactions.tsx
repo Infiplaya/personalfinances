@@ -10,11 +10,9 @@ export default async function RecentTransactions() {
         <CardTitle>Recent Transactions</CardTitle>
       </CardHeader>
       <CardContent>
-        <div>
-          {transactions.map((t) => (
-            <TransactionItem transaction={t} key={t.id} />
-          ))}
-        </div>
+        {transactions.map((t) => (
+          <TransactionItem transaction={t} key={t.id} />
+        ))}
       </CardContent>
     </Card>
   );

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { cn, dateFormat, moneyFormat } from '@/lib/utils';
 import { Transaction } from '@/db/schema/finances';
+import { Badge } from './ui/badge';
 
 export function TransactionItem({ transaction }: { transaction: Transaction }) {
   return (
@@ -8,7 +9,11 @@ export function TransactionItem({ transaction }: { transaction: Transaction }) {
       href={`/transactions/${transaction.id}`}
       className="block rounded-md px-2 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-900"
     >
-        <div className="flex w-full justify-between">
+      <div className="flex w-full justify-between">
+        <div className="inline-flex items-center space-x-4">
+          <Link href={`/categories/${transaction.categoryName}`}>
+            <Badge variant="secondary">{transaction.categoryName}</Badge>
+          </Link>
           <span
             className={cn(
               'text-base font-medium',
@@ -19,8 +24,10 @@ export function TransactionItem({ transaction }: { transaction: Transaction }) {
           >
             {moneyFormat(Number(transaction.amount), transaction.currencyCode)}
           </span>
-          <span>{dateFormat(transaction.timestamp as Date)}</span>
         </div>
+
+        <span>{dateFormat(transaction.timestamp as Date)}</span>
+      </div>
     </Link>
   );
 }
