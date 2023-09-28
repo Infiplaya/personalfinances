@@ -9,7 +9,7 @@ export default async function RecentTransactions() {
       <CardHeader>
         <CardTitle>Recent Transactions</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className='space-y-3'>
         {transactions.map((t) => (
           <TransactionItem transaction={t} key={t.id} />
         ))}

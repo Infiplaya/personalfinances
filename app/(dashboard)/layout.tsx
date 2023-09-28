@@ -16,7 +16,7 @@ export default function RootLayout({
     <>
       <Navbar />
       <Sidebar />
-      <div className="container mx-auto space-y-10 py-10 lg:pl-52">
+      <div className="container mx-auto space-y-10 py-10 lg:pl-24">
         {children}
       </div>
     </>

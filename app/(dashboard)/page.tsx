@@ -1,3 +1,4 @@
+import { BalanceCard } from '@/components/dashboard/balance-card';
 import { BalanceChart } from '@/components/dashboard/balance-chart';
 import { Overview } from '@/components/dashboard/overview';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
@@ -17,28 +18,33 @@ export default async function Home() {
 
   const [overview, balance] = await Promise.all([overviewData, balanceData]);
 
+  const currentBalance = balance.slice(-1);
+
   return (
-    <main className='space-y-10'>
+    <main className="space-y-12">
       <SuccessToast message="Successfully logged in! Welcome back" />
-      <div className="grid-cols-12 gap-x-10 space-y-10 lg:grid lg:space-y-0">
-        <div className="lg:col-span-3">
-          <Suspense fallback={<div>Loading...</div>}>
-            <SummaryCard />
-          </Suspense>
+
+      <div className="grid-cols-12 gap-x-4 space-y-10 lg:grid lg:space-y-0">
+        <div className="lg:col-span-4">
+          <SummaryCard />
         </div>
-        <div className="lg:col-span-3">
-          <Suspense fallback={<div>Loading...</div>}>
-            <SummaryCard currentMonth={currentMonth} />
-          </Suspense>
+        <div className="lg:col-span-4">
+          <SummaryCard currentMonth={currentMonth} />
         </div>
-        <div className="lg:col-span-6">
-          <Suspense fallback={<div>Loading...</div>}>
-            <RecentTransactions />
-          </Suspense>
+        <div className="lg:col-span-4">
+          <BalanceCard currentBalance={currentBalance[0].totalBalance} />
         </div>
       </div>
+      <div className="grid gap-x-4 lg:grid-cols-6">
+        <div className="lg:col-span-4">
+          <BalanceChart data={balance} currencyCode={currencyCode} />
+        </div>
+        <div className="lg:col-span-2">
+          <RecentTransactions />
+        </div>
+      </div>
+
       <Overview data={overview} currencyCode={currencyCode} />
-      <BalanceChart data={balance} currencyCode={currencyCode} />
     </main>
   );
 }
