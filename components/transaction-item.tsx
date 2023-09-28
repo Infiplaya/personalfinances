@@ -1,33 +1,28 @@
 import Link from 'next/link';
-import { cn, dateFormat, moneyFormat } from '@/lib/utils';
-import { Badge } from './ui/badge';
 import { TransactionWithCategory } from '@/db/queries/transactions';
+import { cn, moneyFormat } from '@/lib/utils';
 
-export function TransactionItem({ transaction }: { transaction: TransactionWithCategory }) {
+export function TransactionItem({
+  transaction,
+}: {
+  transaction: TransactionWithCategory;
+}) {
   return (
     <Link
       href={`/transactions/${transaction.slug}`}
-      className="block rounded-md px-2 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-900"
+      className="flex justify-between rounded-md px-2 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
     >
-      <div className="flex w-full justify-between">
-        <div className="inline-flex items-center space-x-4">
-          <Link href={`/categories/${transaction.category.slug}`}>
-            <Badge variant="secondary">{transaction.categoryName}</Badge>
-          </Link>
-          <span
-            className={cn(
-              'text-base font-medium',
-              transaction.type === 'expense'
-                ? 'text-red-500 dark:text-red-400'
-                : 'text-green-500 dark:text-green-400'
-            )}
-          >
-            {moneyFormat(Number(transaction.amount), transaction.currencyCode)}
-          </span>
-        </div>
-
-        <span>{dateFormat(transaction.timestamp as Date)}</span>
-      </div>
+      <span>{transaction.name}</span>
+      <span
+        className={cn(
+          'font-medium',
+          transaction.type == 'income'
+            ? 'text-green-500 dark:text-green-400'
+            : 'text-red-500 dark:text-red-400'
+        )}
+      >
+        {moneyFormat(Number(transaction.amount), transaction.currencyCode)}
+      </span>
     </Link>
   );
 }

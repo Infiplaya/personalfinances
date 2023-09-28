@@ -82,6 +82,8 @@ export const links = [
   },
 ];
 
+export type NavLink = (typeof links)[number];
+
 export function convertCurrency(
   amount: number,
   fromCurrency: string,

@@ -19,11 +19,14 @@ export default async function Navbar() {
   const currentProfile = await getCurrentProfile();
 
   return (
-    <nav className="sticky top-0 inline-flex w-full items-center justify-end border-b border-gray-200 bg-white px-16 py-3 dark:border-gray-800 dark:bg-black">
-      <ProfileSwitcher profiles={userProfiles} currentProfile={currentProfile}>
-        <NewProfileModal />
-      </ProfileSwitcher>
+    <nav className="sticky top-0 inline-flex w-full items-center justify-end border-b border-gray-200 bg-white px-16 py-3 dark:border-gray-800 dark:bg-gray-950">
       <div className="ml-auto hidden items-center space-x-8 lg:inline-flex">
+        <ProfileSwitcher
+          profiles={userProfiles}
+          currentProfile={currentProfile}
+        >
+          <NewProfileModal />
+        </ProfileSwitcher>
         {session?.user ? null : (
           <div className="inline-flex items-center space-x-4 text-xs">
             <Link href="/signin">Sign In</Link>{' '}
