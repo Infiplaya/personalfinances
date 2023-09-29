@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 
 export function SidebarLink({ link }: { link: NavLink }) {
   const path = usePathname();
-  console.log(path);
   return (
     <Link
       href={link.href}

@@ -8,6 +8,7 @@ import {
   fetchExchangeRates,
   findExchangeRate,
   getDayOfWeek,
+  moneyFormat,
   UnwrapPromise,
 } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
@@ -363,3 +364,55 @@ type TransactionsWithCategory = UnwrapPromise<
   ReturnType<typeof selectRecentTransactions>
 >;
 export type TransactionWithCategory = TransactionsWithCategory[number];
+
+export async function calculateTotalForCategory(
+  categoryName: string,
+  thisMonth?: boolean
+) {
+  const exchangeRates = await fetchExchangeRates();
+
+  const preferredCurrency = await getCurrentCurrency();
+
+  const month = thisMonth ? new Date().getMonth() + 1 : null;
+
+  const currentProfile = await getCurrentProfile();
+
+  const result = await db
+    .select({
+      transactionAmount: sql<number>`transactions.amount`,
+      currency: sql<string>`transactions.currencyCode`,
+      type: transactions.type,
+    })
+    .from(transactions)
+    .where(
+      month
+        ? and(
+            eq(sql`MONTH(${transactions.timestamp})`, month),
+            eq(transactions.profileId, currentProfile.id),
+            eq(transactions.categoryName, categoryName)
+          )
+        : and(
+            eq(transactions.profileId, currentProfile.id),
+            eq(transactions.categoryName, categoryName)
+          )
+    );
+
+  const convertedResult = result.map((row) => ({
+    month: month,
+    transactionAmount: convertCurrency(
+      Number(row.transactionAmount),
+      row.currency,
+      preferredCurrency,
+      exchangeRates
+    ),
+    type: row.type,
+  }));
+
+  let totalAmount = 0;
+
+  convertedResult.forEach((transaction) => {
+    totalAmount += transaction.transactionAmount;
+  });
+
+  return moneyFormat(totalAmount, preferredCurrency)
+}

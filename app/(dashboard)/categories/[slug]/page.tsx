@@ -1,10 +1,7 @@
-import { TransactionItem } from '@/components/transaction-item';
 import { TransactionsTable } from '@/components/transactions/transactions-table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
 import { getCurrentProfile } from '@/db/queries/auth';
-import { transactions } from '@/db/schema/finances';
-import { and, eq } from 'drizzle-orm';
+import { calculateTotalForCategory } from '@/db/queries/transactions';
 
 async function getCategory(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -25,24 +22,41 @@ export default async function CategoriesPage({
   params: { slug: string };
 }) {
   const category = await getCategory(params.slug);
+
+  if (!category) {
+    return <p>No such category transactions.</p>;
+  }
+
+  const totalAmount = await calculateTotalForCategory(category.name);
+
+  const totalAmountThisMonth = await calculateTotalForCategory(
+    category.name,
+    true
+  );
+
+  const totalMessage =
+    category.type === 'expense'
+      ? `You have spent ${totalAmount} for ${category.name} in total`
+      : `You have earned ${totalAmount} from ${category.name} in total`;
+
+  const monthMessage =
+    category.type === 'expense'
+      ? `You have spent ${totalAmountThisMonth} for ${category.name} in total`
+      : `You have earned ${totalAmountThisMonth} from ${category.name} in total`;
+
   return (
     <main>
-      {category ? (
-        <>
-          <Card>
-            <CardHeader>
-              <CardTitle>{category.name}</CardTitle>
-            </CardHeader>
-            <CardContent></CardContent>
-          </Card>
-          <TransactionsTable
-            transactions={category.transactions}
-            caption={`A list of transactions in ${category.name}`}
-          />
-        </>
-      ) : (
-        <p>No such category transactions.</p>
-      )}
+      <div className="mb-10">
+        <h1 className="mb-2 text-xl font-semibold lg:text-2xl">
+          {category.name}
+        </h1>
+        <p>{totalMessage}</p>
+        <p>{monthMessage}</p>
+      </div>
+      <TransactionsTable
+        transactions={category.transactions}
+        caption={`A list of transactions in ${category.name}`}
+      />
     </main>
   );
 }
