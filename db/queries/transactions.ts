@@ -4,8 +4,6 @@ import { db } from '@/db';
 import { balances, transactions } from '@/db/schema/finances';
 import { and, asc, desc, eq, gte, inArray, like, lte, sql } from 'drizzle-orm';
 import {
-  convertCurrency,
-  fetchExchangeRates,
   findExchangeRate,
   getConversionRate,
   moneyFormat,
@@ -169,9 +167,9 @@ export async function calculateSummariesForMonths() {
   return await db
   .select({
     month: sql<number>`MONTH(${transactions.timestamp})`,
-    totalIncomes: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
-    totalExpenses: sql<string>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
-    totalBalance: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END) *  ${exchangeRate}`,
+    totalIncomes: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
+    totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
+    totalBalance: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END) *  ${exchangeRate}`,
   })
   .from(transactions)
   .where(and(eq(transactions.profileId, currentProfile.id)))

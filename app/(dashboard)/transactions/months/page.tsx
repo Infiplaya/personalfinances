@@ -1,5 +1,4 @@
 import MonthSummaryCard from '@/components/dashboard/month-summary-card';
-import { getCurrentCurrency } from '@/db/queries/currencies';
 import { getSummariesForMonths } from '@/db/queries/transactions';
 
 export default async function MonthsPage() {
@@ -7,9 +6,11 @@ export default async function MonthsPage() {
 
   return (
     <main>
-      {monthData.map((m) => (
-        <MonthSummaryCard monthData={m} key={m.month} />
-      ))}
+      <div className="space-y-12">
+        {monthData.map((m) => (
+          <MonthSummaryCard monthData={m} key={m.month} />
+        ))}
+      </div>
     </main>
   );
 }
