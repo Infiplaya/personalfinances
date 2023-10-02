@@ -120,15 +120,13 @@ interface ConversionRates {
 }
 
 export function getConversionRate(currencyCode: string) {
-  // Check if the currency code exists in the conversionRates object
   const conversionData = exchangeRateData as ConversionRates;
   if (currencyCode in exchangeRateData) {
     return conversionData[currencyCode];
   } else {
-    // Handle the case where the currency code is not found (e.g., return a default value)
     console.error(
       `Conversion rate for currency code ${currencyCode} not found.`
     );
-    return null; // You can return a default value or handle the error as needed
+    return null;
   }
 }

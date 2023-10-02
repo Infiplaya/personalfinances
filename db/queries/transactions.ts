@@ -96,6 +96,7 @@ type Column =
   | 'name'
   | 'description'
   | 'amount'
+  | 'baseAmount'
   | 'profileId'
   | 'categoryName'
   | 'type'
@@ -165,16 +166,15 @@ export async function calculateSummariesForMonths() {
   const currentProfile = await getCurrentProfile();
   const exchangeRate = getConversionRate(prefferedCurrency);
   return await db
-  .select({
-    month: sql<number>`MONTH(${transactions.timestamp})`,
-    totalIncomes: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
-    totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
-    totalBalance: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END) *  ${exchangeRate}`,
-  })
-  .from(transactions)
-  .where(and(eq(transactions.profileId, currentProfile.id)))
-  .groupBy(sql`MONTH(${transactions.timestamp})`);
-
+    .select({
+      month: sql<number>`MONTH(${transactions.timestamp})`,
+      totalIncomes: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
+      totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
+      totalBalance: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END) *  ${exchangeRate}`,
+    })
+    .from(transactions)
+    .where(and(eq(transactions.profileId, currentProfile.id)))
+    .groupBy(sql`MONTH(${transactions.timestamp})`);
 }
 
 export const getSummariesForMonths = cache(calculateSummariesForMonths);
