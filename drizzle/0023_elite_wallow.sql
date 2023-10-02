@@ -1,0 +1,1 @@
+ALTER TABLE `transactions` ADD `baseAmount` decimal(10,2);

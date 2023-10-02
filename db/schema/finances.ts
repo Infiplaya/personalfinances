@@ -1,6 +1,5 @@
 import { InferModel, relations } from 'drizzle-orm';
 import {
-  decimal,
   double,
   mysqlEnum,
   mysqlTable,
@@ -19,7 +18,8 @@ export const transactions = mysqlTable(
     name: varchar('name', { length: 256 }).notNull(),
     slug: varchar('slug', { length: 256 }).notNull(),
     description: text('description'),
-    amount: decimal('amount', { precision: 10, scale: 2 }),
+    amount: double('amount', { precision: 10, scale: 2 }).notNull(),
+    baseAmount: double('baseAmount', { precision: 10, scale: 2 }).notNull(),
     profileId: varchar('profileId', { length: 255 }).notNull(),
     categoryName: varchar('categoryName', { length: 255 }).notNull(),
     currencyCode: varchar('currencyCode', { length: 3 }).notNull(),

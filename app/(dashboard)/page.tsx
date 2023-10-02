@@ -42,7 +42,7 @@ export default async function Home() {
         <div className="lg:col-span-4">
           <BalanceChart data={balance} currencyCode={currencyCode} />
         </div>
-        <div className="lg:col-span-2 mt-12 lg:mt-0">
+        <div className="mt-12 lg:col-span-2 lg:mt-0">
           <RecentTransactions />
         </div>
       </div>

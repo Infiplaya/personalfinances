@@ -61,11 +61,21 @@ export async function registerUser(formData: RegisterForm) {
 
 export async function createNewTransaction(formData: TransactionForm) {
   const currentProfile = await getCurrentProfile();
+  const exchangeRates = await fetchExchangeRates();
+  const baseAmount = convertCurrency(
+    Number(formData.amount),
+    formData.currencyCode,
+    'USD',
+    exchangeRates
+  );
+
   try {
     await db.insert(transactions).values({
       ...formData,
       slug: slugify(formData.name),
       profileId: currentProfile.id,
+      amount: Number(formData.amount),
+      baseAmount: baseAmount,
     });
 
     const exchangeRates = await fetchExchangeRates();
