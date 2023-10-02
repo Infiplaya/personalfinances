@@ -7,7 +7,7 @@ import {
   convertCurrency,
   fetchExchangeRates,
   findExchangeRate,
-  getDayOfWeek,
+  getConversionRate,
   moneyFormat,
   UnwrapPromise,
 } from '@/lib/utils';
@@ -16,7 +16,6 @@ import { authOptions } from '@/lib/auth/auth';
 import { cache } from 'react';
 import { getCurrentCurrency } from './currencies';
 import { getCurrentProfile } from './auth';
-import { promisify } from 'util';
 
 export async function validateSession() {
   const session = await getServerSession(authOptions);
@@ -41,14 +40,13 @@ export async function calculateOverviewData(preferredCurrency: string) {
 
   const currentProfile = await getCurrentProfile();
 
-  const exchangeRates = await fetchExchangeRates();
+  const conversionRate = getConversionRate(preferredCurrency);
 
-  const result = await db
+  return await db
     .select({
       date: sql<number>`DATE(${transactions.timestamp})`,
-      transactionAmount: sql<number>`transactions.amount`,
-      currency: sql<string>`transactions.currencyCode`,
-      transactionType: sql<string>`transactions.type`,
+      totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${conversionRate} ELSE 0 END)`,
+      totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${conversionRate} ELSE 0 END)`,
     })
     .from(transactions)
     .where(
@@ -57,47 +55,8 @@ export async function calculateOverviewData(preferredCurrency: string) {
         lte(transactions.timestamp, currentDate),
         eq(transactions.profileId, currentProfile.id)
       )
-    );
-
-  const convertedResult = result.map((row) => ({
-    date: row.date,
-    transactionAmount: convertCurrency(
-      Number(row.transactionAmount),
-      row.currency,
-      preferredCurrency,
-      exchangeRates
-    ),
-    transactionType: row.transactionType,
-  }));
-
-  const dailyTotals: {
-    date: number;
-    totalIncome: number;
-    totalExpenses: number;
-  }[] = [];
-
-  convertedResult.forEach((row) => {
-    const date = row.date;
-    const existingTotal = dailyTotals.find((item) => item.date === date);
-
-    if (!existingTotal) {
-      dailyTotals.push({
-        date,
-        totalIncome:
-          row.transactionType === 'income' ? row.transactionAmount : 0,
-        totalExpenses:
-          row.transactionType === 'expense' ? row.transactionAmount : 0,
-      });
-    } else {
-      if (row.transactionType === 'income') {
-        existingTotal.totalIncome += row.transactionAmount;
-      } else if (row.transactionType === 'expense') {
-        existingTotal.totalExpenses += row.transactionAmount;
-      }
-    }
-  });
-
-  return dailyTotals;
+    )
+    .groupBy(sql`DATE(${transactions.timestamp})`);
 }
 
 export type OverviewData = UnwrapPromise<
@@ -205,67 +164,19 @@ export const getTransactionsByMonth = cache(selectTransactionsByMonth);
 
 export async function calculateSummariesForMonths() {
   const prefferedCurrency = await getCurrentCurrency();
-  const exchangeRates = await fetchExchangeRates();
   const currentProfile = await getCurrentProfile();
-  const result = await db
-    .select({
-      month: sql<number>`MONTH(${transactions.timestamp})`,
-      currency: transactions.currencyCode,
-      amount: transactions.amount,
-      transactionType: transactions.type,
-    })
-    .from(transactions)
-    .where(and(eq(transactions.profileId, currentProfile.id)));
+  const exchangeRate = getConversionRate(prefferedCurrency);
+  return await db
+  .select({
+    month: sql<number>`MONTH(${transactions.timestamp})`,
+    totalIncomes: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
+    totalExpenses: sql<string>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
+    totalBalance: sql<string>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END) *  ${exchangeRate}`,
+  })
+  .from(transactions)
+  .where(and(eq(transactions.profileId, currentProfile.id)))
+  .groupBy(sql`MONTH(${transactions.timestamp})`);
 
-  const convertedResult = result.map((row) => ({
-    month: row.month,
-    transactionAmount: convertCurrency(
-      Number(row.amount),
-      row.currency,
-      prefferedCurrency,
-      exchangeRates
-    ),
-    transactionType: row.transactionType,
-  }));
-
-  let monthsSummaries: {
-    month: number;
-    totalIncomes: number;
-    totalExpenses: number;
-    totalBalance: number;
-  }[] = [];
-
-  convertedResult.forEach((row) => {
-    const month = row.month;
-    const existingTotal = monthsSummaries.find((item) => item.month === month);
-
-    if (!existingTotal) {
-      monthsSummaries.push({
-        month,
-        totalIncomes:
-          row.transactionType === 'income' ? row.transactionAmount : 0,
-        totalExpenses:
-          row.transactionType === 'expense' ? row.transactionAmount : 0,
-        totalBalance: 0,
-      });
-    } else {
-      if (row.transactionType === 'income') {
-        existingTotal.totalIncomes += row.transactionAmount;
-      } else if (row.transactionType === 'expense') {
-        existingTotal.totalExpenses += row.transactionAmount;
-      }
-    }
-  });
-
-  monthsSummaries = monthsSummaries.map(
-    (month) =>
-      (month = {
-        ...month,
-        totalBalance: month.totalIncomes - month.totalExpenses,
-      })
-  );
-
-  return monthsSummaries;
 }
 
 export const getSummariesForMonths = cache(calculateSummariesForMonths);
@@ -286,17 +197,16 @@ async function calculateTotalIncomeAndExpenses(
   prefferedCurrency: string,
   month?: number
 ) {
-  const exchangeRates = await fetchExchangeRates();
-
   const currentMonth = month ? month + 1 : null;
 
   const currentProfile = await getCurrentProfile();
 
+  const conversionRate = getConversionRate(prefferedCurrency);
+
   const result = await db
     .select({
-      transactionAmount: sql<number>`transactions.amount`,
-      currency: sql<string>`transactions.currencyCode`,
-      transactionType: sql<string>`transactions.type`,
+      totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${conversionRate} ELSE 0 END)`,
+      totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${conversionRate} ELSE 0 END)`,
     })
     .from(transactions)
     .where(
@@ -308,47 +218,20 @@ async function calculateTotalIncomeAndExpenses(
         : eq(transactions.profileId, currentProfile.id)
     );
 
-  const convertedResult = result.map((row) => ({
-    month: currentMonth,
-    transactionAmount: convertCurrency(
-      Number(row.transactionAmount),
-      row.currency,
-      prefferedCurrency,
-      exchangeRates
-    ),
-    transactionType: row.transactionType,
-  }));
-
-  let totalIncomes = 0;
-  let totalExpenses = 0;
-
-  convertedResult.forEach((transaction) => {
-    if (transaction.transactionType === 'income') {
-      totalIncomes += transaction.transactionAmount;
-    } else if (transaction.transactionType === 'expense') {
-      totalExpenses += transaction.transactionAmount;
-    }
-  });
-
-  const totalBalance = totalIncomes - totalExpenses;
-
-  const summaryObject = {
-    totalIncomes,
-    totalExpenses,
-    totalBalance,
+  return {
+    totalExpenses: result[0].totalExpenses,
+    totalIncomes: result[0].totalIncome,
+    totalBalance: result[0].totalIncome - result[0].totalExpenses,
     month: currentMonth,
   };
-
-  return summaryObject;
 }
-
 export const getTotalIncomeAndExpenses = cache(calculateTotalIncomeAndExpenses);
 
 async function selectRecentTransactions() {
   const currentProfile = await getCurrentProfile();
 
   return await db.query.transactions.findMany({
-    limit: 6,
+    limit: 7,
     orderBy: (transactions, { desc }) => [desc(transactions.timestamp)],
     with: {
       category: true,
@@ -369,19 +252,17 @@ export async function calculateTotalForCategory(
   categoryName: string,
   thisMonth?: boolean
 ) {
-  const exchangeRates = await fetchExchangeRates();
-
   const preferredCurrency = await getCurrentCurrency();
 
   const month = thisMonth ? new Date().getMonth() + 1 : null;
 
   const currentProfile = await getCurrentProfile();
 
-  const result = await db
+  const conversionRate = getConversionRate(preferredCurrency);
+
+  const totalAmountQuery = await db
     .select({
-      transactionAmount: sql<number>`transactions.amount`,
-      currency: sql<string>`transactions.currencyCode`,
-      type: transactions.type,
+      totalAmount: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${conversionRate} ELSE 0 END)`,
     })
     .from(transactions)
     .where(
@@ -397,22 +278,10 @@ export async function calculateTotalForCategory(
           )
     );
 
-  const convertedResult = result.map((row) => ({
-    month: month,
-    transactionAmount: convertCurrency(
-      Number(row.transactionAmount),
-      row.currency,
-      preferredCurrency,
-      exchangeRates
+  return {
+    totalAmount: moneyFormat(
+      totalAmountQuery[0].totalAmount,
+      preferredCurrency
     ),
-    type: row.type,
-  }));
-
-  let totalAmount = 0;
-
-  convertedResult.forEach((transaction) => {
-    totalAmount += transaction.transactionAmount;
-  });
-
-  return moneyFormat(totalAmount, preferredCurrency)
+  };
 }

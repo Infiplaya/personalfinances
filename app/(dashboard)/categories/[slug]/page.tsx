@@ -40,8 +40,8 @@ export default async function CategoriesPage({
         <h1 className="mb-2 text-xl font-semibold lg:text-2xl">
           {category.name}
         </h1>
-        <p>Total: {totalAmount}</p>
-        <p>This Month: {totalAmountThisMonth}</p>
+        <p>Total: {totalAmount.totalAmount}</p>
+        <p>This Month: {totalAmountThisMonth.totalAmount}</p>
       </div>
       <TransactionsTable
         transactions={category.transactions}
