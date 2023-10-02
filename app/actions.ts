@@ -73,6 +73,7 @@ export async function createNewTransaction(formData: TransactionForm) {
     // grab user balance if it exist
     const userBalance = await db.query.balances.findFirst({
       where: eq(balances.profileId, currentProfile.id),
+      orderBy: (balances, { desc }) => [desc(balances.timestamp)],
     });
 
     let amount =

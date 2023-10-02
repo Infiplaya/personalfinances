@@ -34,24 +34,14 @@ export default async function CategoriesPage({
     true
   );
 
-  const totalMessage =
-    category.type === 'expense'
-      ? `You have spent ${totalAmount} for ${category.name} in total`
-      : `You have earned ${totalAmount} from ${category.name} in total`;
-
-  const monthMessage =
-    category.type === 'expense'
-      ? `You have spent ${totalAmountThisMonth} for ${category.name} in total`
-      : `You have earned ${totalAmountThisMonth} from ${category.name} in total`;
-
   return (
     <main>
       <div className="mb-10">
         <h1 className="mb-2 text-xl font-semibold lg:text-2xl">
           {category.name}
         </h1>
-        <p>{totalMessage}</p>
-        <p>{monthMessage}</p>
+        <p>Total: {totalAmount}</p>
+        <p>This Month: {totalAmountThisMonth}</p>
       </div>
       <TransactionsTable
         transactions={category.transactions}

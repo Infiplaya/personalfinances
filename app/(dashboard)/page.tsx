@@ -23,7 +23,6 @@ export default async function Home() {
   return (
     <main className="space-y-12">
       <SuccessToast message="Successfully logged in! Welcome back" />
-
       <div className="grid-cols-12 gap-x-4 space-y-10 lg:grid lg:space-y-0">
         <div className="lg:col-span-4">
           <SummaryCard />
@@ -43,7 +42,7 @@ export default async function Home() {
         <div className="lg:col-span-4">
           <BalanceChart data={balance} currencyCode={currencyCode} />
         </div>
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 mt-12 lg:mt-0">
           <RecentTransactions />
         </div>
       </div>
