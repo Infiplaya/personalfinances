@@ -11,7 +11,6 @@ import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
 import { ProfileDropdown } from './dashboard/profile-dropdown';
 import { NewProfileModal } from './dashboard/new-profile-modal';
 import { Button } from './ui/button';
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { Home } from 'lucide-react';
 
 export default async function Navbar() {

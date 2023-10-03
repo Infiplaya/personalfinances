@@ -7,7 +7,7 @@ import { TransactionForm } from '@/lib/validation/transaction';
 import { eq, inArray, InferModel } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { hash } from 'bcryptjs';
-import { NewProfileForm, RegisterForm } from '@/lib/validation/auth';
+import { ProfileForm, RegisterForm } from '@/lib/validation/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { convertCurrency, fetchExchangeRates } from '@/lib/utils';
 import { getCurrentProfile } from '@/db/queries/auth';
@@ -148,7 +148,7 @@ export async function changePrefferedCurrency(currencyCode: string) {
   }
 }
 
-export async function createNewProfile(formData: NewProfileForm) {
+export async function createNewProfile(formData: ProfileForm) {
   const session = await validateSession();
   try {
     await db.insert(profiles).values({
@@ -156,6 +156,26 @@ export async function createNewProfile(formData: NewProfileForm) {
       ...formData,
       userId: session.user.id,
     });
+  } catch (e) {
+    console.log(e);
+    return 'Something went wrong! Try again later...';
+  }
+
+  revalidatePath('/');
+}
+
+export async function updateUserProfile(formData: ProfileForm) {
+  const currentProfile = await getCurrentProfile();
+  try {
+    await db
+      .update(profiles)
+      .set({
+        name: formData.name,
+        currencyCode: formData.currencyCode,
+      })
+      .where(eq(profiles.id, currentProfile.id));
+
+    await changeCurrentProfile(formData.name);
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';

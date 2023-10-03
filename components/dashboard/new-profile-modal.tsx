@@ -1,8 +1,6 @@
-import {
-  DialogContent,
-} from '@/components/ui/dialog';
+import { DialogContent } from '@/components/ui/dialog';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
-import { NewProfileForm } from './new-profile-form';
+import { ProfileForm } from './profile-form';
 
 export async function NewProfileModal() {
   const currencies = await getCurrencies();
@@ -10,7 +8,7 @@ export async function NewProfileModal() {
 
   return (
     <DialogContent>
-      <NewProfileForm
+      <ProfileForm
         currencies={currencies}
         currentCurrency={currentCurrency}
       />

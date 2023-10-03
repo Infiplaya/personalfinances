@@ -22,7 +22,7 @@ export async function selectCurrentProfile() {
     .where(
       and(
         eq(profiles.userId, user.id),
-        eq(profiles.name, currentProfileName ? currentProfileName : 'xd')
+        eq(profiles.name, currentProfileName ? currentProfileName : '')
       )
     );
 

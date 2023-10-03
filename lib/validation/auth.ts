@@ -11,7 +11,7 @@ export const loginFormSchema = z.object({
   password: z.string(),
 });
 
-export const newProfileFormSchema = z.object({
+export const profileFormSchema = z.object({
   name: z
     .string()
     .min(4, {
@@ -25,4 +25,4 @@ export const newProfileFormSchema = z.object({
 
 export type RegisterForm = z.infer<typeof registerFormSchema>;
 export type LoginForm = z.infer<typeof loginFormSchema>;
-export type NewProfileForm = z.infer<typeof newProfileFormSchema>;
+export type ProfileForm = z.infer<typeof profileFormSchema>;

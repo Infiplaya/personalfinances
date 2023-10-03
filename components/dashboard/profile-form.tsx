@@ -31,37 +31,61 @@ import {
 import { CheckIcon } from 'lucide-react';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
-import { NewProfileForm, newProfileFormSchema } from '@/lib/validation/auth';
+import { ProfileForm, profileFormSchema } from '@/lib/validation/auth';
 import { Currency } from '@/db/schema/finances';
-import { createNewProfile } from '@/app/actions';
+import { createNewProfile, updateUserProfile } from '@/app/actions';
 
-export function NewProfileForm({
+export function ProfileForm({
   closeModal,
   currencies,
   currentCurrency,
+  edit,
+  name,
 }: {
   closeModal?: () => void;
   currencies: Currency[];
   currentCurrency: string;
+  edit?: boolean;
+  name?: string;
 }) {
-  const form = useForm<NewProfileForm>({
-    resolver: zodResolver(newProfileFormSchema),
-    defaultValues: {},
+  const form = useForm<ProfileForm>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: edit ? { currencyCode: currentCurrency, name: name } : {},
   });
+
+  async function handleEditProfile(data: ProfileForm) {
+    const error = await updateUserProfile(data);
+
+    if (error) {
+      toast.error(error);
+    } else {
+      if (closeModal) closeModal();
+      toast.success('Created new profile!');
+    }
+  }
+
+  async function handleCreateProfile(data: ProfileForm) {
+    const error = await createNewProfile(data);
+
+    if (error) {
+      toast.error(error);
+    } else {
+      if (closeModal) closeModal();
+      toast.success('Created new profile!');
+    }
+  }
 
   return (
     <Form {...form}>
-      <h3 className="py-4 font-semibold">Add new profile</h3>
+      {
+        <h3 className="py-2 font-semibold">
+          {edit ? 'Edit Profile' : 'Add Profile'}
+        </h3>
+      }
       <form
-        onSubmit={form.handleSubmit(async (data) => {
-          const error = await createNewProfile(data);
-          if (error) {
-            toast.error(error);
-          } else {
-            if (closeModal) closeModal();
-            toast.success('Created new profile!');
-          }
-        })}
+        onSubmit={form.handleSubmit((data) =>
+          edit ? handleEditProfile(data) : handleCreateProfile(data)
+        )}
         className="space-y-8"
       >
         <FormField
@@ -105,7 +129,7 @@ export function NewProfileForm({
                   <Command>
                     <CommandInput placeholder={`Search code`} className="h-9" />
                     <CommandEmpty>No currency found.</CommandEmpty>
-                    <CommandGroup>
+                    <CommandGroup className="max-h-[200px] overflow-y-auto">
                       {currencies.map((currency) => (
                         <CommandItem
                           value={currency.code}
@@ -135,7 +159,7 @@ export function NewProfileForm({
         />
         <div className="inline-flex w-full items-center justify-between">
           <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? 'Creating' : 'Create'}
+            {form.formState.isSubmitting ? 'Saving...' : 'Save'}
           </Button>
         </div>
       </form>
