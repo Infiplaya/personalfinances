@@ -1,7 +1,6 @@
 'use client';
 
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { SelectProfile } from '@/db/schema/auth';
 import { Currency } from '@/db/schema/finances';
 import { Edit } from 'lucide-react';

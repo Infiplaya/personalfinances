@@ -68,14 +68,8 @@ export default async function ProfilesSettingsPage() {
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
 
                     <form action={deleteProfile.bind(null, profile.id)}>
-                      <input
-                        type="text"
-                        value={profile.id}
-                        id="profileId"
-                        name="profileId"
-                      />
-                      <AlertDialogAction>
-                        <button type="submit">Delete</button>
+                      <AlertDialogAction type="submit">
+                        Delete
                       </AlertDialogAction>
                     </form>
                   </AlertDialogFooter>

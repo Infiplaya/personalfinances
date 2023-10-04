@@ -201,8 +201,7 @@ export async function changeCurrentProfile(newCurrentProfile: string) {
         currentProfile: newCurrentProfile,
       })
       .where(eq(users.id, session.user.id));
-
-    console.log(user);
+      
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';
