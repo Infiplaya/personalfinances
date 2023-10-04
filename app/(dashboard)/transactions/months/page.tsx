@@ -4,6 +4,8 @@ import { getSummariesForMonths } from '@/db/queries/transactions';
 export default async function MonthsPage() {
   const monthData = await getSummariesForMonths();
 
+  console.log(monthData);
+
   return (
     <main>
       <div className="space-y-12">

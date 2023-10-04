@@ -8,7 +8,7 @@ import {
 } from '@radix-ui/react-icons';
 
 import { cn } from '@/lib/utils';
-import { Dialog, DialogTrigger } from '../ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Button } from '../ui/button';
 import {
@@ -21,6 +21,8 @@ import {
   CommandSeparator,
 } from '../ui/command';
 import { changeCurrentProfile } from '@/app/actions';
+import { ProfileForm } from './profile-form';
+import { Currency } from '@/db/schema/finances';
 
 interface Profile {
   id: string;
@@ -30,22 +32,24 @@ interface Profile {
 }
 
 export function ProfileSwitcher({
-  children,
+  currencies,
+  currentCurrency,
   profiles,
   currentProfile,
 }: {
-  children: React.ReactNode;
+  currencies: Currency[];
+  currentCurrency: string;
   profiles: Profile[];
   currentProfile: Profile;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [showNewProfileDialog, setShowNewProfileDialog] = React.useState(false);
+  const [showDialog, setShowDialog] = React.useState(false);
   const [selectedProfile, setselectedProfile] =
     React.useState<Profile>(currentProfile);
   const [isPending, startTransition] = React.useTransition();
 
   return (
-    <Dialog open={showNewProfileDialog} onOpenChange={setShowNewProfileDialog}>
+    <Dialog open={showDialog} onOpenChange={setShowDialog}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -94,7 +98,7 @@ export function ProfileSwitcher({
                   <CommandItem
                     onSelect={() => {
                       setOpen(false);
-                      setShowNewProfileDialog(true);
+                      setShowDialog(true);
                     }}
                   >
                     <PlusCircledIcon className="mr-2 h-5 w-5" />
@@ -106,7 +110,13 @@ export function ProfileSwitcher({
           </Command>
         </PopoverContent>
       </Popover>
-      {children}
+      <DialogContent>
+        <ProfileForm
+          currencies={currencies}
+          closeModal={() => setShowDialog(false)}
+          currentCurrency={currentCurrency}
+        />
+      </DialogContent>
     </Dialog>
   );
 }

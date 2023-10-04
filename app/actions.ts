@@ -10,7 +10,7 @@ import { hash } from 'bcryptjs';
 import { ProfileForm, RegisterForm } from '@/lib/validation/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { convertCurrency, fetchExchangeRates } from '@/lib/utils';
-import { getCurrentProfile } from '@/db/queries/auth';
+import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
 import { validateSession } from '@/db/queries/transactions';
 import slugify from 'slugify';
 
@@ -164,7 +164,10 @@ export async function createNewProfile(formData: ProfileForm) {
   revalidatePath('/');
 }
 
-export async function updateUserProfile(formData: ProfileForm) {
+export async function updateUserProfile(
+  formData: ProfileForm,
+  profileId?: string
+) {
   const currentProfile = await getCurrentProfile();
   try {
     await db
@@ -173,7 +176,7 @@ export async function updateUserProfile(formData: ProfileForm) {
         name: formData.name,
         currencyCode: formData.currencyCode,
       })
-      .where(eq(profiles.id, currentProfile.id));
+      .where(eq(profiles.id, profileId ? profileId : currentProfile.id));
 
     await changeCurrentProfile(formData.name);
   } catch (e) {
@@ -200,6 +203,17 @@ export async function changeCurrentProfile(newCurrentProfile: string) {
       .where(eq(users.id, session.user.id));
 
     console.log(user);
+  } catch (e) {
+    console.log(e);
+    return 'Something went wrong! Try again later...';
+  }
+
+  revalidatePath('/');
+}
+
+export async function deleteProfile(profileId: string, formData: FormData) {
+  try {
+    await db.delete(profiles).where(eq(profiles.id, profileId));
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';

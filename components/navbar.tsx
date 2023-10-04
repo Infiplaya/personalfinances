@@ -9,7 +9,6 @@ import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { ProfileSwitcher } from './dashboard/profile-switcher';
 import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
 import { ProfileDropdown } from './dashboard/profile-dropdown';
-import { NewProfileModal } from './dashboard/new-profile-modal';
 import { Button } from './ui/button';
 import { Home } from 'lucide-react';
 
@@ -26,9 +25,9 @@ export default async function Navbar() {
         <ProfileSwitcher
           profiles={userProfiles}
           currentProfile={currentProfile}
-        >
-          <NewProfileModal />
-        </ProfileSwitcher>
+          currencies={currenciesData}
+          currentCurrency={currentCurrency}
+        />
         {session?.user ? null : (
           <div className="inline-flex items-center space-x-4 text-xs">
             <Link href="/signin">Sign In</Link>{' '}
@@ -54,9 +53,10 @@ export default async function Navbar() {
         <ProfileSwitcher
           profiles={userProfiles}
           currentProfile={currentProfile}
-        >
-          <NewProfileModal />
-        </ProfileSwitcher>
+          currencies={currenciesData}
+          currentCurrency={currentCurrency}
+        />
+
         <MobileNavbar>
           <CurrencyDropdown
             currencies={currenciesData}

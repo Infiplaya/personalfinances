@@ -170,7 +170,7 @@ export async function calculateSummariesForMonths() {
       month: sql<number>`MONTH(${transactions.timestamp})`,
       totalIncomes: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
       totalExpenses: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END)`,
-      totalBalance: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.amount ELSE 0 END) *  ${exchangeRate}`,
+      totalBalance: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${exchangeRate} ELSE 0 END) - sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount *  ${exchangeRate} ELSE 0 END)`,
     })
     .from(transactions)
     .where(and(eq(transactions.profileId, currentProfile.id)))

@@ -102,6 +102,6 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   }),
 }));
 
-export type Category = InferModel<typeof categories>;
-export type Currency = InferModel<typeof currencies>;
-export type Transaction = InferModel<typeof transactions>;
+export type Category = typeof categories.$inferSelect;
+export type Currency = typeof currencies.$inferSelect;
+export type Transaction = typeof transactions.$inferSelect;

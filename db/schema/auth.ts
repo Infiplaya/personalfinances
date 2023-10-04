@@ -59,7 +59,10 @@ export const profiles = mysqlTable(
     currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
   },
   (profiles) => ({
-    profileNameIndex: uniqueIndex('profileName_idx').on(profiles.name, profiles.id),
+    profileNameIndex: uniqueIndex('profileName_idx').on(
+      profiles.name,
+      profiles.id
+    ),
   })
 );
 
@@ -91,3 +94,5 @@ export const profilesRelations = relations(profiles, ({ many, one }) => ({
     references: [currencies.code],
   }),
 }));
+
+export type SelectProfile = typeof profiles.$inferSelect;

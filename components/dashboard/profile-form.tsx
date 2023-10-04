@@ -41,12 +41,14 @@ export function ProfileForm({
   currentCurrency,
   edit,
   name,
+  profileId,
 }: {
   closeModal?: () => void;
   currencies: Currency[];
   currentCurrency: string;
   edit?: boolean;
   name?: string;
+  profileId?: string;
 }) {
   const form = useForm<ProfileForm>({
     resolver: zodResolver(profileFormSchema),
@@ -54,7 +56,7 @@ export function ProfileForm({
   });
 
   async function handleEditProfile(data: ProfileForm) {
-    const error = await updateUserProfile(data);
+    const error = await updateUserProfile(data, profileId);
 
     if (error) {
       toast.error(error);
