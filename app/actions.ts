@@ -160,25 +160,29 @@ export async function changeCurrency(prevState: any, formData: FormData) {
 
 export async function createNewProfile(formData: ProfileForm) {
   const session = await validateSession();
+
   try {
     await db.insert(profiles).values({
       id: uuidv4(),
       ...formData,
       userId: session.user.id,
     });
+    revalidatePath('/');
+    return { success: true, message: 'Success!' };
   } catch (e) {
-    console.log(e);
-    return 'Something went wrong! Try again later...';
+    console.log(e.body.message);
+    return { success: false, message: 'Something went wrong... Try Again' };
   }
-
-  revalidatePath('/');
 }
 
 export async function updateUserProfile(
   formData: ProfileForm,
-  profileId?: string
+  profileId: string | undefined
 ) {
   const currentProfile = await getCurrentProfile();
+
+  const { user } = await validateSession();
+
   try {
     await db
       .update(profiles)
@@ -187,12 +191,21 @@ export async function updateUserProfile(
         currencyCode: formData.currencyCode,
       })
       .where(eq(profiles.id, profileId ? profileId : currentProfile.id));
+
+    await db
+      .update(users)
+      .set({
+        currentProfile: formData.name,
+      })
+      .where(eq(users.id, user.id));
+
+    revalidatePath('/');
+
+    return { success: true, message: 'Success!' };
   } catch (e) {
     console.log(e);
-    return 'Something went wrong! Try again later...';
+    return { success: false, message: 'Something Went Wrong!' };
   }
-
-  revalidatePath('/');
 }
 
 export async function changeCurrentProfile(prevState: any, formData: FormData) {

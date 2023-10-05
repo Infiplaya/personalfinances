@@ -119,7 +119,6 @@ export function ProfileSwitcher({
                 <form
                   action={formAction}
                   key={p.id}
-                  onChange={() => toast(state?.message)}
                 >
                   <input type="hidden" id="name" name="name" value={p.name} />
                   <SubmitButton

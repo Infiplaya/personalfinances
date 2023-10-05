@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
@@ -35,6 +35,33 @@ import { ProfileForm, profileFormSchema } from '@/lib/validation/auth';
 import { Currency } from '@/db/schema/finances';
 import { createNewProfile, updateUserProfile } from '@/app/actions';
 
+// @ts-ignore
+import { experimental_useFormState as useFormState } from 'react-dom';
+import { experimental_useFormStatus as useFormStatus } from 'react-dom';
+
+const initialEditState = {
+  success: null,
+  message: null,
+};
+const initialCreateState = {
+  success: null,
+  message: null,
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      aria-disabled={pending}
+      type="submit"
+      className="ml-2 w-full text-left"
+    >
+      Save
+    </button>
+  );
+}
+
 export function ProfileForm({
   closeModal,
   currencies,
@@ -52,28 +79,31 @@ export function ProfileForm({
 }) {
   const form = useForm<ProfileForm>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues: edit ? { currencyCode: currentCurrency, name: name } : {},
+    defaultValues: edit
+      ? { currencyCode: currentCurrency, name: name }
+      : {
+          currencyCode: currentCurrency,
+        },
   });
 
   async function handleEditProfile(data: ProfileForm) {
-    const error = await updateUserProfile(data, profileId);
+    const result = await updateUserProfile(data, profileId);
 
-    if (error) {
-      toast.error(error);
+    if (result.success) {
+      closeModal ? closeModal() : null;
+      toast.success(result.message);
     } else {
-      if (closeModal) closeModal();
-      toast.success('Created new profile!');
+      toast.error(result.message);
     }
   }
 
   async function handleCreateProfile(data: ProfileForm) {
-    const error = await createNewProfile(data);
-
-    if (error) {
-      toast.error(error);
+    const result = await createNewProfile(data);
+    if (result.success) {
+      closeModal ? closeModal() : null;
+      toast.success(result.message);
     } else {
-      if (closeModal) closeModal();
-      toast.success('Created new profile!');
+      toast.error(result.message);
     }
   }
 
@@ -88,7 +118,7 @@ export function ProfileForm({
         onSubmit={form.handleSubmit((data) =>
           edit ? handleEditProfile(data) : handleCreateProfile(data)
         )}
-        className="space-y-8"
+        className="space-y-8 mt-3"
       >
         <FormField
           control={form.control}

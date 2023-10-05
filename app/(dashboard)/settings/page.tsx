@@ -16,12 +16,14 @@ export default async function SettingsPage() {
         </p>
       </div>
       <Separator />
-      <ProfileForm
-        edit={true}
-        currencies={currencies}
-        currentCurrency={currentCurrency}
-        name={currentProfile.name}
-      />
+      <div className='max-w-lg'>
+        <ProfileForm
+          edit={true}
+          currencies={currencies}
+          currentCurrency={currentCurrency}
+          name={currentProfile.name}
+        />
+      </div>
     </div>
   );
 }

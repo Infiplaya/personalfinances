@@ -61,7 +61,7 @@ export const profiles = mysqlTable(
   (profiles) => ({
     profileNameIndex: uniqueIndex('profileName_idx').on(
       profiles.name,
-      profiles.id
+      profiles.userId
     ),
   })
 );

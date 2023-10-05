@@ -41,7 +41,6 @@ export default async function ProfilesSettingsPage() {
                 currentCurrency={currentCurrency}
                 profile={profile}
               />
-
               <AlertDialog>
                 <AlertDialogTrigger disabled={userProfiles.length === 1}>
                   {' '}
