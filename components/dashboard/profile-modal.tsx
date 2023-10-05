@@ -19,7 +19,7 @@ export function ProfileModal({
   const [showDialog, setShowDialog] = useState(false);
   return (
     <Dialog onOpenChange={setShowDialog} open={showDialog}>
-      <DialogTrigger>
+      <DialogTrigger disabled={profile.name === 'default'}>
         <Button variant="outline" size="icon" className="h-5 w-5">
           <Edit className="h-4 w-4" />
         </Button>

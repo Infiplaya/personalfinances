@@ -207,12 +207,12 @@ export async function updateUserProfile(
   }
 }
 
+const profileSchema = z.object({
+  name: z.string().nonempty(),
+});
+
 export async function changeCurrentProfile(prevState: any, formData: FormData) {
   const { user } = await validateSession();
-
-  const profileSchema = z.object({
-    name: z.string().nonempty(),
-  });
 
   const data = profileSchema.parse({
     name: formData.get('name'),
@@ -235,8 +235,16 @@ export async function changeCurrentProfile(prevState: any, formData: FormData) {
 }
 
 export async function deleteProfile(profileId: string, formData: FormData) {
+  const { user } = await validateSession();
+
   try {
     await db.delete(profiles).where(eq(profiles.id, profileId));
+    await db
+      .update(users)
+      .set({
+        currentProfile: 'default',
+      })
+      .where(eq(users.id, user.id));
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';

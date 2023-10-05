@@ -42,7 +42,11 @@ export default async function ProfilesSettingsPage() {
                 profile={profile}
               />
               <AlertDialog>
-                <AlertDialogTrigger disabled={userProfiles.length === 1}>
+                <AlertDialogTrigger
+                  disabled={
+                    userProfiles.length === 1 || profile.name === 'default'
+                  }
+                >
                   {' '}
                   <Button
                     variant="outline"
