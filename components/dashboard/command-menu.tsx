@@ -1,14 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import {
-  Calculator,
-  Calendar,
-  CreditCard,
-  Settings,
-  Smile,
-  User,
-} from 'lucide-react';
+import { CreditCard, Dot, Settings, User } from 'lucide-react';
 
 import {
   CommandDialog,
@@ -18,12 +11,27 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from '@/components/ui/command';
 import { Button } from '../ui/button';
+import { useRouter } from 'next/navigation';
+import { links } from '@/lib/utils';
+
+const settingsLinks = [
+  {
+    href: '/settings',
+    label: 'Settings',
+    icon: <Settings className="mr-2 h-4 w-4" />,
+  },
+  {
+    href: '/settings/profiles',
+    label: 'Profiles Settings',
+    icon: <User className="mr-2 h-4 w-4" />,
+  },
+];
 
 export function CommandMenu() {
   const [open, setOpen] = React.useState(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -35,6 +43,12 @@ export function CommandMenu() {
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
   }, []);
+
+  const runCommand = React.useCallback((command: () => unknown) => {
+    setOpen(false);
+    command();
+  }, []);
+
   return (
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>
@@ -48,36 +62,31 @@ export function CommandMenu() {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>Transactions</span>
-            </CommandItem>
-            <CommandItem>
-              <Smile className="mr-2 h-4 w-4" />
-              <span>Categories</span>
-            </CommandItem>
-            <CommandItem>
-              <Calculator className="mr-2 h-4 w-4" />
-              <span>Months summaries</span>
-            </CommandItem>
+            {links.map((link) => (
+              <CommandItem
+                key={link.href}
+                onSelect={() => {
+                  runCommand(() => router.push(link.href));
+                }}
+              >
+                <Dot className="mr-1 h-4 w-4" />
+                <span>{link.label}</span>
+              </CommandItem>
+            ))}
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Settings">
-            <CommandItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Current Profile Settings</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <CreditCard className="mr-2 h-4 w-4" />
-              <span>Other Profiles Settings</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
+            {settingsLinks.map((link) => (
+              <CommandItem
+                key={link.href}
+                onSelect={() => {
+                  runCommand(() => router.push(link.href));
+                }}
+              >
+                {link.icon}
+                <span>{link.label}</span>
+              </CommandItem>
+            ))}
           </CommandGroup>
         </CommandList>
       </CommandDialog>
