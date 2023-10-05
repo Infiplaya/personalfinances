@@ -170,7 +170,6 @@ export async function createNewProfile(formData: ProfileForm) {
     revalidatePath('/');
     return { success: true, message: 'Success!' };
   } catch (e) {
-    console.log(e.body.message);
     return { success: false, message: 'Something went wrong... Try Again' };
   }
 }
