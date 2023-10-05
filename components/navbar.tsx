@@ -11,6 +11,7 @@ import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
 import { ProfileDropdown } from './dashboard/profile-dropdown';
 import { Button } from './ui/button';
 import { Home } from 'lucide-react';
+import { CommandMenu } from './dashboard/command-menu';
 
 export default async function Navbar() {
   const session = await getServerSession(authOptions);
@@ -22,6 +23,7 @@ export default async function Navbar() {
   return (
     <nav className="sticky top-0 inline-flex w-full items-center justify-end border-b border-gray-200 bg-white px-6 py-4 dark:border-gray-800 dark:bg-gray-950 lg:px-16">
       <div className="ml-auto hidden items-center space-x-8 lg:inline-flex">
+        <CommandMenu />
         <ProfileSwitcher
           profiles={userProfiles}
           currentProfile={currentProfile}
