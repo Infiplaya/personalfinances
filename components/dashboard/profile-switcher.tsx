@@ -23,12 +23,57 @@ import {
 import { changeCurrentProfile } from '@/app/actions';
 import { ProfileForm } from './profile-form';
 import { Currency } from '@/db/schema/finances';
+// @ts-ignore
+import { experimental_useFormState as useFormState } from 'react-dom';
+import { experimental_useFormStatus as useFormStatus } from 'react-dom';
+import { toast } from 'sonner';
 
 interface Profile {
   id: string;
   name: string;
   currencyCode: string;
   userId: string;
+}
+
+const initialState = {
+  message: null,
+};
+
+function SubmitButton({
+  profile,
+  changeSelectedProfile,
+  selectedProfile,
+}: {
+  profile: Profile;
+  changeSelectedProfile: () => void;
+  selectedProfile: Profile;
+}) {
+  const { pending } = useFormStatus();
+
+  return (
+    <CommandItem
+      onSelect={() => {
+        changeSelectedProfile();
+        toast.success(`Changed profile to ${profile.name}`);
+      }}
+      aria-disabled={pending}
+      className="w-full"
+    >
+      <button
+        aria-disabled={pending}
+        type="submit"
+        className="ml-2 w-full text-left"
+      >
+        {profile.name}
+      </button>
+      <CheckIcon
+        className={cn(
+          'ml-auto h-5 w-5',
+          selectedProfile.id === profile.id ? 'opacity-100' : 'opacity-0'
+        )}
+      />
+    </CommandItem>
+  );
 }
 
 export function ProfileSwitcher({
@@ -44,9 +89,11 @@ export function ProfileSwitcher({
 }) {
   const [open, setOpen] = React.useState(false);
   const [showDialog, setShowDialog] = React.useState(false);
-  const [selectedProfile, setselectedProfile] =
+  const [selectedProfile, setSelectedProfile] =
     React.useState<Profile>(currentProfile);
-  const [isPending, startTransition] = React.useTransition();
+  const [state, formAction] = useFormState(changeCurrentProfile, initialState);
+
+  console.log(state.message);
 
   return (
     <Dialog open={showDialog} onOpenChange={setShowDialog}>
@@ -69,26 +116,18 @@ export function ProfileSwitcher({
               <CommandInput placeholder="Search profile..." />
               <CommandEmpty>No profile found.</CommandEmpty>
               {profiles.map((p) => (
-                <CommandItem
-                  key={p.name}
-                  disabled={isPending}
-                  onSelect={() =>
-                    startTransition(async () => {
-                      await changeCurrentProfile(p.name);
-                      setselectedProfile(p);
-                      setOpen(false);
-                    })
-                  }
-                  className="text-sm"
+                <form
+                  action={formAction}
+                  key={p.id}
+                  onChange={() => toast(state?.message)}
                 >
-                  {p.name}
-                  <CheckIcon
-                    className={cn(
-                      'ml-auto h-4 w-4',
-                      selectedProfile.id === p.id ? 'opacity-100' : 'opacity-0'
-                    )}
+                  <input type="hidden" id="name" name="name" value={p.name} />
+                  <SubmitButton
+                    selectedProfile={selectedProfile}
+                    profile={p}
+                    changeSelectedProfile={() => setSelectedProfile(p)}
                   />
-                </CommandItem>
+                </form>
               ))}
             </CommandList>
             <CommandSeparator />

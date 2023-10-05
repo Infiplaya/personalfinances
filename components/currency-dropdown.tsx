@@ -17,9 +17,35 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Currency } from '@/db/schema/finances';
-import { changePrefferedCurrency } from '@/app/actions';
-import { useState, useTransition } from 'react';
+// @ts-ignore
+import { experimental_useFormState as useFormState } from 'react-dom';
+import { experimental_useFormStatus as useFormStatus } from 'react-dom';
+import { useState } from 'react';
 import { toast } from 'sonner';
+import { changeCurrency } from '@/app/actions';
+
+const initialState = {
+  message: null,
+};
+
+function SubmitButton({ currency }: { currency: Currency }) {
+  const { pending } = useFormStatus();
+
+  return (
+    <CommandItem
+      onSelect={() => toast.success(`Changed currency to ${currency.name}`)}
+      disabled={pending}
+    >
+      <button
+        aria-disabled={pending}
+        type="submit"
+        className="ml-2 w-full text-left"
+      >
+        {currency.code}
+      </button>
+    </CommandItem>
+  );
+}
 
 export function CurrencyDropdown({
   currencies,
@@ -29,8 +55,7 @@ export function CurrencyDropdown({
   currentCurrency: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
-
+  const [state, formAction] = useFormState(changeCurrency, initialState);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -46,7 +71,6 @@ export function CurrencyDropdown({
                 ?.code
             : 'Select currency...'}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0">
@@ -55,29 +79,15 @@ export function CurrencyDropdown({
           <CommandEmpty>No currency found.</CommandEmpty>
           <CommandGroup>
             {currencies.map((currency) => (
-              <CommandItem
-                disabled={isPending}
-                key={currency.code}
-                onSelect={() =>
-                  startTransition(() => {
-                    changePrefferedCurrency(currency.code);
-                    setOpen(false);
-                    toast.success(
-                      `Your preffered currency changed to ${currency.code} successfully!`
-                    );
-                  })
-                }
-              >
-                <Check
-                  className={cn(
-                    'mr-2 h-4 w-4',
-                    currentCurrency === currency.code
-                      ? 'opacity-100'
-                      : 'opacity-0'
-                  )}
+              <form action={formAction} key={currency.id}>
+                <input
+                  type="hidden"
+                  id="code"
+                  name="code"
+                  value={currency.code}
                 />
-                {currency.code}
-              </CommandItem>
+                <SubmitButton currency={currency} />
+              </form>
             ))}
           </CommandGroup>
         </Command>

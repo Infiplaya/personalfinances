@@ -13,6 +13,7 @@ import { convertCurrency, fetchExchangeRates } from '@/lib/utils';
 import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
 import { validateSession } from '@/db/queries/transactions';
 import slugify from 'slugify';
+import { z } from 'zod';
 
 export async function registerUser(formData: RegisterForm) {
   try {
@@ -132,17 +133,26 @@ export async function deleteTransactions(transactionsIds: number[]) {
   }
 }
 
-export async function changePrefferedCurrency(currencyCode: string) {
+const currencySchema = z.object({
+  code: z.string().nonempty(),
+});
+
+export async function changeCurrency(prevState: any, formData: FormData) {
   const currentProfile = await getCurrentProfile();
+  const data = currencySchema.parse({
+    code: formData.get('code'),
+  });
+
   try {
     await db
       .update(profiles)
       .set({
-        currencyCode: currencyCode,
+        currencyCode: data.code,
       })
       .where(eq(profiles.id, currentProfile.id));
 
     revalidatePath('/');
+    return { message: `Changed currency to ${data.code}` };
   } catch (e) {
     console.log(e);
   }
@@ -177,8 +187,6 @@ export async function updateUserProfile(
         currencyCode: formData.currencyCode,
       })
       .where(eq(profiles.id, profileId ? profileId : currentProfile.id));
-
-    await changeCurrentProfile(formData.name);
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';
@@ -187,27 +195,31 @@ export async function updateUserProfile(
   revalidatePath('/');
 }
 
-export async function changeCurrentProfile(newCurrentProfile: string) {
-  const session = await validateSession();
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.id, session.user.id));
+export async function changeCurrentProfile(prevState: any, formData: FormData) {
+  const { user } = await validateSession();
+
+  const profileSchema = z.object({
+    name: z.string().nonempty(),
+  });
+
+  const data = profileSchema.parse({
+    name: formData.get('name'),
+  });
 
   try {
     await db
       .update(users)
       .set({
-        currentProfile: newCurrentProfile,
+        currentProfile: data.name,
       })
-      .where(eq(users.id, session.user.id));
-      
+      .where(eq(users.id, user.id));
+
+    revalidatePath('/');
+    return { message: `Changed profile to ${data.name}` };
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';
   }
-
-  revalidatePath('/');
 }
 
 export async function deleteProfile(profileId: string, formData: FormData) {
