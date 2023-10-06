@@ -195,7 +195,7 @@ export async function createNewProfile(formData: ProfileForm) {
       userId: session.user.id,
     });
     revalidatePath('/');
-    return { success: true, message: 'Success!' };
+    return { success: true, message: 'Successfully created new profile!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
@@ -227,7 +227,7 @@ export async function updateUserProfile(
 
     revalidatePath('/');
 
-    return { success: true, message: 'Success!' };
+    return { success: true, message: 'Successfully updated your profile!' };
   } catch (e) {
     console.log(e);
     return { success: false, message: 'Something Went Wrong!' };
