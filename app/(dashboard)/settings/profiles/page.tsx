@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getUserProfiles } from '@/db/queries/auth';
+import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
 import { Edit, X } from 'lucide-react';
 import {
   AlertDialog,
@@ -21,14 +21,23 @@ export default async function ProfilesSettingsPage() {
   const userProfiles = await getUserProfiles();
   const currencies = await getCurrencies();
   const currentCurrency = await getCurrentCurrency();
+  const currentProfile = await getCurrentProfile();
 
   return (
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium">Manage Profiles</h3>
-        <p className="text-muted-foreground text-sm">
-          This are the settings for managing all of your profiles.
-        </p>
+        <div className="flex items-baseline justify-between">
+          <p className="text-muted-foreground text-sm">
+            This are the settings for managing all of your profiles.
+          </p>
+          <ProfileModal
+            currencies={currencies}
+            currentCurrency={currentCurrency}
+            profile={currentProfile}
+            edit={false}
+          />
+        </div>
       </div>
       <Separator />
       <ul className="space-y-3">
@@ -40,6 +49,7 @@ export default async function ProfilesSettingsPage() {
                 currencies={currencies}
                 currentCurrency={currentCurrency}
                 profile={profile}
+                edit={true}
               />
               <AlertDialog>
                 <AlertDialogTrigger

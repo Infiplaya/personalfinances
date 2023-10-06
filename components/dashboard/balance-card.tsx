@@ -12,7 +12,7 @@ export async function BalanceCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitleWithTooltip message="Your current balance" link='/balances'>
+        <CardTitleWithTooltip message="Your current balance" link="/balances">
           <CardTitle>Balance</CardTitle>
         </CardTitleWithTooltip>
       </CardHeader>
@@ -20,7 +20,9 @@ export async function BalanceCard({
         <span
           className={cn(
             'text-lg font-semibold',
-            currentBalance > 0 ? 'text-green-500' : 'text-red-500'
+            currentBalance > 0
+              ? 'text-green-500 dark:text-green-400'
+              : 'text-red-500'
           )}
         >
           {moneyFormat(currentBalance, currencyCode)}

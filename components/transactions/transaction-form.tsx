@@ -65,12 +65,12 @@ export function TransactionForm({
       <h3 className="py-4 font-semibold">Add new {type}</h3>
       <form
         onSubmit={form.handleSubmit(async (data) => {
-          const error = await createNewTransaction(data);
-          if (error) {
-            toast.error(error);
+          const result = await createNewTransaction(data);
+          if (result.success) {
+            closeModal ? closeModal() : null;
+            toast.success(result.message);
           } else {
-            if (closeModal) closeModal();
-            toast.success('Created new transaction!');
+            toast.error(result.message);
           }
         })}
         className="space-y-6"

@@ -10,7 +10,7 @@ import { hash } from 'bcryptjs';
 import { ProfileForm, RegisterForm } from '@/lib/validation/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { convertCurrency, fetchExchangeRates } from '@/lib/utils';
-import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
+import { getCurrentProfile } from '@/db/queries/auth';
 import { validateSession } from '@/db/queries/transactions';
 import slugify from 'slugify';
 import { z } from 'zod';
@@ -105,12 +105,14 @@ export async function createNewTransaction(formData: TransactionForm) {
         ? (userBalance.totalBalance as number) + amount
         : amount,
     });
+    revalidatePath('/transactions');
+
+    return { success: true, message: 'Succesfully added new transaction!' };
   } catch (e) {
     console.log(e);
-    return 'Something went wrong! Try again later...';
+    revalidatePath('/transactions');
+    return { success: true, message: 'Something went wrong Try Again!' };
   }
-
-  revalidatePath('/transactions');
 }
 
 export async function deleteTransaction(transactionId: number) {
@@ -227,7 +229,7 @@ export async function changeCurrentProfile(prevState: any, formData: FormData) {
       .where(eq(users.id, user.id));
 
     revalidatePath('/');
-    return { message: `Changed profile to ${data.name}` };
+    return { success: true, message: `Changed profile to ${data.name}` };
   } catch (e) {
     console.log(e);
     return 'Something went wrong! Try again later...';

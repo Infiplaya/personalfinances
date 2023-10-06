@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import {
@@ -34,33 +34,6 @@ import { cn } from '@/lib/utils';
 import { ProfileForm, profileFormSchema } from '@/lib/validation/auth';
 import { Currency } from '@/db/schema/finances';
 import { createNewProfile, updateUserProfile } from '@/app/actions';
-
-// @ts-ignore
-import { experimental_useFormState as useFormState } from 'react-dom';
-import { experimental_useFormStatus as useFormStatus } from 'react-dom';
-
-const initialEditState = {
-  success: null,
-  message: null,
-};
-const initialCreateState = {
-  success: null,
-  message: null,
-};
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <button
-      aria-disabled={pending}
-      type="submit"
-      className="ml-2 w-full text-left"
-    >
-      Save
-    </button>
-  );
-}
 
 export function ProfileForm({
   closeModal,
@@ -118,7 +91,7 @@ export function ProfileForm({
         onSubmit={form.handleSubmit((data) =>
           edit ? handleEditProfile(data) : handleCreateProfile(data)
         )}
-        className="space-y-8 mt-3"
+        className="mt-3 space-y-8"
       >
         <FormField
           control={form.control}
@@ -189,11 +162,9 @@ export function ProfileForm({
             </FormItem>
           )}
         />
-        <div className="inline-flex w-full items-center justify-between">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? 'Saving...' : 'Save'}
-          </Button>
-        </div>
+        <Button type="submit" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? 'Saving...' : 'Save'}
+        </Button>
       </form>
     </Form>
   );
