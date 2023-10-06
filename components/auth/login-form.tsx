@@ -36,14 +36,10 @@ export function LoginForm() {
               email: data.email,
               password: data.password,
             });
-
-
             if (!res?.error) {
               router.push("/?success=true");
             } else {
               toast.error("Invalid Credentials! Try Again.")
-              form.setValue("email", "");
-              form.setValue("password", "");
             }
           } catch (e) {
             console.log(e);

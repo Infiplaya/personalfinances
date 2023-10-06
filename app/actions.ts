@@ -47,6 +47,8 @@ export async function registerUser(formData: RegisterForm) {
     await insertProfile(newProfile);
 
     return {
+      success: true,
+      message: 'Registration completed successfully',
       user: {
         name: newUser.name,
         email: newUser.email,
@@ -55,6 +57,7 @@ export async function registerUser(formData: RegisterForm) {
   } catch (e: any) {
     console.log(e);
     return {
+      success: false,
       error: e.message,
     };
   }
@@ -111,7 +114,7 @@ export async function createNewTransaction(formData: TransactionForm) {
   } catch (e) {
     console.log(e);
     revalidatePath('/transactions');
-    return { success: false, message: 'Something went wrong Try Again!' };
+    return { success: false, message: 'Something went wrong. Try Again!' };
   }
 }
 
