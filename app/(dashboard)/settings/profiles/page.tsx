@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
-import { Edit, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,

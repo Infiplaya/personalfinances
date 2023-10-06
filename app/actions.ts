@@ -58,7 +58,7 @@ export async function registerUser(formData: RegisterForm) {
     console.log(e);
     return {
       success: false,
-      error: e.message,
+      error: 'Something went wrong. Try Again.',
     };
   }
 }
@@ -122,8 +122,15 @@ export async function deleteTransaction(transactionId: number) {
   try {
     await db.delete(transactions).where(eq(transactions.id, transactionId));
     revalidatePath('/transactions');
+    return {
+      success: true,
+      error: 'Transaction deleted successfully!',
+    };
   } catch (e) {
-    console.log(e);
+    return {
+      success: false,
+      error: 'Something went wrong. Try Again.',
+    };
   }
 }
 
@@ -133,8 +140,16 @@ export async function deleteTransactions(transactionsIds: number[]) {
       .delete(transactions)
       .where(inArray(transactions.id, transactionsIds));
     revalidatePath('/transactions');
+    return {
+      success: true,
+      error: 'Transactions deleted successfully!',
+    };
   } catch (e) {
     console.log(e);
+    return {
+      success: false,
+      error: 'Something went wrong. Try Again.',
+    };
   }
 }
 
@@ -157,9 +172,16 @@ export async function changeCurrency(prevState: any, formData: FormData) {
       .where(eq(profiles.id, currentProfile.id));
 
     revalidatePath('/');
-    return { message: `Changed currency to ${data.code}` };
+    return {
+      success: true,
+      message: `Changed currency to ${data.code}`,
+    };
   } catch (e) {
     console.log(e);
+    return {
+      success: false,
+      message: 'Something went wrong. Try Again',
+    };
   }
 }
 
@@ -235,25 +257,28 @@ export async function changeCurrentProfile(prevState: any, formData: FormData) {
     return { success: true, message: `Changed profile to ${data.name}` };
   } catch (e) {
     console.log(e);
-    return 'Something went wrong! Try again later...';
+    return { success: false, message: 'Something went wrong... Try again.' };
   }
 }
 
 export async function deleteProfile(profileId: string, formData: FormData) {
   const { user } = await validateSession();
+  const currentProfile = await getCurrentProfile();
 
   try {
     await db.delete(profiles).where(eq(profiles.id, profileId));
-    await db
-      .update(users)
-      .set({
-        currentProfile: 'default',
-      })
-      .where(eq(users.id, user.id));
+    currentProfile.id === profileId
+      ? await db
+          .update(users)
+          .set({
+            currentProfile: 'default',
+          })
+          .where(eq(users.id, user.id))
+      : null;
+    revalidatePath('/');
+    return { success: true, message: 'Deleted profile successfully.' };
   } catch (e) {
     console.log(e);
-    return 'Something went wrong! Try again later...';
+    return { success: false, message: 'Something went wrong. Try Again' };
   }
-
-  revalidatePath('/');
 }
