@@ -111,7 +111,7 @@ export async function createNewTransaction(formData: TransactionForm) {
   } catch (e) {
     console.log(e);
     revalidatePath('/transactions');
-    return { success: true, message: 'Something went wrong Try Again!' };
+    return { success: false, message: 'Something went wrong Try Again!' };
   }
 }
 
