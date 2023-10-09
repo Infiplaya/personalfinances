@@ -2,14 +2,13 @@ import { DataTable } from '@/components/data-table/data-table';
 import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
-import {
-  getCurrencies,
-  getCurrentCurrency,
-} from '@/db/queries/currencies';
+import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { columns } from './columns';
+import TableSkeleton from '@/components/skeletons/table-skeleton';
+import { Suspense } from 'react';
 interface Props {
   searchParams: {
     [key: string]: string | string[] | undefined;
@@ -80,12 +79,15 @@ export default async function TransactionsPage({ searchParams }: Props) {
           />
         </div>
       </div>
-      <DataTable
-        categories={categoriesData}
-        columns={columns}
-        data={transactions}
-        count={transactionsCount}
-      />
+
+      <Suspense fallback={<TableSkeleton />}>
+        <DataTable
+          categories={categoriesData}
+          columns={columns}
+          data={transactions}
+          count={transactionsCount}
+        />
+      </Suspense>
     </main>
   );
 }

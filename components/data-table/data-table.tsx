@@ -80,7 +80,6 @@ export function DataTable<TData, TValue>({
 
   const transactionsToDeleteIds = Object.values(transactionsToDelete);
 
-
   function handleSort(id: string, sortType: 'desc' | 'asc' | boolean) {
     if (id === 'select') return;
     const params = new URLSearchParams(window.location.search);
@@ -92,11 +91,12 @@ export function DataTable<TData, TValue>({
   }
   return (
     <>
-      <div className="flex space-x-3 items-center lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex items-center space-x-3 lg:flex-row lg:items-center lg:justify-between">
         <DataTableToolbar table={table} categories={categories} />
         {Object.keys(rowSelection).length > 0 ? (
           <Button
             size="sm"
+            disabled={isPending}
             onClick={() =>
               startTransition(() => {
                 deleteTransactions(transactionsToDeleteIds);

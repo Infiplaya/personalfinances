@@ -93,8 +93,6 @@ export function ProfileSwitcher({
     React.useState<Profile>(currentProfile);
   const [state, formAction] = useFormState(changeCurrentProfile, initialState);
 
-  console.log(state.message);
-
   return (
     <Dialog open={showDialog} onOpenChange={setShowDialog}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -116,10 +114,7 @@ export function ProfileSwitcher({
               <CommandInput placeholder="Search profile..." />
               <CommandEmpty>No profile found.</CommandEmpty>
               {profiles.map((p) => (
-                <form
-                  action={formAction}
-                  key={p.id}
-                >
+                <form action={formAction} key={p.id}>
                   <input type="hidden" id="name" name="name" value={p.name} />
                   <SubmitButton
                     selectedProfile={selectedProfile}

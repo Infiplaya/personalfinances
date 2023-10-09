@@ -1,27 +1,25 @@
+'use client';
+
+import { OverviewData } from '@/db/queries/transactions';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { CardTitleWithTooltip } from './card-title-with-tooltip';
+import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { moneyFormat } from '@/lib/utils';
-import { OverviewData } from '@/db/queries/transactions';
 
-export function OverviewCard({
+export function Overview({
   data,
-  dataKey,
   currencyCode,
-  title,
-  message,
 }: {
   data: OverviewData;
   currencyCode: string;
-  dataKey: string;
-  title: string;
-  message: string;
 }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitleWithTooltip message={message}>
-          <CardTitle>{title}</CardTitle>
+        <CardTitleWithTooltip
+          message={'Your incomes and expenses in last 7 days'}
+        >
+          <CardTitle>Incomes and Expenses</CardTitle>
         </CardTitleWithTooltip>
       </CardHeader>
       <CardContent>
@@ -42,8 +40,13 @@ export function OverviewCard({
               tickFormatter={(value) => `${moneyFormat(value, currencyCode)}`}
             />
             <Bar
-              dataKey={dataKey}
-              fill={title == 'Expenses' ? '#F4364C' : '#39E75F'}
+              dataKey={'totalExpenses'}
+              fill={'#F4364C'}
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar
+              dataKey={'totalIncome'}
+              fill={'#39E75F'}
               radius={[4, 4, 0, 0]}
             />
           </BarChart>

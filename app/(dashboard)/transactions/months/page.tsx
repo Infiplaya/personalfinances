@@ -1,16 +1,20 @@
-import MonthSummaryCard from '@/components/dashboard/month-summary-card';
+import MonthSummaryCard from '@/components/summaries/month-summary-card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getSummariesForMonths } from '@/db/queries/transactions';
+import { Suspense } from 'react';
 
 export default async function MonthsPage() {
   const monthData = await getSummariesForMonths();
-
-  console.log(monthData);
-
   return (
     <main>
-      <div className="space-y-12">
+      <div className="grid gap-12 md:grid-cols-2">
         {monthData.map((m) => (
-          <MonthSummaryCard monthData={m} key={m.month} />
+          <Suspense
+            key={m.month}
+            fallback={<Skeleton className="h-52 w-full" />}
+          >
+            <MonthSummaryCard monthData={m} />
+          </Suspense>
         ))}
       </div>
     </main>

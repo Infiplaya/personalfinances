@@ -1,6 +1,6 @@
-import { AuthPage } from "@/components/auth/auth-page";
-import { LoginForm } from "@/components/auth/login-form";
-import { SuccessToast } from "@/components/success-toast";
+import { AuthPage } from '@/components/auth/auth-page';
+import { LoginForm } from '@/components/auth/login-form';
+import { SuccessToast } from '@/components/ui/success-toast';
 
 export default async function SignInPage() {
   return (

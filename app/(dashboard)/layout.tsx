@@ -1,6 +1,6 @@
+import { Navbar } from '@/components/dashboard/navbar';
+import { Sidebar } from '@/components/dashboard/sidebar';
 import type { Metadata } from 'next';
-import Navbar from '@/components/navbar';
-import { Sidebar } from '@/components/sidebar';
 
 export const metadata: Metadata = {
   title: 'Personal Finances App',
@@ -16,7 +16,7 @@ export default function RootLayout({
     <>
       <Navbar />
       <Sidebar />
-      <div className="container mx-auto space-y-10 py-10 lg:pl-24">
+      <div className="max-w-7xl px-4 mx-auto space-y-10 py-10">
         {children}
       </div>
     </>

@@ -44,7 +44,7 @@ export function DataTableToolbar<TData>({
   });
   return (
     <div className="flex flex-1 items-center justify-between space-x-4">
-      <div className='lg:flex items-center lg:space-x-3 mb-6 lg:mb-0'>
+      <div className="mb-6 items-center lg:mb-0 lg:flex lg:space-x-3">
         <SearchTable />
         {table.getColumn('categoryName') && (
           <DataTableFacetedFilter
@@ -84,7 +84,7 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <div className='hidden lg:block space-x-12'>
+      <div className="hidden space-x-12 lg:block">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

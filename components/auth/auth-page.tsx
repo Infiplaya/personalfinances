@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { signIn } from "next-auth/react";
-import Link from "next/link";
-import { ReactNode } from "react";
-import { Button } from "../ui/button";
+import { signIn } from 'next-auth/react';
+import Link from 'next/link';
+import { ReactNode } from 'react';
+import { Button } from '../ui/button';
 
 export function AuthPage({
   children,
   type,
 }: {
   children?: ReactNode;
-  type: "signin" | "signup";
+  type: 'signin' | 'signup';
 }) {
   return (
     <>
-      {" "}
+      {' '}
       <div className="flex min-h-full flex-1">
-        <div className="relative hidden w-0 dark:bg-gray-950 bg-gray-50 flex-1 lg:flex text-lg lg:flex-row items-center justify-center">
-          {type === "signin" ? (
+        <div className="relative hidden w-0 flex-1 items-center justify-center bg-gray-50 text-lg dark:bg-gray-950 lg:flex lg:flex-row">
+          {type === 'signin' ? (
             <>
               <h3 className="leading-6 text-gray-900 dark:text-gray-50">
                 Do not have account?
@@ -25,11 +25,11 @@ export function AuthPage({
               <Link href="/signup">
                 <Button
                   variant="link"
-                  className="text-gray-900 dark:text-gray-50 text-lg"
+                  className="text-lg text-gray-900 dark:text-gray-50"
                 >
                   Sign Up
                 </Button>
-              </Link>{" "}
+              </Link>{' '}
             </>
           ) : (
             <>
@@ -39,18 +39,18 @@ export function AuthPage({
               <Link href="/signin">
                 <Button
                   variant="link"
-                  className="text-gray-900 dark:text-gray-50 text-lg"
+                  className="text-lg text-gray-900 dark:text-gray-50"
                 >
                   Sign In
                 </Button>
-              </Link>{" "}
+              </Link>{' '}
             </>
           )}
         </div>
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
-              {type === "signin" ? (
+              {type === 'signin' ? (
                 <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
                   Sign In
                 </h2>
@@ -73,7 +73,7 @@ export function AuthPage({
                     <div className="w-full border-t border-gray-200" />
                   </div>
                   <div className="relative flex justify-center text-sm font-medium leading-6">
-                    <span className="px-6 bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+                    <span className="bg-gray-50 px-6 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
                       Or continue with
                     </span>
                   </div>
@@ -81,7 +81,7 @@ export function AuthPage({
 
                 <div className="mt-6 grid grid-cols-2 gap-4">
                   <Button
-                    onClick={() => signIn("google")}
+                    onClick={() => signIn('google')}
                     className="inline-flex items-center gap-3"
                   >
                     <svg
@@ -89,7 +89,7 @@ export function AuthPage({
                       height="1em"
                       viewBox="0 0 488 512"
                       fill="currentColor"
-                      className="w-4 h-4"
+                      className="h-4 w-4"
                     >
                       <path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
                     </svg>

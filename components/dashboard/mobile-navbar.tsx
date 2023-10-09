@@ -14,7 +14,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Home, Settings } from 'lucide-react';
 import { ThemeSwitcher } from './theme-switcher';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 
 export default function MobileNavbar({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -23,9 +23,7 @@ export default function MobileNavbar({ children }: { children: ReactNode }) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className="lg:hidden">
-        <Button size="icon" variant="outline">
-          <HamburgerMenuIcon className="h-5 w-5 dark:text-gray-300" />
-        </Button>
+        <HamburgerMenuIcon className="h-5 w-5 dark:text-gray-300" />
       </SheetTrigger>
       <SheetContent className="w-full lg:hidden" side="right">
         <SheetHeader>
@@ -37,9 +35,7 @@ export default function MobileNavbar({ children }: { children: ReactNode }) {
               }}
               href="/"
             >
-              <Button size="icon" variant="outline">
-                <Home className="h-5 w-5 dark:text-gray-300" />
-              </Button>
+              <Home className="h-5 w-5 dark:text-gray-300" />
             </Link>
           </SheetTitle>
         </SheetHeader>

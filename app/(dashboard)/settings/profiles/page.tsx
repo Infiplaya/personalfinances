@@ -14,8 +14,10 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
-import { ProfileModal } from '@/components/dashboard/profile-modal';
+import { ProfileModal } from '@/components/profile/profile-modal';
 import { deleteProfile } from '@/app/actions';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Suspense } from 'react';
 
 export default async function ProfilesSettingsPage() {
   const userProfiles = await getUserProfiles();
@@ -40,57 +42,56 @@ export default async function ProfilesSettingsPage() {
         </div>
       </div>
       <Separator />
-      <ul className="space-y-3">
-        {userProfiles.map((profile) => (
-          <li key={profile.id} className="flex w-full max-w-lg justify-between">
-            <span className="font-medium">{profile.name}</span>
-            <div className="space-x-3">
-              <ProfileModal
-                currencies={currencies}
-                currentCurrency={currentCurrency}
-                profile={profile}
-                edit={true}
-              />
-              <AlertDialog>
-                <AlertDialogTrigger
-                  disabled={
-                    userProfiles.length === 1 || profile.name === 'default'
-                  }
-                >
-                  {' '}
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-5 w-5"
-                    disabled={userProfiles.length === 1}
+      <Suspense fallback={<Skeleton className="h-72 w-[1500px]" />}>
+        <ul className="space-y-3">
+          {userProfiles.map((profile) => (
+            <li
+              key={profile.id}
+              className="flex w-full max-w-lg justify-between"
+            >
+              <span className="font-medium">{profile.name}</span>
+              <div className="space-x-3">
+                <ProfileModal
+                  currencies={currencies}
+                  currentCurrency={currentCurrency}
+                  profile={profile}
+                  edit={true}
+                />
+                <AlertDialog>
+                  <AlertDialogTrigger
+                    disabled={
+                      userProfiles.length === 1 || profile.name === 'default'
+                    }
                   >
+                    {' '}
                     <X className="h-4 w-4" />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      your account and remove your data from our servers.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <form action={deleteProfile.bind(null, profile.id)}>
-                      <AlertDialogAction type="submit">
-                        Delete
-                      </AlertDialogAction>
-                    </form>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          </li>
-        ))}
-      </ul>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete your account and remove your data from our
+                        servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <form action={deleteProfile.bind(null, profile.id)}>
+                        <AlertDialogAction type="submit">
+                          Delete
+                        </AlertDialogAction>
+                      </form>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Suspense>
     </div>
   );
 }

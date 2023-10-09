@@ -21,15 +21,13 @@ export function ProfileModal({
   const [showDialog, setShowDialog] = useState(false);
   return (
     <Dialog onOpenChange={setShowDialog} open={showDialog}>
-      <DialogTrigger disabled={profile.name === 'default'}>
-        {edit ? (
-          <Button variant="outline" size="icon" className="h-5 w-5">
-            <Edit className="h-4 w-4" />
-          </Button>
-        ) : (
-          <Button>New Profile</Button>
-        )}
-      </DialogTrigger>
+      {edit ? (
+        <DialogTrigger disabled={profile.name === 'default'}>
+          <Edit className="h-4 w-4" />
+        </DialogTrigger>
+      ) : (
+        <DialogTrigger>New Profile</DialogTrigger>
+      )}
       <DialogContent>
         <ProfileForm
           currencies={currencies}

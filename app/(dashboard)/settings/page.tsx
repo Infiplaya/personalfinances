@@ -1,7 +1,9 @@
-import { ProfileForm } from '@/components/dashboard/profile-form';
+import { ProfileForm } from '@/components/profile/profile-form';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getCurrentProfile } from '@/db/queries/auth';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
+import { Suspense } from 'react';
 
 export default async function SettingsPage() {
   const currencies = await getCurrencies();
@@ -16,13 +18,15 @@ export default async function SettingsPage() {
         </p>
       </div>
       <Separator />
-      <div className='max-w-lg'>
-        <ProfileForm
-          edit={true}
-          currencies={currencies}
-          currentCurrency={currentCurrency}
-          name={currentProfile.name}
-        />
+      <div className="max-w-lg">
+        <Suspense fallback={<Skeleton className="h-48 w-full" />}>
+          <ProfileForm
+            edit={true}
+            currencies={currencies}
+            currentCurrency={currentCurrency}
+            name={currentProfile.name}
+          />
+        </Suspense>
       </div>
     </div>
   );

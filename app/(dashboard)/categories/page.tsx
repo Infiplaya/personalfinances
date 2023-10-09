@@ -1,4 +1,4 @@
-export const revalidate = 24000;
+export const revalidate = 360000;
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getCategories } from '@/db/queries/categories';

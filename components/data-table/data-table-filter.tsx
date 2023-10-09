@@ -1,4 +1,6 @@
-import { useEffect, useTransition } from 'react';
+'use client';
+
+import { useTransition } from 'react';
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import { Column } from '@tanstack/react-table';
 

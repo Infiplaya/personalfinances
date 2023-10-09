@@ -6,14 +6,13 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 import { CurrencyDropdown } from './currency-dropdown';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
-import { ProfileSwitcher } from './dashboard/profile-switcher';
+import { ProfileSwitcher } from '../profile/profile-switcher';
 import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
-import { ProfileDropdown } from './dashboard/profile-dropdown';
-import { Button } from './ui/button';
+import { ProfileDropdown } from '../profile/profile-dropdown';
+import { Button } from '../ui/button';
 import { Home } from 'lucide-react';
-import { CommandMenu } from './dashboard/command-menu';
-
-export default async function Navbar() {
+import { CommandMenu } from './command-menu';
+export async function Navbar() {
   const session = await getServerSession(authOptions);
   const currenciesData = await getCurrencies();
   const currentCurrency = await getCurrentCurrency();

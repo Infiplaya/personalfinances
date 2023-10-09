@@ -11,9 +11,15 @@ import {
   YAxis,
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { CardTitleWithTooltip } from './card-title-with-tooltip';
+import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 
-export function BalanceChart({ data, currencyCode }: { data: any, currencyCode: string }) {
+export function BalanceChart({
+  data,
+  currencyCode,
+}: {
+  data: any;
+  currencyCode: string;
+}) {
   return (
     <Card>
       <CardHeader>

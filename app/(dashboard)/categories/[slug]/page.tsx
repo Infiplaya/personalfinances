@@ -1,7 +1,9 @@
+import TableSkeleton from '@/components/skeletons/table-skeleton';
 import { TransactionsTable } from '@/components/transactions/transactions-table';
 import { db } from '@/db';
 import { getCurrentProfile } from '@/db/queries/auth';
 import { calculateTotalForCategory } from '@/db/queries/transactions';
+import { Suspense } from 'react';
 
 async function getCategory(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -43,10 +45,12 @@ export default async function CategoriesPage({
         <p>Total: {totalAmount.totalAmount}</p>
         <p>This Month: {totalAmountThisMonth.totalAmount}</p>
       </div>
-      <TransactionsTable
-        transactions={category.transactions}
-        caption={`A list of transactions in ${category.name}`}
-      />
+      <Suspense fallback={<TableSkeleton />}>
+        <TransactionsTable
+          transactions={category.transactions}
+          caption={`A list of transactions in ${category.name}`}
+        />
+      </Suspense>
     </main>
   );
 }

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useTransition } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 export function RowsControls({}) {
   const router = useRouter();
@@ -18,8 +18,8 @@ export function RowsControls({}) {
 
   function handleTableRows(value: string) {
     const params = new URLSearchParams(window.location.search);
-    params.set("per_page", value);
-    params.delete("page");
+    params.set('per_page', value);
+    params.delete('page');
 
     startTransition(() => {
       router.replace(`${pathname}?${params.toString()}`);
@@ -29,7 +29,7 @@ export function RowsControls({}) {
   return (
     <Select
       onValueChange={(value) => handleTableRows(value)}
-      defaultValue={"10"}
+      defaultValue={'10'}
       disabled={isPending}
     >
       <div className="inline-flex items-center space-x-4">

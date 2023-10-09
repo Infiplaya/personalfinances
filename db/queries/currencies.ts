@@ -37,7 +37,7 @@ async function selectCurrentCurrency() {
     };
     await insertProfile(newProfile);
 
-    return newProfile.currencyCode
+    return newProfile.currencyCode;
   }
 
   return currentProfile.currencyCode;
