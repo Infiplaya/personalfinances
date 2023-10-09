@@ -19,14 +19,12 @@ export default async function SettingsPage() {
       </div>
       <Separator />
       <div className="max-w-lg">
-        <Suspense fallback={<Skeleton className="h-48 w-full" />}>
-          <ProfileForm
-            edit={true}
-            currencies={currencies}
-            currentCurrency={currentCurrency}
-            name={currentProfile.name}
-          />
-        </Suspense>
+        <ProfileForm
+          edit={true}
+          currencies={currencies}
+          currentCurrency={currentCurrency}
+          name={currentProfile.name}
+        />
       </div>
     </div>
   );

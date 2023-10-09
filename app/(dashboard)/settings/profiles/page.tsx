@@ -42,56 +42,53 @@ export default async function ProfilesSettingsPage() {
         </div>
       </div>
       <Separator />
-      <Suspense fallback={<Skeleton className="h-72 w-[1500px]" />}>
-        <ul className="space-y-3">
-          {userProfiles.map((profile) => (
-            <li
-              key={profile.id}
-              className="flex w-full max-w-lg justify-between"
-            >
-              <span className="font-medium">{profile.name}</span>
-              <div className="space-x-3">
-                <ProfileModal
-                  currencies={currencies}
-                  currentCurrency={currentCurrency}
-                  profile={profile}
-                  edit={true}
-                />
-                <AlertDialog>
-                  <AlertDialogTrigger
-                    disabled={
-                      userProfiles.length === 1 || profile.name === 'default'
-                    }
-                  >
-                    {' '}
-                    <X className="h-4 w-4" />
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <form action={deleteProfile.bind(null, profile.id)}>
-                        <AlertDialogAction type="submit">
-                          Delete
-                        </AlertDialogAction>
-                      </form>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </Suspense>
+      <ul className="space-y-3">
+        {userProfiles.map((profile) => (
+          <li key={profile.id} className="flex w-full max-w-lg justify-between">
+            <span className="font-medium">{profile.name}</span>
+            <div className="space-x-3">
+              <ProfileModal
+                currencies={currencies}
+                currentCurrency={currentCurrency}
+                profile={profile}
+                edit={true}
+              />
+              <AlertDialog>
+                <AlertDialogTrigger
+                  disabled={
+                    userProfiles.length === 1 || profile.name === 'default'
+                  }
+                >
+                  {' '}
+                  <X className="h-4 w-4" />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      this profile from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <form action={deleteProfile.bind(null, profile.id)}>
+                      <AlertDialogAction
+                        type="submit"
+                        className="w-full md:w-auto"
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </form>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
