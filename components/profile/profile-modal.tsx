@@ -26,7 +26,9 @@ export function ProfileModal({
           <Edit className="h-4 w-4" />
         </DialogTrigger>
       ) : (
-        <DialogTrigger>New Profile</DialogTrigger>
+        <DialogTrigger asChild>
+          <Button>New Profile</Button>
+        </DialogTrigger>
       )}
       <DialogContent>
         <ProfileForm

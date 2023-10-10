@@ -22,34 +22,23 @@ export default async function Home() {
       <SuccessToast message="Successfully logged in! Welcome back" />
       <div className="grid-cols-12 gap-x-4 space-y-10 lg:grid lg:space-y-0">
         <div className="lg:col-span-4">
-          <Suspense fallback={<Skeleton className="h-[268px] w-full" />}>
-            <SummaryCard />
-          </Suspense>
+          <SummaryCard />
         </div>
         <div className="lg:col-span-4">
-          <Suspense fallback={<Skeleton className="h-[268px] w-full" />}>
-            <SummaryCard currentMonth={currentMonth} />
-          </Suspense>
+          <SummaryCard currentMonth={currentMonth} />
         </div>
         <div className="lg:col-span-4">
-          <Suspense fallback={<Skeleton className="h-[268px] w-full" />}>
-            <BalanceCard currentBalance={0} />
-          </Suspense>
+          <BalanceCard currentBalance={0} />
         </div>
       </div>
       <div className="grid gap-x-4 lg:grid-cols-6">
         <div className="lg:col-span-4">
-          <Suspense fallback={<Skeleton className="h-[420px] w-full" />}>
-            <BalanceChart data={balanceData} currencyCode={currencyCode} />
-          </Suspense>
+          <BalanceChart data={balanceData} currencyCode={currencyCode} />
         </div>
         <div className="mt-12 lg:col-span-2 lg:mt-0">
-          <Suspense fallback={<Skeleton className="h-[420px] w-full" />}>
-            <RecentTransactions />
-          </Suspense>
+          <RecentTransactions />
         </div>
       </div>
-
       <Overview data={overviewData} currencyCode={currencyCode} />
     </main>
   );

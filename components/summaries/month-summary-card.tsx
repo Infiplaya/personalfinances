@@ -22,7 +22,7 @@ export default async function MonthSummaryCard({
     <Card>
       <CardHeader>
         <CardTitleWithTooltip
-          link={`/transactions/months/${getMonth(monthData.month)}`}
+          link={`/months/${getMonth(monthData.month)}`}
           message={`Summary of incomes and spendings in ${getMonth(
             monthData.month,
             true

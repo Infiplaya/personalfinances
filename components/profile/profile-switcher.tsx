@@ -27,6 +27,7 @@ import { Currency } from '@/db/schema/finances';
 import { experimental_useFormState as useFormState } from 'react-dom';
 import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface Profile {
   id: string;
@@ -49,11 +50,13 @@ function SubmitButton({
   selectedProfile: Profile;
 }) {
   const { pending } = useFormStatus();
+  const router = useRouter();
 
   return (
     <CommandItem
       onSelect={() => {
         changeSelectedProfile();
+        router.refresh();
         toast.success(`Changed profile to ${profile.name}`);
       }}
       aria-disabled={pending}

@@ -9,6 +9,17 @@ import {
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 import {
   Table,
@@ -23,9 +34,11 @@ import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { DataTablePagination } from './data-table-pagination';
 import { RowsControls } from './data-table-rows';
 import { DataTableToolbar } from './data-table-toolbar';
-import { Category, Transaction } from '@/db/schema/finances';
+import { Category } from '@/db/schema/finances';
 import { Button } from '@/components/ui/button';
 import { deleteTransactions } from '@/app/actions';
+import { Loader2 } from 'lucide-react';
+import { Spinner } from '../ui/spinner';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -94,19 +107,37 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center space-x-3 lg:flex-row lg:items-center lg:justify-between">
         <DataTableToolbar table={table} categories={categories} />
         {Object.keys(rowSelection).length > 0 ? (
-          <Button
-            size="sm"
-            disabled={isPending}
-            onClick={() =>
-              startTransition(() => {
-                deleteTransactions(transactionsToDeleteIds);
-                setRowSelection({});
-              })
-            }
-            variant="destructive"
-          >
-            Delete
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button size="sm" variant="destructive">
+                Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  transactions from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={isPending}
+                  onClick={() =>
+                    startTransition(() => {
+                      deleteTransactions(transactionsToDeleteIds);
+                      setRowSelection({});
+                    })
+                  }
+                  className="w-full md:w-auto"
+                >
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         ) : null}
       </div>
 

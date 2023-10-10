@@ -13,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { DialogOverlay } from '@radix-ui/react-dialog';
+import { Plus, PlusCircle } from 'lucide-react';
 
 export function TransactionDialog({
   categories,
@@ -30,9 +32,16 @@ export function TransactionDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Button className="hidden lg:block">New Transaction </Button>
+        <DropdownMenuTrigger asChild>
+          <Button
+            className="inline-flex items-center space-x-2"
+            size="sm"
+          >
+            <PlusCircle className="h-5 w-5 dark:text-gray-700" />{' '}
+            <span>New Transaction</span>
+          </Button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent>
           <DropdownMenuLabel>Choose Type</DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -49,7 +58,6 @@ export function TransactionDialog({
           </DialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-
       <DialogContent>
         <TransactionForm
           categories={

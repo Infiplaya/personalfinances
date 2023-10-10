@@ -34,6 +34,8 @@ import { cn } from '@/lib/utils';
 import { ProfileForm, profileFormSchema } from '@/lib/validation/auth';
 import { Currency } from '@/db/schema/finances';
 import { createNewProfile, updateUserProfile } from '@/app/actions';
+import { useEffect } from 'react';
+import { getCurrentProfile } from '@/db/queries/auth';
 
 export function ProfileForm({
   closeModal,

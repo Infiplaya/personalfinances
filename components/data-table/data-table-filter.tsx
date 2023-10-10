@@ -1,6 +1,6 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useEffect, useTransition } from 'react';
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import { Column } from '@tanstack/react-table';
 
@@ -44,8 +44,30 @@ export function DataTableFacetedFilter<TData, TValue>({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
+  const handleSelect = (name: string, isSelected: boolean) => {
+    const params = new URLSearchParams(window.location.search);
 
-  const params = new URLSearchParams(window.location.search);
+    if (isSelected) {
+      selectedValues.delete(name);
+    } else {
+      selectedValues.add(name);
+    }
+
+    const filterValues = Array.from(selectedValues);
+    column?.setFilterValue(filterValues.length ? filterValues : undefined);
+
+    if (filterValues && filterValues.length > 0) {
+      const paramName = title === 'Category' ? 'category' : 'type';
+      params.set(paramName, filterValues.join('.'));
+    } else {
+      params.delete('category');
+      params.delete('type');
+    }
+
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`);
+    });
+  };
 
   return (
     <Popover>
@@ -104,30 +126,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                   <CommandItem
                     key={option.name}
                     disabled={isPending}
-                    onSelect={() => {
-                      if (isSelected) {
-                        selectedValues.delete(option.name);
-                      } else {
-                        selectedValues.add(option.name);
-                      }
-                      const filterValues = Array.from(selectedValues);
-                      column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined
-                      );
-
-                      if (filterValues && filterValues.length > 0) {
-                        const paramName =
-                          title === 'Category' ? 'category' : 'type';
-                        params.set(paramName, filterValues.join('.'));
-                      } else {
-                        params.delete('category');
-                        params.delete('type');
-                      }
-
-                      startTransition(() => {
-                        router.replace(`${pathname}?${params.toString()}`);
-                      });
-                    }}
+                    onSelect={() => handleSelect(option.name, isSelected)}
                   >
                     <div
                       className={cn(

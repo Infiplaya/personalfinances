@@ -77,8 +77,8 @@ export const links = [
     label: 'Categories',
   },
   {
-    href: '/transactions/months',
-    label: 'Monthly Overviews',
+    href: '/months',
+    label: 'Months Summary',
   },
 ];
 

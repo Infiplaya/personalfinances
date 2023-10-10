@@ -30,27 +30,18 @@ export default async function TransactionsPage({
   }
   return (
     <div className="py-10">
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            {transaction.amount
-              ? moneyFormat(
-                  Number(transaction.amount),
-                  transaction.currencyCode
-                )
-              : null}
-          </CardTitle>
-        </CardHeader>
+      {transaction.amount
+        ? moneyFormat(Number(transaction.amount), transaction.currencyCode)
+        : null}
 
-        <CardContent>
-          <div className="pb-4">
-            <p>{transaction?.name}</p>
-            <p>{transaction?.description}</p>
-          </div>
-          <p>Category: {transaction?.categoryName}</p>
-          <p>Type: {transaction?.type}</p>
-        </CardContent>
-      </Card>
+      <div className="pb-4">
+        <p>{transaction?.name}</p>
+        <p>{transaction?.description}</p>
+      </div>
+      <p>Category: {transaction?.categoryName}</p>
+      <p>Type: {transaction?.type}</p>
+
+      <div>See more similar transactions: </div>
     </div>
   );
 }

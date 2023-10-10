@@ -9,12 +9,7 @@ export default async function MonthsPage() {
     <main>
       <div className="grid gap-12 md:grid-cols-2">
         {monthData.map((m) => (
-          <Suspense
-            key={m.month}
-            fallback={<Skeleton className="h-52 w-full" />}
-          >
-            <MonthSummaryCard monthData={m} />
-          </Suspense>
+          <MonthSummaryCard monthData={m} key={m.month} />
         ))}
       </div>
     </main>

@@ -43,47 +43,51 @@ export function DataTableToolbar<TData>({
     return filteredTypes.includes(category.type);
   });
   return (
-    <div className="flex flex-1 items-center justify-between space-x-4">
-      <div className="mb-6 items-center lg:mb-0 lg:flex lg:space-x-3">
+    <div className="flex w-full my-6 items-center justify-between">
+      <div className="inline-flex space-x-6">
         <SearchTable />
-        {table.getColumn('categoryName') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('categoryName')}
-            title="Category"
-            options={filteredCategories}
-          />
-        )}
-        {table.getColumn('type') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('type')}
-            title="Type"
-            options={[
-              { id: 0, name: 'expense' },
-              { id: 1, name: 'income' },
-            ]}
-          />
-        )}
-        {isFiltered && (
-          <Button
-            variant="ghost"
-            onClick={() => {
-              const params = new URLSearchParams(window.location.search);
-              params.delete('category');
-              params.delete('type');
+        <div className="mr-auto inline-flex space-x-2">
+          {table.getColumn('categoryName') && (
+            <DataTableFacetedFilter
+              column={table.getColumn('categoryName')}
+              title="Category"
+              options={filteredCategories}
+            />
+          )}
+          {table.getColumn('type') && (
+            <DataTableFacetedFilter
+              column={table.getColumn('type')}
+              title="Type"
+              options={[
+                { id: 0, name: 'expense' },
+                { id: 1, name: 'income' },
+              ]}
+            />
+          )}
+          {isFiltered && (
+            <Button
+              variant="ghost"
+              disabled={isPending}
+              onClick={() => {
+                const params = new URLSearchParams(window.location.search);
+                params.delete('category');
+                params.delete('type');
 
-              startTransition(() => {
-                router.replace(`${pathname}?${params.toString()}`);
-              });
+                startTransition(() => {
+                  router.replace(`${pathname}?${params.toString()}`);
+                });
 
-              table.resetColumnFilters();
-            }}
-            className="h-8 px-2 lg:px-3"
-          >
-            Reset
-            <Cross2Icon className="ml-2 h-4 w-4" />
-          </Button>
-        )}
+                table.resetColumnFilters();
+              }}
+              className="h-8 px-2 lg:px-3"
+            >
+              <span className="hidden md:block">Reset</span>
+              <Cross2Icon className="ml-2 h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
+
       <div className="hidden space-x-12 lg:block">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

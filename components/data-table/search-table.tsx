@@ -28,20 +28,16 @@ export default function SearchTable() {
   const handleDebouncedSearch = debounce(handleSearch, 300);
 
   return (
-    <div
-      className="my-6 w-full
-    "
-    >
-      <div className="flex w-full items-center">
-        <Input
-          placeholder="Search by name..."
-          onChange={(event) => handleDebouncedSearch(event.target.value)}
-          className="max-w-sm"
-        />
-        <div className="-mt-2 ml-4 h-4 w-4 text-gray-800 dark:text-gray-200">
-          {isPending && <Loader2 />}
-        </div>
-      </div>
+    <div className="relative">
+      <Input
+        placeholder="Type name..."
+        onChange={(event) => handleDebouncedSearch(event.target.value)}
+        className="relative max-w-[200px]"
+        aria-disabled={isPending}
+      />
+      {isPending ? (
+        <Loader2 className="absolute right-2 top-2 ml-2 h-5 w-5 animate-spin text-gray-800 dark:text-gray-200" />
+      ) : null}
     </div>
   );
 }

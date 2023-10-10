@@ -1,9 +1,7 @@
 import { ProfileForm } from '@/components/profile/profile-form';
 import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
 import { getCurrentProfile } from '@/db/queries/auth';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
-import { Suspense } from 'react';
 
 export default async function SettingsPage() {
   const currencies = await getCurrencies();

@@ -65,13 +65,16 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   return (
     <main>
-      <div className="flex w-full justify-end space-x-6 px-3 lg:my-6">
-        <TransactionDialog
-          categories={categoriesData}
-          currencies={currenciesData}
-          currentCurrency={currentCurrency}
-        />
-        <div className="lg:hidden">
+      <div className="justify-end md:mb-6 md:flex">
+        <div className="hidden md:block">
+          <TransactionDialog
+            categories={categoriesData}
+            currencies={currenciesData}
+            currentCurrency={currentCurrency}
+          />
+        </div>
+
+        <div className="md:hidden">
           <TransactionDrawer
             categories={categoriesData}
             currencies={currenciesData}
@@ -80,14 +83,12 @@ export default async function TransactionsPage({ searchParams }: Props) {
         </div>
       </div>
 
-      <Suspense fallback={<TableSkeleton />}>
-        <DataTable
-          categories={categoriesData}
-          columns={columns}
-          data={transactions}
-          count={transactionsCount}
-        />
-      </Suspense>
+      <DataTable
+        categories={categoriesData}
+        columns={columns}
+        data={transactions}
+        count={transactionsCount}
+      />
     </main>
   );
 }

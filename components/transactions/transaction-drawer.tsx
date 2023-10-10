@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { PlusCircle } from 'lucide-react';
+import { Button } from '../ui/button';
 
 export function TransactionDrawer({
   categories,
@@ -30,8 +31,14 @@ export function TransactionDrawer({
   return (
     <Drawer.Root open={open} onOpenChange={setOpen} shouldScaleBackground>
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <PlusCircle className="lg:hidden" />
+        <DropdownMenuTrigger asChild>
+          <Button
+            className="items-center space-x-2"
+            size="sm"
+          >
+            <PlusCircle className="h-5 w-5 dark:text-gray-700" />{' '}
+            <span>New Transaction</span>
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>Choose Type</DropdownMenuLabel>

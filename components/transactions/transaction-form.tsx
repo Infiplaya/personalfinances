@@ -14,6 +14,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 import {
   Command,
@@ -38,6 +45,7 @@ import { createNewTransaction } from '@/app/actions';
 import { CheckIcon } from 'lucide-react';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from '../ui/scroll-area';
 
 export function TransactionForm({
   categories,
@@ -137,7 +145,8 @@ export function TransactionForm({
                       className="h-9"
                     />
                     <CommandEmpty>No currency found.</CommandEmpty>
-                    <CommandGroup>
+
+                    <CommandGroup className="max-h-72 overflow-auto">
                       {currencies.map((currency) => (
                         <CommandItem
                           value={currency.code}
@@ -170,59 +179,22 @@ export function TransactionForm({
           control={form.control}
           name="categoryName"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem>
               <FormLabel>Category</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        'w-full justify-between',
-                        !field.value && 'text-muted-foreground'
-                      )}
-                    >
-                      {field.value
-                        ? categories.find(
-                            (category) => category.name === field.value
-                          )?.name
-                        : 'Select category'}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput
-                      placeholder={`Search ${type}`}
-                      className="h-9"
-                    />
-                    <CommandEmpty>No category found.</CommandEmpty>
-                    <CommandGroup>
-                      {categories.map((category) => (
-                        <CommandItem
-                          value={category.name}
-                          key={category.name}
-                          onSelect={() => {
-                            form.setValue('categoryName', category.name);
-                          }}
-                        >
-                          {category.name}
-                          <CheckIcon
-                            className={cn(
-                              'ml-auto h-4 w-4',
-                              category.name === field.value
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                            )}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder={`Select ${type} category`} />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem value={category.name} key={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
