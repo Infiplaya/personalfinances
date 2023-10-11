@@ -18,8 +18,6 @@ export default function SearchTable() {
     } else {
       params.delete('name');
     }
-    params.delete('page');
-    params.delete('sort');
 
     startTransition(() => {
       router.replace(`${pathname}?${params.toString()}`);

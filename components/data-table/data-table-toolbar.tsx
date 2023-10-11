@@ -34,30 +34,22 @@ export function DataTableToolbar<TData>({
   const [isPending, startTransition] = useTransition();
 
   const isFiltered = table.getState().columnFilters.length > 0;
-  const filteredTypes = table.getColumn('type')?.getFilterValue() as string[];
-  const filteredCategories = categories.filter((category) => {
-    if (!filteredTypes) return true;
-    if (filteredTypes.length === 0) {
-      return true;
-    }
-    return filteredTypes.includes(category.type);
-  });
   return (
-    <div className="flex w-full my-6 items-center justify-between">
+    <div className="my-6 flex w-full items-center justify-between">
       <div className="inline-flex space-x-6">
         <SearchTable />
         <div className="mr-auto inline-flex space-x-2">
           {table.getColumn('categoryName') && (
             <DataTableFacetedFilter
               column={table.getColumn('categoryName')}
-              title="Category"
-              options={filteredCategories}
+              title="category"
+              options={categories}
             />
           )}
           {table.getColumn('type') && (
             <DataTableFacetedFilter
               column={table.getColumn('type')}
-              title="Type"
+              title="type"
               options={[
                 { id: 0, name: 'expense' },
                 { id: 1, name: 'income' },

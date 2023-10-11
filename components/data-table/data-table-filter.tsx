@@ -1,8 +1,5 @@
-'use client';
-
-import { useEffect, useTransition } from 'react';
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
-import { Column } from '@tanstack/react-table';
+import { type Column } from '@tanstack/react-table';
 
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -22,15 +19,18 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { startTransition } from 'react';
+
+export type FilterOption = {
+  id: number;
+  name: string;
+};
 
 interface DataTableFacetedFilter<TData, TValue> {
   column?: Column<TData, TValue>;
-  title?: string;
-  options: {
-    name: string;
-    id: number;
-  }[];
+  title: string;
+  options: FilterOption[];
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
@@ -38,45 +38,20 @@ export function DataTableFacetedFilter<TData, TValue>({
   title,
   options,
 }: DataTableFacetedFilter<TData, TValue>) {
-  const facets = column?.getFacetedUniqueValues();
-  const selectedValues = new Set(column?.getFilterValue() as string[]);
-
-  const [isPending, startTransition] = useTransition();
+  const params = useSearchParams();
+  const selectedValues = new Set(
+    title === 'category'
+      ? params.get('category')?.split('.')
+      : params.get('type')?.split('.')
+  );
+  console.log();
   const router = useRouter();
   const pathname = usePathname();
-  const handleSelect = (name: string, isSelected: boolean) => {
-    const params = new URLSearchParams(window.location.search);
-
-    if (isSelected) {
-      selectedValues.delete(name);
-    } else {
-      selectedValues.add(name);
-    }
-
-    const filterValues = Array.from(selectedValues);
-    column?.setFilterValue(filterValues.length ? filterValues : undefined);
-
-    if (filterValues && filterValues.length > 0) {
-      const paramName = title === 'Category' ? 'category' : 'type';
-      params.set(paramName, filterValues.join('.'));
-    } else {
-      params.delete('category');
-      params.delete('type');
-    }
-
-    startTransition(() => {
-      router.replace(`${pathname}?${params.toString()}`);
-    });
-  };
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="mr-3 h-8 border-dashed lg:mr-0"
-        >
+        <Button variant="outline" size="sm" className="h-8 border-dashed">
           <PlusCircledIcon className="mr-2 h-4 w-4" />
           {title}
           {selectedValues?.size > 0 && (
@@ -125,8 +100,31 @@ export function DataTableFacetedFilter<TData, TValue>({
                 return (
                   <CommandItem
                     key={option.name}
-                    disabled={isPending}
-                    onSelect={() => handleSelect(option.name, isSelected)}
+                    onSelect={() => {
+                      const params = new URLSearchParams(
+                        window.location.search
+                      );
+
+                      if (isSelected) {
+                        selectedValues.delete(option.name);
+                      } else {
+                        selectedValues.add(option.name);
+                      }
+                      const filterValues = Array.from(selectedValues);
+                      console.log(filterValues.join('.'));
+                      if (title === 'category' && selectedValues.size > 0) {
+                        console.log(selectedValues.size);
+                        params.set('category', filterValues.join('.'));
+                      } else if (title === 'type' && selectedValues.size > 0) {
+                        params.set('type', filterValues.join('.'));
+                      } else {
+                        params.delete(title);
+                      }
+
+                      startTransition(() => {
+                        router.replace(`${pathname}?${params.toString()}`);
+                      });
+                    }}
                   >
                     <div
                       className={cn(
@@ -136,14 +134,9 @@ export function DataTableFacetedFilter<TData, TValue>({
                           : 'opacity-50 [&_svg]:invisible'
                       )}
                     >
-                      <CheckIcon className={cn('h-4 w-4')} />
+                      <CheckIcon className={cn('h-4 w-4')} aria-hidden="true" />
                     </div>
                     <span>{option.name}</span>
-                    {facets?.get(option.name) && (
-                      <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-                        {facets.get(option.name)}
-                      </span>
-                    )}
                   </CommandItem>
                 );
               })}
@@ -153,7 +146,15 @@ export function DataTableFacetedFilter<TData, TValue>({
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
-                    onSelect={() => column?.setFilterValue(undefined)}
+                    onSelect={() => {
+                      const params = new URLSearchParams(
+                        window.location.search
+                      );
+                      params.delete(title);
+                      startTransition(() => {
+                        router.replace(`${pathname}?${params.toString()}`);
+                      });
+                    }}
                     className="justify-center text-center"
                   >
                     Clear filters
