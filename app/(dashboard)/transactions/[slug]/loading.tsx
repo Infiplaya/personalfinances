@@ -1,9 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function TransactionLoading() {
-  return (
-    <main>
-      <Skeleton className="h-52 w-full" />
-    </main>
-  );
+export default function loading() {
+  return <Skeleton className="h-52 w-full" />;
 }
