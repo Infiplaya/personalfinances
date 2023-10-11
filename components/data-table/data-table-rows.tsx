@@ -18,7 +18,7 @@ export function RowsControls({}) {
 
   function handleTableRows(value: string) {
     const params = new URLSearchParams(window.location.search);
-    params.set('per_page', value);
+    params.set('limit', value);
     params.delete('page');
 
     startTransition(() => {
@@ -33,7 +33,9 @@ export function RowsControls({}) {
       disabled={isPending}
     >
       <div className="inline-flex items-center space-x-4">
-        <Label className="whitespace-nowrap">Rows Per Page</Label>
+        <Label className="hidden whitespace-nowrap md:block">
+          Rows Per Page
+        </Label>
         <SelectTrigger className="max-w-[6rem]">
           <SelectValue />
         </SelectTrigger>

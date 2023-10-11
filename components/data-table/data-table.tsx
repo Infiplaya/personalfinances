@@ -31,14 +31,12 @@ import {
 } from '@/components/ui/table';
 import { useState, useTransition } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { DataTablePagination } from './data-table-pagination';
 import { RowsControls } from './data-table-rows';
 import { DataTableToolbar } from './data-table-toolbar';
 import { Category } from '@/db/schema/finances';
 import { Button } from '@/components/ui/button';
 import { deleteTransactions } from '@/app/actions';
 import { Loader2 } from 'lucide-react';
-import { Spinner } from '../ui/spinner';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -50,7 +48,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  count,
   categories,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -58,9 +55,6 @@ export function DataTable<TData, TValue>({
 
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const page = searchParams?.get('page') ?? '1';
-  const per_page = searchParams?.get('per_page') ?? '10';
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<Record<number, boolean>>({});
@@ -81,10 +75,6 @@ export function DataTable<TData, TValue>({
     manualFiltering: true,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  const start = (Number(page) - 1) * Number(per_page);
-  const end = start + Number(per_page);
-  const totalPages = Math.ceil(count / Number(per_page));
 
   const transactionsToDelete = table
     .getRowModel()
@@ -200,19 +190,10 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="mt-10 flex flex-col items-center space-y-3 lg:flex-row lg:justify-between lg:space-y-0">
-        <div className="space-y-3">
-          <RowsControls />
-          <div className="flex-1 text-sm text-gray-700 dark:text-gray-200">
-            {table.getFilteredSelectedRowModel().rows.length} of{' '}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
+        <div className="flex-1 text-sm text-gray-700 dark:text-gray-200">
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-
-        <DataTablePagination
-          hasNextPage={end < count}
-          hasPrevPage={start > 0}
-          totalPages={totalPages}
-        />
       </div>
     </>
   );

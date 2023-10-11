@@ -107,7 +107,7 @@ type Column =
 
 export async function selectTransactions(
   limit: number,
-  offset: number,
+  page: number,
   name: string | string[] | undefined,
   column: Column,
   order: Order,
@@ -115,6 +115,7 @@ export async function selectTransactions(
   typesFilter: any
 ) {
   const currentProfile = await getCurrentProfile();
+  const offset = (page - 1) * limit;
   return await db
     .select()
     .from(transactions)
