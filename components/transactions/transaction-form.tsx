@@ -107,7 +107,7 @@ export function TransactionForm({
   return (
     <Form {...form}>
       <h3 className="py-4 font-semibold">
-        {edit ? 'Edit' : 'Add new'} {type}
+        {edit ? `Edit ${transaction?.type}` : `Add new ${type}`}
       </h3>
       <form
         onSubmit={form.handleSubmit((data) =>
