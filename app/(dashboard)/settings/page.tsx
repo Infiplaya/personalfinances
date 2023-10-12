@@ -1,11 +1,10 @@
 import { ProfileForm } from '@/components/profile/profile-form';
 import { Separator } from '@/components/ui/separator';
 import { getCurrentProfile } from '@/db/queries/auth';
-import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
+import { getCurrencies } from '@/db/queries/currencies';
 
 export default async function SettingsPage() {
   const currencies = await getCurrencies();
-  const currentCurrency = await getCurrentCurrency();
   const currentProfile = await getCurrentProfile();
   return (
     <div className="space-y-6">
@@ -20,8 +19,8 @@ export default async function SettingsPage() {
         <ProfileForm
           edit={true}
           currencies={currencies}
-          currentCurrency={currentCurrency}
           name={currentProfile.name}
+          currentCurrency={currentProfile.currencyCode}
         />
       </div>
     </div>

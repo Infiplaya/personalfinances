@@ -16,8 +16,6 @@ import {
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { ProfileModal } from '@/components/profile/profile-modal';
 import { deleteProfile } from '@/app/actions';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Suspense } from 'react';
 
 export default async function ProfilesSettingsPage() {
   const userProfiles = await getUserProfiles();
@@ -29,7 +27,7 @@ export default async function ProfilesSettingsPage() {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium">Manage Profiles</h3>
-        <div className="flex flex-col items-baseline md:justify-between md:flex-row">
+        <div className="flex flex-col items-baseline md:flex-row md:justify-between">
           <p className="text-muted-foreground text-sm">
             This are the settings for managing all of your profiles.
           </p>
