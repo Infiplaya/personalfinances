@@ -58,7 +58,7 @@ export default async function TransactionsPage({
       <Dialog open={edit ? true : false}>
         <DialogContent>
           <TransactionForm
-            categories={categories}
+            categories={categories.filter((c) => c.type === transaction.type)}
             currencies={currencies}
             transaction={transaction}
             edit={true}
