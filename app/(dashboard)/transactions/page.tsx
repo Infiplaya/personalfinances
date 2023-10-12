@@ -173,7 +173,6 @@ export default async function TransactionsPage({ searchParams }: Props) {
             </Link>
           </div>
         </div>
-
         <RowsControls />
       </div>
     </main>
