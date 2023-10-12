@@ -30,13 +30,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useState, useTransition } from 'react';
-import { usePathname, useSearchParams, useRouter } from 'next/navigation';
-import { RowsControls } from './data-table-rows';
+import { usePathname, useRouter } from 'next/navigation';
 import { DataTableToolbar } from './data-table-toolbar';
 import { Category } from '@/db/schema/finances';
 import { Button } from '@/components/ui/button';
 import { deleteTransactions } from '@/app/actions';
-import { Loader2 } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

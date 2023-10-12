@@ -30,6 +30,9 @@ import { dateFormat, moneyFormat } from '@/lib/utils';
 import { deleteTransaction } from '@/app/actions';
 import { toast } from 'sonner';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogTrigger } from '../ui/dialog';
+import { TransactionDialog } from '../transactions/transaction-dialog';
+import { useState } from 'react';
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -151,7 +154,6 @@ export const columns: ColumnDef<Transaction>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const transaction = row.original;
-
       return (
         <AlertDialog>
           <DropdownMenu>
@@ -165,15 +167,18 @@ export const columns: ColumnDef<Transaction>[] = [
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
 
+              <Link href={`/transactions/${transaction.slug}?edit=true`}>
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+              </Link>
               <AlertDialogTrigger asChild>
-                <DropdownMenuItem>Delete</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <span>Delete</span>
+                </DropdownMenuItem>
               </AlertDialogTrigger>
 
-              <DropdownMenuItem>
-                <Link href={`/transactions/${transaction.slug}`}>
-                  View details
-                </Link>
-              </DropdownMenuItem>
+              <Link href={`/transactions/${transaction.slug}`}>
+                <DropdownMenuItem>View details</DropdownMenuItem>
+              </Link>
             </DropdownMenuContent>
           </DropdownMenu>
 

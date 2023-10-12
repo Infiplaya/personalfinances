@@ -64,6 +64,7 @@ export async function registerUser(formData: RegisterForm) {
 }
 
 export async function createNewTransaction(formData: TransactionForm) {
+  console.log('eo');
   const currentProfile = await getCurrentProfile();
   const exchangeRates = await fetchExchangeRates();
   const baseAmount = convertCurrency(
@@ -115,6 +116,42 @@ export async function createNewTransaction(formData: TransactionForm) {
     console.log(e);
     revalidatePath('/transactions');
     return { success: false, message: 'Something went wrong. Try Again!' };
+  }
+}
+
+export async function updateTransaction(
+  formData: TransactionForm,
+  transactionId: number | undefined
+) {
+  if (!transactionId)
+    return { success: false, message: 'Something Went Wrong!' };
+  const currentProfile = await getCurrentProfile();
+  const exchangeRates = await fetchExchangeRates();
+  const baseAmount = convertCurrency(
+    Number(formData.amount),
+    formData.currencyCode,
+    'USD',
+    exchangeRates
+  );
+
+  try {
+    await db
+      .update(transactions)
+      .set({
+        ...formData,
+        slug: slugify(formData.name),
+        profileId: currentProfile.id,
+        amount: Number(formData.amount),
+        baseAmount: baseAmount,
+      })
+      .where(eq(transactions.id, transactionId));
+
+    revalidatePath('/');
+
+    return { success: true, message: 'Successfully updated transaction!' };
+  } catch (e) {
+    console.log(e);
+    return { success: false, message: 'Something Went Wrong!' };
   }
 }
 

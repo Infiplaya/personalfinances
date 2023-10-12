@@ -6,16 +6,10 @@ import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 
 import { countTransactions, getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
-import { columns } from './columns';
+import { columns } from '../../../components/data-table/columns';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import {
-  ArrowRightIcon,
-  ChevronFirstIcon,
-  ChevronLastIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,

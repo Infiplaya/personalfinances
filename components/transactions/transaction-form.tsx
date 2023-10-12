@@ -35,52 +35,84 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { Category, Currency } from '@/db/schema/finances';
+import { Category, Currency, Transaction } from '@/db/schema/finances';
 import {
   TransactionForm,
   transactionFormSchema,
 } from '@/lib/validation/transaction';
 import { Textarea } from '../ui/textarea';
-import { createNewTransaction } from '@/app/actions';
+import { createNewTransaction, updateTransaction } from '@/app/actions';
 import { CheckIcon } from 'lucide-react';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
-import { ScrollArea } from '../ui/scroll-area';
+import { useRouter } from 'next/navigation';
 
 export function TransactionForm({
   categories,
   currencies,
   currentCurrency,
-  closeModal,
   type,
+  transaction,
+  edit,
+  closeModal,
 }: {
   categories: Category[];
   currencies: Currency[];
-  currentCurrency: string;
+  currentCurrency?: string;
+  type?: 'expense' | 'income';
+  transaction?: Transaction;
+  edit?: boolean;
   closeModal?: () => void;
-  type: 'expense' | 'income';
 }) {
+  const router = useRouter();
   const form = useForm<TransactionForm>({
     resolver: zodResolver(transactionFormSchema),
-    defaultValues: {
-      type: type,
-      currencyCode: currentCurrency.toUpperCase(),
-    },
+    defaultValues: transaction
+      ? {
+          name: transaction.name,
+          amount: String(transaction.amount),
+          currencyCode: transaction.currencyCode,
+          categoryName: transaction.categoryName,
+          description: transaction.description ?? '',
+          type: transaction.type,
+        }
+      : {
+          type: type,
+          currencyCode: currentCurrency?.toUpperCase(),
+        },
   });
+
+  async function handleEditTransaction(data: TransactionForm) {
+    if (!transaction) return;
+    const result = await updateTransaction(data, transaction.id);
+
+    if (result.success) {
+      toast.success(result.message);
+      router.replace('/transactions');
+    } else {
+      toast.error(result.message);
+    }
+  }
+
+  async function handleCreateTransaction(data: TransactionForm) {
+    const result = await createNewTransaction(data);
+    if (result.success) {
+      closeModal ? closeModal() : null;
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+  }
 
   return (
     <Form {...form}>
-      <h3 className="py-4 font-semibold">Add new {type}</h3>
+      <h3 className="py-4 font-semibold">
+        {edit ? 'Edit' : 'Add new'} {type}
+      </h3>
       <form
-        onSubmit={form.handleSubmit(async (data) => {
-          const result = await createNewTransaction(data);
-          if (result.success) {
-            closeModal ? closeModal() : null;
-            toast.success(result.message);
-          } else {
-            toast.error(result.message);
-          }
-        })}
+        onSubmit={form.handleSubmit((data) =>
+          edit ? handleEditTransaction(data) : handleCreateTransaction(data)
+        )}
         className="space-y-6"
       >
         <FormField
@@ -133,7 +165,7 @@ export function TransactionForm({
                     >
                       {field.value
                         ? currencies.find((c) => c.code === field.value)?.code
-                        : currentCurrency.toUpperCase()}
+                        : currentCurrency?.toUpperCase()}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
