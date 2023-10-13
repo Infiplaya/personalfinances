@@ -4,6 +4,7 @@ import { Transaction } from '@/db/schema/finances';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import slugify from 'slugify';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,6 +34,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogTrigger } from '../ui/dialog';
 import { TransactionDialog } from '../transactions/transaction-dialog';
 import { useState } from 'react';
+import { Badge } from '../ui/badge';
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -69,6 +71,9 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return <div className="ml-4">{row.getValue('name')}</div>;
+    },
   },
   {
     accessorKey: 'type',
@@ -83,6 +88,15 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       </div>
     ),
+    cell: ({ row }) => {
+      return (
+        <Link href="/incomes">
+          <Badge className="ml-4" variant="outline">
+            {row.getValue('type')}
+          </Badge>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: 'categoryName',
@@ -97,6 +111,15 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       </div>
     ),
+    cell: ({ row }) => {
+      return (
+        <Link href={`/categories/${row.getValue('categoryName')}`}>
+          <Badge className="ml-4" variant="outline">
+            {row.getValue('categoryName')}
+          </Badge>
+        </Link>
+      );
+    },
   },
   {
     accessorKey: 'currencyCode',
@@ -111,6 +134,9 @@ export const columns: ColumnDef<Transaction>[] = [
         </Button>
       </div>
     ),
+    cell: ({ row }) => {
+      return <div className="ml-4">{row.getValue('currencyCode')}</div>;
+    },
   },
   {
     accessorKey: 'amount',
@@ -147,7 +173,7 @@ export const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => {
       const date = row.getValue('timestamp') as Date;
-      return <div className="text-right font-medium">{dateFormat(date)}</div>;
+      return <div className="text-right">{dateFormat(date)}</div>;
     },
   },
   {
