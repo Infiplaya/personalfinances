@@ -49,7 +49,7 @@ export function ProfileForm({
   currencies: Currency[];
   currentCurrency: string;
   edit?: boolean;
-  name: string;
+  name?: string;
   profileId?: string;
 }) {
   const form = useForm<ProfileForm>({
@@ -76,6 +76,7 @@ export function ProfileForm({
 
   useEffect(() => {
     if (path !== '/settings') return;
+    if (!name) return;
     form.setValue('name', name);
     form.setValue('currencyCode', currentCurrency);
   }, [name, currentCurrency, form, path]);
