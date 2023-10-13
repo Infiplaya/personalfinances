@@ -34,7 +34,7 @@ import { cn } from '@/lib/utils';
 import { ProfileForm, profileFormSchema } from '@/lib/validation/auth';
 import { Currency } from '@/db/schema/finances';
 import { createNewProfile, updateUserProfile } from '@/app/actions';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 export function ProfileForm({
@@ -49,7 +49,7 @@ export function ProfileForm({
   currencies: Currency[];
   currentCurrency: string;
   edit?: boolean;
-  name?: string;
+  name: string;
   profileId?: string;
 }) {
   const form = useForm<ProfileForm>({
@@ -61,6 +61,8 @@ export function ProfileForm({
         },
   });
 
+  const path = usePathname();
+
   async function handleEditProfile(data: ProfileForm) {
     const result = await updateUserProfile(data, profileId);
 
@@ -71,6 +73,12 @@ export function ProfileForm({
       toast.error(result.message);
     }
   }
+
+  useEffect(() => {
+    if (path !== '/settings') return;
+    form.setValue('name', name);
+    form.setValue('currencyCode', currentCurrency);
+  }, [name, currentCurrency, form, path]);
 
   async function handleCreateProfile(data: ProfileForm) {
     const result = await createNewProfile(data);
