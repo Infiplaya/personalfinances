@@ -20,42 +20,48 @@ export default async function UserOptions() {
 
   return (
     <>
-      <div className="ml-auto hidden items-center space-x-8 lg:inline-flex">
-        <CommandMenu />
-        <ProfileSwitcher
-          profiles={userProfiles}
-          currentProfile={currentProfile}
-          currencies={currenciesData}
-          currentCurrency={currentCurrency}
-        />
-        {session?.user ? null : (
-          <div className="inline-flex items-center space-x-4 text-xs">
-            <Link href="/signin">Sign In</Link>{' '}
-            <Link href="/signup">Register</Link>
-          </div>
-        )}
-        <CurrencyDropdown
-          currencies={currenciesData}
-          currentCurrency={currentCurrency}
-        />
-        <ThemeSwitcher />
-        <ProfileDropdown
-          userImg={session?.user.image}
-          username={session?.user.name}
-        />
+      <div className="ml-auto hidden w-full items-center justify-between space-x-8 lg:inline-flex">
+        <div>
+          <ProfileSwitcher
+            profiles={userProfiles}
+            currentProfile={currentProfile}
+            currencies={currenciesData}
+            currentCurrency={currentCurrency}
+          />
+        </div>
+        <div>
+          <CommandMenu />
+        </div>
+        <div className="lg:flex lg:items-center lg:space-x-8">
+          {session?.user ? null : (
+            <div className="inline-flex items-center space-x-4 text-xs">
+              <Link href="/signin">Sign In</Link>{' '}
+              <Link href="/signup">Register</Link>
+            </div>
+          )}
+          <CurrencyDropdown
+            currencies={currenciesData}
+            currentCurrency={currentCurrency}
+          />
+          <ThemeSwitcher />
+          <ProfileDropdown
+            userImg={session?.user.image}
+            username={session?.user.name}
+          />
+        </div>
       </div>
-      <div className="mr-auto flex w-full justify-between lg:hidden">
-        <Link href="/">
+      <div className="mr-auto flex w-full items-center justify-between lg:hidden">
+        <Link href="/" className="block">
           <Home className="h-5 w-5 dark:text-gray-300" />
         </Link>
-        <ProfileSwitcher
-          profiles={userProfiles}
-          currentProfile={currentProfile}
-          currencies={currenciesData}
-          currentCurrency={currentCurrency}
-        />
 
         <MobileNavbar>
+          <ProfileSwitcher
+            profiles={userProfiles}
+            currentProfile={currentProfile}
+            currencies={currenciesData}
+            currentCurrency={currentCurrency}
+          />
           <CurrencyDropdown
             currencies={currenciesData}
             currentCurrency={currentCurrency}

@@ -1,6 +1,5 @@
 import { Navbar } from '@/components/dashboard/navbar';
 import { Sidebar } from '@/components/dashboard/sidebar';
-import { Skeleton } from '@/components/ui/skeleton';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -16,8 +15,10 @@ export default function RootLayout({
   return (
     <>
       <Navbar />
-      <Sidebar />
-      <div className="mx-auto max-w-7xl space-y-10 px-4 py-10">{children}</div>
+      <div>
+        <Sidebar />
+        <div className="py-10 lg:ml-64 px-4 lg:px-12 mx-auto">{children}</div>
+      </div>
     </>
   );
 }
