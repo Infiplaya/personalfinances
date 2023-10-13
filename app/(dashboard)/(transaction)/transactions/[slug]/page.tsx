@@ -18,6 +18,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { TransactionForm } from '@/components/transactions/transaction-form';
+import { DialogClose } from '@radix-ui/react-dialog';
 
 async function getTransaction(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -55,7 +56,7 @@ export default async function TransactionsPage({
   }
   return (
     <div>
-      <Dialog open={edit ? true : false}>
+      <Dialog defaultOpen={edit ? true : false}>
         <DialogContent>
           <TransactionForm
             categories={categories.filter((c) => c.type === transaction.type)}
