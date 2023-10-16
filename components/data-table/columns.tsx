@@ -31,9 +31,6 @@ import { dateFormat, moneyFormat } from '@/lib/utils';
 import { deleteTransaction } from '@/app/actions';
 import { toast } from 'sonner';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogTrigger } from '../ui/dialog';
-import { TransactionDialog } from '../transactions/transaction-dialog';
-import { useState } from 'react';
 import { Badge } from '../ui/badge';
 
 export const columns: ColumnDef<Transaction>[] = [
@@ -113,7 +110,7 @@ export const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <Link href={`/categories/${row.getValue('categoryName')}`}>
+        <Link href={`/categories/${slugify(row.getValue('categoryName'))}`}>
           <Badge className="ml-4" variant="outline">
             {row.getValue('categoryName')}
           </Badge>
