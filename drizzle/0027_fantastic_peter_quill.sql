@@ -1,0 +1,1 @@
+ALTER TABLE `profiles` ADD `totalBalance` double(10,2) DEFAULT 0;

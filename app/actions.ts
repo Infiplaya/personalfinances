@@ -43,6 +43,7 @@ export async function registerUser(formData: RegisterForm) {
       name: 'default',
       currencyCode: 'USD',
       userId: newUser.id,
+      balance: 0,
     };
     await insertProfile(newProfile);
 
@@ -64,7 +65,6 @@ export async function registerUser(formData: RegisterForm) {
 }
 
 export async function createNewTransaction(formData: TransactionForm) {
-  console.log('eo');
   const currentProfile = await getCurrentProfile();
   const exchangeRates = await fetchExchangeRates();
   const baseAmount = convertCurrency(
@@ -83,31 +83,26 @@ export async function createNewTransaction(formData: TransactionForm) {
       baseAmount: baseAmount,
     });
 
-    const exchangeRates = await fetchExchangeRates();
-
     // grab user balance if it exist
     const userBalance = await db.query.balances.findFirst({
       where: eq(balances.profileId, currentProfile.id),
       orderBy: (balances, { desc }) => [desc(balances.timestamp)],
     });
 
-    let amount =
-      formData.type === 'expense'
-        ? -Number(formData.amount)
-        : Number(formData.amount);
-
-    amount = convertCurrency(
-      amount,
-      formData.currencyCode,
-      'USD',
-      exchangeRates
-    );
+    await db
+      .update(profiles)
+      .set({
+        balance: userBalance
+          ? (userBalance.totalBalance as number) + baseAmount
+          : baseAmount,
+      })
+      .where(eq(profiles.id, currentProfile.id));
 
     await db.insert(balances).values({
       profileId: currentProfile.id,
       totalBalance: userBalance
-        ? (userBalance.totalBalance as number) + amount
-        : amount,
+        ? (userBalance.totalBalance as number) + baseAmount
+        : baseAmount,
     });
     revalidatePath('/transactions');
 

@@ -14,6 +14,7 @@ import { authOptions } from '@/lib/auth/auth';
 import { cache } from 'react';
 import { getCurrentCurrency } from './currencies';
 import { getCurrentProfile } from './auth';
+import { profiles } from '../schema/auth';
 
 export async function validateSession() {
   const session = await getServerSession(authOptions);
@@ -88,6 +89,22 @@ export async function calculateBalanceData(preferredCurrency: string) {
 }
 
 export const getBalanceData = cache(calculateBalanceData);
+
+export async function calculateBalancesForUser(preferredCurrency: string) {
+  const exchangeRate = await findExchangeRate('USD', preferredCurrency);
+  const { user } = await validateSession();
+
+  return await db
+    .select({
+      balance: sql<number>`ROUND(profiles.totalBalance * ${exchangeRate}, 2)`,
+      name: profiles.name,
+    })
+    .from(profiles)
+    .limit(5)
+    .where(eq(profiles.userId, user.id));
+}
+
+export const getBalancesForUser = cache(calculateBalancesForUser);
 
 type Order = 'asc' | 'desc' | undefined;
 

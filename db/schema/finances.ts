@@ -27,7 +27,10 @@ export const transactions = mysqlTable(
     timestamp: timestamp('timestamp').defaultNow(),
   },
   (transactions) => ({
-    nameIndex: uniqueIndex('name_idx').on(transactions.name),
+    nameProfileIdIndex: uniqueIndex('nameProfileId_idx').on(
+      transactions.name,
+      transactions.profileId
+    ),
   })
 );
 

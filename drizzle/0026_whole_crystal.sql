@@ -1,0 +1,1 @@
+ALTER TABLE `transactions` ADD CONSTRAINT `nameProfileId_idx` UNIQUE(`name`,`profileId`);

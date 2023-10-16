@@ -6,6 +6,7 @@ import {
   varchar,
   text,
   uniqueIndex,
+  double,
 } from 'drizzle-orm/mysql-core';
 import type { AdapterAccount } from '@auth/core/adapters';
 import { relations } from 'drizzle-orm';
@@ -57,6 +58,7 @@ export const profiles = mysqlTable(
     userId: varchar('userId', { length: 255 }).notNull(),
     name: varchar('name', { length: 255 }).notNull(),
     currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
+    balance: double('totalBalance', { precision: 10, scale: 2 }).default(0.0),
   },
   (profiles) => ({
     profileNameIndex: uniqueIndex('profileName_idx').on(
