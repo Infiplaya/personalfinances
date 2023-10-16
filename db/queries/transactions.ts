@@ -261,7 +261,7 @@ export async function calculateTotalForCategory(
 
   const totalAmountQuery = await db
     .select({
-      totalAmount: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${conversionRate} ELSE 0 END)`,
+      totalAmount: sql<number>`sum(transactions.baseAmount * ${conversionRate})`,
     })
     .from(transactions)
     .where(

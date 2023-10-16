@@ -1,7 +1,11 @@
 import TableSkeleton from '@/components/skeletons/table-skeleton';
+import { TransactionDialog } from '@/components/transactions/transaction-dialog';
+import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
 import { TransactionsTable } from '@/components/transactions/transactions-table';
 import { db } from '@/db';
 import { getCurrentProfile } from '@/db/queries/auth';
+import { getCategories } from '@/db/queries/categories';
+import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { calculateTotalForCategory } from '@/db/queries/transactions';
 import { Suspense } from 'react';
 
@@ -29,21 +33,51 @@ export default async function CategoriesPage({
     return <p>No such category transactions.</p>;
   }
 
-  const totalAmount = await calculateTotalForCategory(category.name);
+  const totalAmountData = calculateTotalForCategory(category.name);
 
-  const totalAmountThisMonth = await calculateTotalForCategory(
-    category.name,
-    true
-  );
+  const totalMonthData = calculateTotalForCategory(category.name, true);
+
+  const categoriesData = getCategories();
+  const currenciesData = getCurrencies();
+  const currentCurrencyData = getCurrentCurrency();
+
+  const [totalAmount, totalMonth, categories, currencies, currentCurrency] =
+    await Promise.all([
+      totalAmountData,
+      totalMonthData,
+      categoriesData,
+      currenciesData,
+      currentCurrencyData,
+    ]);
 
   return (
     <main>
       <div className="mb-10">
-        <h1 className="mb-2 text-xl font-semibold lg:text-2xl">
-          {category.name}
-        </h1>
-        <p>Total: {totalAmount.totalAmount}</p>
-        <p>This Month: {totalAmountThisMonth.totalAmount}</p>
+        <div>
+          <h1 className="mb-2 text-xl font-semibold lg:text-2xl">
+            {category.name}
+          </h1>
+          <p className="text-sm">Total: {totalAmount.totalAmount}</p>
+          <p className="text-sm">This Month: {totalMonth.totalAmount}</p>
+        </div>
+
+        <div className="flex w-full justify-end px-3 md:my-6">
+          <div className="hidden md:block">
+            <TransactionDialog
+              categories={categories}
+              currencies={currencies}
+              currentCurrency={currentCurrency}
+            />
+          </div>
+
+          <div className="md:hidden">
+            <TransactionDrawer
+              categories={categories}
+              currencies={currencies}
+              currentCurrency={currentCurrency}
+            />
+          </div>
+        </div>
       </div>
       <Suspense fallback={<TableSkeleton />}>
         <TransactionsTable

@@ -108,6 +108,8 @@ export async function findExchangeRate(
 
   const exchangeRates = await fetchExchangeRates();
 
+  console.log()
+
   return exchangeRates[toCurrency] / exchangeRates[fromCurrency];
 }
 

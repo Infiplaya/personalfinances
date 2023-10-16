@@ -23,33 +23,38 @@ export function TransactionsTable({
       <TableCaption>{caption}</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Name</TableHead>
+          <TableHead>Name</TableHead>
           <TableHead>Category</TableHead>
-          <TableHead>Date</TableHead>
           <TableHead className="text-right">Amount</TableHead>
+          <TableHead className="text-right">Date</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {transactions.map((transaction) => (
           <TableRow key={transaction.id}>
-            <Link
-              href={`/transactions/${transaction.slug}`}
-              className="block"
-              key={transaction.id}
-            >
-              <TableCell className="font-medium">{transaction.name}</TableCell>
-            </Link>
-            <TableCell>{transaction.categoryName}</TableCell>
             <TableCell>
-              {transaction.timestamp ? dateFormat(transaction.timestamp) : null}
+              {' '}
+              <Link
+                href={`/transactions/${transaction.slug}`}
+                className="block"
+                key={transaction.id}
+              >
+                {' '}
+                {transaction.name}{' '}
+              </Link>
             </TableCell>
-            <TableCell className="text-right">
+
+            <TableCell>{transaction.categoryName}</TableCell>
+            <TableCell className="text-right font-medium">
               {transaction.amount
                 ? moneyFormat(
                     Number(transaction.amount),
                     transaction.currencyCode
                   )
                 : null}
+            </TableCell>
+            <TableCell className="text-right">
+              {transaction.timestamp ? dateFormat(transaction.timestamp) : null}
             </TableCell>
           </TableRow>
         ))}

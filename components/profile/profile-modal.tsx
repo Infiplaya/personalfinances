@@ -34,7 +34,7 @@ export function ProfileModal({
         <ProfileForm
           currencies={currencies}
           currentCurrency={profile.currencyCode}
-          edit={edit ? edit : false}
+          edit={edit}
           name={profile.name}
           profileId={profile.id}
           closeModal={() => setShowDialog(false)}
