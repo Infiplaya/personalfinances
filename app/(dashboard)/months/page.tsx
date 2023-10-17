@@ -1,7 +1,11 @@
 import MonthSummaryCard from '@/components/summaries/month-summary-card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { getSummariesForMonths } from '@/db/queries/transactions';
-import { Suspense } from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Months Summaries',
+  description: 'Summaries of months data',
+};
 
 export default async function MonthsPage() {
   const monthData = await getSummariesForMonths();

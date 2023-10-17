@@ -4,6 +4,27 @@ import { getCategories } from '@/db/queries/categories';
 import { getMonthIndex } from '@/lib/utils';
 import { TransactionByMonth } from './transactions-by-month';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
+import { Metadata, ResolvingMetadata } from 'next';
+import { getTransactionsByMonth } from '@/db/queries/transactions';
+
+type Props = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const slug = params.slug;
+
+  const month = params.slug.charAt(0).toUpperCase() + slug.slice(1);
+
+  return {
+    title: `Transactions in ${month}`,
+    description: `Transactions in month ${month}`,
+  };
+}
 
 export default async function MonthPage({
   params,

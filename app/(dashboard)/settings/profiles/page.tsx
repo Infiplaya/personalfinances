@@ -16,6 +16,12 @@ import {
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { ProfileModal } from '@/components/profile/profile-modal';
 import { deleteProfile } from '@/app/actions';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Profiles Settings',
+  description: 'Manage your profiles',
+};
 
 export default async function ProfilesSettingsPage() {
   const userProfiles = await getUserProfiles();

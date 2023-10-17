@@ -164,6 +164,21 @@ export async function selectTransactions(
 
 export const getTransactions = cache(selectTransactions);
 
+async function selectIncomesOrExpenses(type: 'expense' | 'income') {
+  const currentProfile = await getCurrentProfile();
+  return await db
+    .select()
+    .from(transactions)
+    .where(
+      and(
+        eq(transactions.profileId, currentProfile.id),
+        eq(transactions.type, type === 'expense' ? 'expense' : 'income')
+      )
+    );
+}
+
+export const getIncomesOrExpenses = cache(selectIncomesOrExpenses);
+
 export async function selectTransactionsByMonth(month: number) {
   const currentProfile = await getCurrentProfile();
   return await db

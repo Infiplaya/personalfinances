@@ -6,11 +6,15 @@ import SummaryCard from '@/components/summaries/summary-card';
 import { SuccessToast } from '@/components/ui/success-toast';
 import { getCurrentCurrency } from '@/db/queries/currencies';
 import { getBalanceData, getOverviewData } from '@/db/queries/transactions';
-import { Suspense } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Metadata } from 'next';
 
 const currentDate = new Date();
 const currentMonth = currentDate.getMonth();
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Dashboard of personal finances app',
+};
 
 export default async function Home() {
   const currencyCode = await getCurrentCurrency();

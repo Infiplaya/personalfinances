@@ -4,7 +4,7 @@ import { TransactionDialog } from '@/components/transactions/transaction-dialog'
 import { getCategories } from '@/db/queries/categories';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 
-import { countTransactions, getTransactions } from '@/db/queries/transactions';
+import { getTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { columns } from '../../../components/data-table/columns';
 import Link from 'next/link';
@@ -15,6 +15,13 @@ import {
   DoubleArrowRightIcon,
 } from '@radix-ui/react-icons';
 import { RowsControls } from '@/components/data-table/data-table-rows';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Transactions',
+  description: 'Page with your transactions',
+};
+
 interface Props {
   searchParams: {
     [key: string]: string | string[] | undefined;

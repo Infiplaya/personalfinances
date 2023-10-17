@@ -8,6 +8,7 @@ import { getCategories } from '@/db/queries/categories';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { calculateTotalForCategory } from '@/db/queries/transactions';
 import { Suspense } from 'react';
+import type { Metadata, ResolvingMetadata } from 'next';
 
 async function getCategory(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -20,6 +21,25 @@ async function getCategory(slug: string) {
       },
     },
   });
+}
+
+type Props = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const slug = params.slug;
+
+  const category = await getCategory(slug);
+
+  return {
+    title: category?.name,
+    description: 'Your transaction page',
+  };
 }
 
 export default async function CategoriesPage({

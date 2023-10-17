@@ -2,6 +2,12 @@ import { ProfileForm } from '@/components/profile/profile-form';
 import { Separator } from '@/components/ui/separator';
 import { getCurrentProfile } from '@/db/queries/auth';
 import { getCurrencies } from '@/db/queries/currencies';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Settings',
+  description: 'Settings page',
+};
 
 export default async function SettingsPage() {
   const currencies = await getCurrencies();

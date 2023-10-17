@@ -80,6 +80,14 @@ export const links = [
     href: '/months',
     label: 'Months Summary',
   },
+  {
+    href: '/incomes',
+    label: 'Incomes',
+  },
+  {
+    href: '/expenses',
+    label: 'Expenses',
+  },
 ];
 
 export type NavLink = (typeof links)[number];

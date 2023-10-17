@@ -2,7 +2,13 @@ export const revalidate = 360000;
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getCategories } from '@/db/queries/categories';
+import { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Categories',
+  description: 'Categories of transactions',
+};
 
 export default async function CategoriesPage() {
   const categoriesData = await getCategories();

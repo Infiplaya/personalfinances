@@ -1,24 +1,17 @@
-import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { db } from '@/db';
 import { getCurrentProfile } from '@/db/queries/auth';
 import { getCategories } from '@/db/queries/categories';
-import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
+import { getCurrencies } from '@/db/queries/currencies';
 import { getAllTransactionsSlugs } from '@/db/queries/transactions';
 import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
 import { and, eq } from 'drizzle-orm';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { TransactionForm } from '@/components/transactions/transaction-form';
-import { DialogClose } from '@radix-ui/react-dialog';
+
+import type { Metadata, ResolvingMetadata } from 'next';
 
 async function getTransaction(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -32,6 +25,25 @@ async function getTransaction(slug: string) {
       category: true,
     },
   });
+}
+
+type Props = {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const slug = params.slug;
+
+  const transaction = await getTransaction(slug);
+
+  return {
+    title: transaction?.name,
+    description: 'Your transaction page',
+  };
 }
 
 export async function generateStaticParams() {
