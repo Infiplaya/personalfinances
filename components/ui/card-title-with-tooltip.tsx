@@ -1,6 +1,7 @@
 import { ChevronRight, Info } from 'lucide-react';
 import Link from 'next/link';
 import { ReactNode } from 'react';
+import { CardTitle } from './card';
 import {
   Tooltip,
   TooltipContent,
@@ -20,7 +21,7 @@ export function CardTitleWithTooltip({
   return (
     <div className="inline-flex items-center justify-between space-x-4">
       <div className="inline-flex items-center space-x-4">
-        {children}
+        <CardTitle>{children}</CardTitle>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger className="hidden lg:block">

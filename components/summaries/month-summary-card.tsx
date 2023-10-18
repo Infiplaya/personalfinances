@@ -28,7 +28,7 @@ export default async function MonthSummaryCard({
             true
           )}`}
         >
-          <CardTitle>{getMonth(monthData.month, true)}</CardTitle>
+          {getMonth(monthData.month, true)}
         </CardTitleWithTooltip>
       </CardHeader>
       <CardContent className="space-y-3">

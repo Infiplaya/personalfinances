@@ -16,10 +16,25 @@ export const metadata: Metadata = {
   description: 'Dashboard of personal finances app',
 };
 
-export default async function Home() {
+interface Props {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+}
+
+export default async function Home({ searchParams }: Props) {
+  const balance =
+    typeof searchParams.balance === 'string'
+      ? Number(searchParams.balance)
+      : 30;
+  const overview =
+    typeof searchParams.overview === 'string'
+      ? Number(searchParams.overview)
+      : 7;
+
   const currencyCode = await getCurrentCurrency();
-  const overviewData = await getOverviewData(currencyCode);
-  const balanceData = await getBalanceData(currencyCode);
+  const overviewData = await getOverviewData(currencyCode, overview);
+  const balanceData = await getBalanceData(currencyCode, balance);
 
   return (
     <main className="space-y-12">
@@ -37,13 +52,21 @@ export default async function Home() {
       </div>
       <div className="grid gap-x-4 lg:grid-cols-6">
         <div className="lg:col-span-4">
-          <BalanceChart data={balanceData} currencyCode={currencyCode} />
+          <BalanceChart
+            data={balanceData}
+            balance={balance}
+            currencyCode={currencyCode}
+          />
         </div>
         <div className="mt-12 lg:col-span-2 lg:mt-0">
           <RecentTransactions />
         </div>
       </div>
-      <Overview data={overviewData} currencyCode={currencyCode} />
+      <Overview
+        data={overviewData}
+        currencyCode={currencyCode}
+        overview={overview}
+      />
     </main>
   );
 }

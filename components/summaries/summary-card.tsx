@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { cn, getMonth, moneyFormat } from '@/lib/utils';
 import { Label } from '../ui/label';
 
@@ -29,7 +29,7 @@ export default async function SummaryCard({
               true
             )}`}
           >
-            <CardTitle>{getMonth(month, true)}</CardTitle>
+            {getMonth(month, true)}
           </CardTitleWithTooltip>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -67,7 +67,7 @@ export default async function SummaryCard({
     <Card>
       <CardHeader>
         <CardTitleWithTooltip message="Summary of all your transactions.">
-          <CardTitle>Summary</CardTitle>
+          Summary
         </CardTitleWithTooltip>
       </CardHeader>
       <CardContent className="space-y-3">

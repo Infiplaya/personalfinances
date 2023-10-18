@@ -12,7 +12,7 @@ export default async function RecentTransactions() {
           link="/transactions"
           message="List of your recent transactions"
         >
-          <CardTitle>Recent Transactions</CardTitle>
+          Recent Transactions
         </CardTitleWithTooltip>
       </CardHeader>
       <CardContent className="space-y-3">

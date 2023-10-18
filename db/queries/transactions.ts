@@ -43,10 +43,13 @@ export async function selectAllTransactionsSlugs() {
 
 export const getAllTransactionsSlugs = cache(selectAllTransactionsSlugs);
 
-export async function calculateOverviewData(preferredCurrency: string) {
+export async function calculateOverviewData(
+  preferredCurrency: string,
+  overviewDays: number
+) {
   const currentDate = new Date();
   const sevenDaysAgo = new Date(currentDate);
-  sevenDaysAgo.setDate(currentDate.getDate() - 7);
+  sevenDaysAgo.setDate(currentDate.getDate() - overviewDays);
 
   const currentProfile = await getCurrentProfile();
 
@@ -75,10 +78,13 @@ export type OverviewData = UnwrapPromise<
 
 export const getOverviewData = cache(calculateOverviewData);
 
-export async function calculateBalanceData(preferredCurrency: string) {
+export async function calculateBalanceData(
+  preferredCurrency: string,
+  balanceDays: number
+) {
   const currentDate = new Date();
-  let monthAgo = new Date(currentDate);
-  monthAgo.setDate(currentDate.getDate() - 30);
+  let timestamp = new Date(currentDate);
+  timestamp.setDate(currentDate.getDate() - balanceDays);
 
   const exchangeRate = await findExchangeRate('USD', preferredCurrency);
 
@@ -92,7 +98,7 @@ export async function calculateBalanceData(preferredCurrency: string) {
     .from(balances)
     .where(
       and(
-        gte(balances.timestamp, monthAgo),
+        gte(balances.timestamp, timestamp),
         lte(balances.timestamp, currentDate),
         eq(balances.profileId, currentProfile.id)
       )

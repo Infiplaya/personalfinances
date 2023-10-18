@@ -18,7 +18,7 @@ export async function BalanceCard({
           message="Your current balance for every profile"
           link="/balances"
         >
-          <CardTitle>Balance</CardTitle>
+          Balance
         </CardTitleWithTooltip>
       </CardHeader>
       <CardContent>
