@@ -20,7 +20,8 @@ import {
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { startTransition } from 'react';
+import { useTransition } from 'react';
+import { Spinner } from '../ui/spinner';
 
 export type FilterOption = {
   id: number;
@@ -28,13 +29,11 @@ export type FilterOption = {
 };
 
 interface DataTableFacetedFilter<TData, TValue> {
-  column?: Column<TData, TValue>;
   title: string;
   options: FilterOption[];
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
-  column,
   title,
   options,
 }: DataTableFacetedFilter<TData, TValue>) {
@@ -44,7 +43,8 @@ export function DataTableFacetedFilter<TData, TValue>({
       ? params.get('category')?.split('.')
       : params.get('type')?.split('.')
   );
-  console.log();
+
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -95,6 +95,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
+              {isPending ? <Spinner /> : null}
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.name);
                 return (
@@ -111,12 +112,9 @@ export function DataTableFacetedFilter<TData, TValue>({
                         selectedValues.add(option.name);
                       }
                       const filterValues = Array.from(selectedValues);
-                      console.log(filterValues.join('.'));
-                      if (title === 'category' && selectedValues.size > 0) {
-                        console.log(selectedValues.size);
-                        params.set('category', filterValues.join('.'));
-                      } else if (title === 'type' && selectedValues.size > 0) {
-                        params.set('type', filterValues.join('.'));
+
+                      if (selectedValues.size > 0) {
+                        params.set(title, filterValues.join('.'));
                       } else {
                         params.delete(title);
                       }

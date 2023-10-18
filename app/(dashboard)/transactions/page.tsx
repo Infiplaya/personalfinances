@@ -10,16 +10,12 @@ import {
 } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { columns } from '../../../components/data-table/columns';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
-import {
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from '@radix-ui/react-icons';
 import { RowsControls } from '@/components/data-table/data-table-rows';
 import { Metadata } from 'next';
 import Pagination from '@/components/data-table/pagination';
+import { Suspense } from 'react';
+import { Await } from '@/components/await';
+import TableSkeleton from '@/components/skeletons/table-skeleton';
 
 export const metadata: Metadata = {
   title: 'Transactions',
@@ -56,7 +52,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
         ])
       : [];
 
-  const transactions = await getTransactions(
+  const promise = getTransactions(
     limit,
     page,
     name,
@@ -79,8 +75,6 @@ export default async function TransactionsPage({ searchParams }: Props) {
     categoriesFilter,
     typesFilter
   );
-
-  const hasNextPage = totalTransactions > page * limit;
   const lastPage = Math.ceil(totalTransactions / limit);
 
   return (
@@ -102,23 +96,31 @@ export default async function TransactionsPage({ searchParams }: Props) {
           />
         </div>
       </div>
-      <DataTable
-        categories={categoriesData}
-        columns={columns}
-        data={transactions}
-      />
+      <section>
+        <Suspense fallback={<TableSkeleton />}>
+          <Await promise={promise}>
+            {(transactions) => (
+              <DataTable
+                categories={categoriesData}
+                columns={columns}
+                data={transactions}
+              />
+            )}
+          </Await>
+        </Suspense>
 
-      <div className="mt-3 flex w-full items-center justify-between">
-        <Pagination
-          page={page}
-          lastPage={lastPage}
-          notNextPage={end > totalTransactions}
-          notPreviousPage={page <= 1}
-          name={name}
-          limit={limit}
-        />
-        <RowsControls />
-      </div>
+        <div className="mt-3 flex w-full items-center justify-between">
+          <Pagination
+            page={page}
+            lastPage={lastPage}
+            notNextPage={end > totalTransactions}
+            notPreviousPage={page <= 1}
+            name={name}
+            limit={limit}
+          />
+          <RowsControls />
+        </div>
+      </section>
     </main>
   );
 }

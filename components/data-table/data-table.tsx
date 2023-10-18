@@ -35,6 +35,8 @@ import { DataTableToolbar } from './data-table-toolbar';
 import { Category } from '@/db/schema/finances';
 import { Button } from '@/components/ui/button';
 import { deleteTransactions } from '@/app/actions';
+import { Spinner } from '../ui/spinner';
+import { cn } from '@/lib/utils';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -128,7 +130,12 @@ export function DataTable<TData, TValue>({
         ) : null}
       </div>
 
-      <div className="rounded-md border dark:border-gray-800">
+      <div
+        className={cn(
+          'rounded-md border dark:border-gray-800',
+          isPending && 'opacity-50'
+        )}
+      >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
