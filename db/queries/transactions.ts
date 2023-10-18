@@ -223,12 +223,30 @@ export async function calculateSummariesForMonths() {
 
 export const getSummariesForMonths = cache(calculateSummariesForMonths);
 
-export async function countTransactions() {
+export async function countTransactions(
+  name: string | string[] | undefined,
+  categoriesFilter: string[],
+  typesFilter: any
+) {
   const currentProfile = await getCurrentProfile();
   const count = await db
     .select({ count: sql<number>`count(*)` })
     .from(transactions)
-    .where(eq(transactions.profileId, currentProfile.id));
+    .where(
+      and(
+        typeof name === 'string'
+          ? like(transactions.name, `%${name}%`)
+          : undefined,
+
+        eq(transactions.profileId, currentProfile.id),
+        categoriesFilter.length > 0
+          ? inArray(transactions.categoryName, categoriesFilter)
+          : undefined,
+        typesFilter.length > 0
+          ? inArray(transactions.type, typesFilter)
+          : undefined
+      )
+    );
 
   return count[0].count;
 }

@@ -13,8 +13,6 @@ import { TransactionForm } from '@/components/transactions/transaction-form';
 
 import type { Metadata, ResolvingMetadata } from 'next';
 import { SimilarTransactions } from './similar-transactions';
-import { Suspense } from 'react';
-import { Spinner } from '@/components/ui/spinner';
 import Link from 'next/link';
 
 async function getTransaction(slug: string) {

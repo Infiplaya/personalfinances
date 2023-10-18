@@ -39,7 +39,6 @@ import { deleteTransactions } from '@/app/actions';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  count: number;
   categories: Category[];
 }
 

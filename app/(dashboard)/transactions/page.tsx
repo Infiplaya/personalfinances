@@ -4,7 +4,10 @@ import { TransactionDialog } from '@/components/transactions/transaction-dialog'
 import { getCategories } from '@/db/queries/categories';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 
-import { getTransactions } from '@/db/queries/transactions';
+import {
+  getTransactions,
+  getTransactionsCount,
+} from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { columns } from '../../../components/data-table/columns';
 import Link from 'next/link';
@@ -16,6 +19,7 @@ import {
 } from '@radix-ui/react-icons';
 import { RowsControls } from '@/components/data-table/data-table-rows';
 import { Metadata } from 'next';
+import Pagination from '@/components/data-table/pagination';
 
 export const metadata: Metadata = {
   title: 'Transactions',
@@ -70,7 +74,11 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   const start = (Number(page) - 1) * Number(limit);
   const end = start + Number(limit);
-  const totalTransactions = transactions.length + 1;
+  const totalTransactions = await getTransactionsCount(
+    name,
+    categoriesFilter,
+    typesFilter
+  );
 
   const hasNextPage = totalTransactions > page * limit;
   const lastPage = Math.ceil(totalTransactions / limit);
@@ -94,86 +102,21 @@ export default async function TransactionsPage({ searchParams }: Props) {
           />
         </div>
       </div>
-
       <DataTable
         categories={categoriesData}
         columns={columns}
         data={transactions}
-        count={transactions.length}
       />
 
       <div className="mt-3 flex w-full items-center justify-between">
-        <div className="flex items-center space-x-6">
-          <p className="text-sm">
-            Page {page} of {lastPage}
-          </p>
-          <div className="flex space-x-2">
-            <Link
-              href={{
-                pathname: '/transactions',
-                query: {
-                  ...(name ? { name } : {}),
-                  page: 1,
-                },
-              }}
-              className={cn(
-                'rounded border bg-gray-100 p-1 text-sm text-gray-800',
-                page <= 1 && 'pointer-events-none opacity-50'
-              )}
-            >
-              <span className="sr-only">Go to first page</span>
-              <DoubleArrowLeftIcon className="h-4 w-4" />
-            </Link>
-            <Link
-              href={{
-                pathname: '/transactions',
-                query: {
-                  ...(name ? { name } : {}),
-                  page: page > 1 ? page - 1 : 1,
-                },
-              }}
-              className={cn(
-                'rounded border bg-gray-100 p-1  text-sm text-gray-800',
-                page <= 1 && 'pointer-events-none opacity-50'
-              )}
-            >
-              <span className="sr-only">Go to previous page</span>
-              <ChevronLeftIcon className="h-4 w-4" />
-            </Link>
-            <Link
-              href={{
-                pathname: '/transactions',
-                query: {
-                  ...(name ? { name } : {}),
-                  page: page + 1,
-                },
-              }}
-              className={cn(
-                'rounded border bg-gray-100 p-1  text-sm text-gray-800',
-                end > transactions.length && 'pointer-events-none opacity-50'
-              )}
-            >
-              <span className="sr-only">Go to next page</span>
-              <ChevronRightIcon className="h-4 w-4" />
-            </Link>
-            <Link
-              href={{
-                pathname: '/transactions',
-                query: {
-                  ...(name ? { name } : {}),
-                  page: lastPage,
-                },
-              }}
-              className={cn(
-                'rounded border bg-gray-100 p-1  text-sm text-gray-800',
-                !hasNextPage && 'pointer-events-none opacity-50'
-              )}
-            >
-              <span className="sr-only">Go to last page</span>
-              <DoubleArrowRightIcon className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
+        <Pagination
+          page={page}
+          lastPage={lastPage}
+          notNextPage={end > totalTransactions}
+          notPreviousPage={page <= 1}
+          name={name}
+          limit={limit}
+        />
         <RowsControls />
       </div>
     </main>
