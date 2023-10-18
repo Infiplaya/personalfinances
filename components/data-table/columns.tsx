@@ -87,7 +87,7 @@ export const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <Link href={`/${row.getValue('type')}`}>
+        <Link href={`/${row.getValue('type')}s`}>
           <Badge className="ml-4" variant="outline">
             {row.getValue('type')}
           </Badge>

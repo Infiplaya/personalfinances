@@ -12,6 +12,10 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { TransactionForm } from '@/components/transactions/transaction-form';
 
 import type { Metadata, ResolvingMetadata } from 'next';
+import { SimilarTransactions } from './similar-transactions';
+import { Suspense } from 'react';
+import { Spinner } from '@/components/ui/spinner';
+import Link from 'next/link';
 
 async function getTransaction(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -78,22 +82,18 @@ export default async function TransactionsPage({
           />
         </DialogContent>
       </Dialog>
-      <Card>
-        <CardHeader>
-          <div className="mb-3 space-x-3">
-            <Badge>{transaction?.type}</Badge>
-            <Badge>{transaction?.categoryName}</Badge>
-          </div>
-          <CardTitle>
-            {transaction.name} -{' '}
-            {moneyFormat(transaction.amount, transaction.currencyCode)}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{transaction?.description}</p>
-        </CardContent>
-      </Card>
-      <div className="mt-6">See more similar transactions: </div>
+      <div className="mb-3 space-x-3">
+        <Link href={`/${transaction.type}s`}>
+          <Badge>{transaction.type}</Badge>
+        </Link>
+        <Badge>{transaction.categoryName}</Badge>
+      </div>
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        {transaction.name} -{' '}
+        {moneyFormat(transaction.amount, transaction.currencyCode)}{' '}
+      </h1>
+      <p>{transaction?.description}</p>
+      <SimilarTransactions transaction={transaction} />
     </div>
   );
 }

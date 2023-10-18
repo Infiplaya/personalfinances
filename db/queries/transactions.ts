@@ -2,7 +2,18 @@
 
 import { db } from '@/db';
 import { balances, transactions } from '@/db/schema/finances';
-import { and, asc, desc, eq, gte, inArray, like, lte, sql } from 'drizzle-orm';
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gte,
+  inArray,
+  like,
+  lte,
+  ne,
+  sql,
+} from 'drizzle-orm';
 import {
   findExchangeRate,
   getConversionRate,
@@ -316,3 +327,24 @@ export async function calculateTotalForCategory(
     ),
   };
 }
+
+async function selectSimilarTransactions(
+  name: string,
+  type: 'income' | 'expense',
+  category: string
+) {
+  const currentProfile = await getCurrentProfile();
+
+  return await db.query.transactions.findMany({
+    limit: 4,
+    orderBy: (transactions, { desc }) => [desc(transactions.timestamp)],
+    where: (transactions, { eq, and }) =>
+      and(
+        eq(transactions.profileId, currentProfile.id),
+        ne(transactions.name, name),
+        eq(transactions.type, type) || eq(transactions.categoryName, category)
+      ),
+  });
+}
+
+export const getSimilarTransactions = cache(selectSimilarTransactions);
