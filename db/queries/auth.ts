@@ -38,3 +38,6 @@ export async function selectUserProfiles() {
 }
 
 export const getUserProfiles = cache(selectUserProfiles);
+
+
+export type Profile = typeof profiles.$inferSelect

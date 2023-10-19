@@ -15,8 +15,22 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Home, Settings } from 'lucide-react';
 import { ThemeSwitcher } from './theme-switcher';
 import { Button } from '../ui/button';
+import { ProfileSwitcher } from '../profile/profile-switcher';
+import { Currency } from '@/db/schema/finances';
+import { Profile } from '@/db/queries/auth';
+import { CurrencyDropdown } from './currency-dropdown';
 
-export default function MobileNavbar({ children }: { children: ReactNode }) {
+export default function MobileNavbar({
+  currencies,
+  currentCurrency,
+  profiles,
+  currentProfile,
+}: {
+  currencies: Currency[];
+  currentCurrency: Currency['code'];
+  profiles: Profile[];
+  currentProfile: Profile;
+}) {
   const [open, setOpen] = useState(false);
   const path = usePathname();
   const router = useRouter();
@@ -27,7 +41,7 @@ export default function MobileNavbar({ children }: { children: ReactNode }) {
       </SheetTrigger>
       <SheetContent className="w-full lg:hidden" side="right">
         <SheetHeader>
-          <SheetTitle className="flex text-left">
+          <SheetTitle className="flex items-center space-x-24">
             <Link
               onClick={() => {
                 router.push('/');
@@ -37,6 +51,13 @@ export default function MobileNavbar({ children }: { children: ReactNode }) {
             >
               <Home className="h-5 w-5 dark:text-gray-300" />
             </Link>
+
+            <ProfileSwitcher
+              profiles={profiles}
+              currentProfile={currentProfile}
+              currentCurrency={currentCurrency}
+              currencies={currencies}
+            />
           </SheetTitle>
         </SheetHeader>
         <div className="flex h-full flex-col justify-between">
@@ -59,7 +80,10 @@ export default function MobileNavbar({ children }: { children: ReactNode }) {
             ))}
           </ScrollArea>
           <div className="ml-auto flex items-center space-x-3 pb-20">
-            {children}
+            <CurrencyDropdown
+              currencies={currencies}
+              currentCurrency={currentCurrency}
+            />
             <ThemeSwitcher />
             <Link
               href="/settings"

@@ -55,18 +55,12 @@ export default async function UserOptions() {
           <Home className="h-5 w-5 dark:text-gray-300" />
         </Link>
 
-        <MobileNavbar>
-          <ProfileSwitcher
-            profiles={userProfiles}
-            currentProfile={currentProfile}
-            currencies={currenciesData}
-            currentCurrency={currentCurrency}
-          />
-          <CurrencyDropdown
-            currencies={currenciesData}
-            currentCurrency={currentCurrency}
-          />
-        </MobileNavbar>
+        <MobileNavbar
+          currencies={currenciesData}
+          currentCurrency={currentCurrency}
+          currentProfile={currentProfile}
+          profiles={userProfiles}
+        />
       </div>
     </>
   );
