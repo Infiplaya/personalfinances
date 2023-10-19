@@ -5,15 +5,15 @@ import { Button } from '../ui/button';
 
 export const timestamps = [
   {
-    label: '24 hours',
+    label: '24h',
     time: 1,
   },
   {
-    label: '7 days',
+    label: '7d',
     time: 7,
   },
   {
-    label: '30 days',
+    label: '30d',
     time: 30,
   },
 ];
