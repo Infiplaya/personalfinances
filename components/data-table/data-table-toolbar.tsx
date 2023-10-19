@@ -41,14 +41,12 @@ export function DataTableToolbar<TData>({
         <div className="mr-auto inline-flex space-x-2">
           {table.getColumn('categoryName') && (
             <DataTableFacetedFilter
-              column={table.getColumn('categoryName')}
               title="category"
               options={categories}
             />
           )}
           {table.getColumn('type') && (
             <DataTableFacetedFilter
-              column={table.getColumn('type')}
               title="type"
               options={[
                 { id: 0, name: 'expense' },
