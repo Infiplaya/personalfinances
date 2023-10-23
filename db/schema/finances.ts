@@ -74,6 +74,46 @@ export const balances = mysqlTable(
   })
 );
 
+export const budgetStatuses = mysqlTable(
+  'budgetStatuses',
+  {
+    id: varchar('id', { length: 255 }).notNull().primaryKey(),
+    name: varchar('name', { length: 255 }).notNull(),
+    profileId: varchar('profileId', { length: 255 }).notNull(),
+  },
+  (status) => ({
+    nameIndex: uniqueIndex('profileIdName_idx').on(
+      status.name,
+      status.profileId
+    ),
+  })
+);
+
+export const budgetPlans = mysqlTable('budgetPlans', {
+  id: varchar('id', { length: 255 }).notNull().primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description'),
+  statusId: varchar('statusId', { length: 255 }).notNull(),
+});
+
+export const budgetStatusesRelations = relations(
+  budgetStatuses,
+  ({ one, many }) => ({
+    profile: one(profiles, {
+      fields: [budgetStatuses.profileId],
+      references: [profiles.id],
+    }),
+    budgetPlans: many(budgetPlans),
+  })
+);
+
+export const budgetPlansRelations = relations(budgetPlans, ({ one, many }) => ({
+  budgetStatus: one(budgetStatuses, {
+    fields: [budgetPlans.statusId],
+    references: [budgetStatuses.id],
+  }),
+}));
+
 export const balancesRelations = relations(balances, ({ one }) => ({
   profile: one(profiles, {
     fields: [balances.profileId],

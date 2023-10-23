@@ -2,9 +2,9 @@
 
 import { db } from '@/db';
 import { profiles, users } from '@/db/schema/auth';
-import { balances, transactions } from '@/db/schema/finances';
+import { balances, budgetPlans, transactions } from '@/db/schema/finances';
 import { TransactionForm } from '@/lib/validation/transaction';
-import { eq, inArray, InferModel } from 'drizzle-orm';
+import { and, eq, inArray, InferModel } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { hash } from 'bcryptjs';
 import { ProfileForm, RegisterForm } from '@/lib/validation/auth';
@@ -312,5 +312,21 @@ export async function deleteProfile(profileId: string, formData: FormData) {
   } catch (e) {
     console.log(e);
     return { success: false, message: 'Something went wrong. Try Again' };
+  }
+}
+
+export async function updateBudgetPlanStatus(planId: string, statusId: string) {
+  try {
+    await db
+      .update(budgetPlans)
+      .set({
+        statusId: statusId,
+      })
+      .where(eq(budgetPlans.id, planId));
+
+    revalidatePath('/');
+    return { success: true, message: 'Successfully created new profile!' };
+  } catch (e) {
+    return { success: false, message: 'Something went wrong... Try Again' };
   }
 }

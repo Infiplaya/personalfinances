@@ -1,10 +1,12 @@
-import { Board } from "./board";
+import { getAllBudgetStatuses } from '@/db/queries/budgets';
+import { Board } from './board';
 
+export default async function Page() {
+  const data = await getAllBudgetStatuses();
 
-export default function Page() {
   return (
     <div>
-      <Board />
+      <Board data={data} />
     </div>
   );
 }

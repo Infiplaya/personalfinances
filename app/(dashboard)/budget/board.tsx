@@ -1,181 +1,154 @@
 'use client';
-import { cn } from '@/lib/utils';
-import React, { useState } from 'react';
-import {
-  DragDropContext,
-  Draggable,
-  DraggableLocation,
-  DropResult,
-} from 'react-beautiful-dnd';
+import { updateBudgetPlanStatus } from '@/app/actions';
+import { BudgetStatus } from '@/db/queries/budgets';
+import React, { useState, useTransition } from 'react';
+import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 import { StrictModeDroppable } from './strict-droppable';
 
-interface Task {
-  content: string;
-  id: string;
-  columnId: string;
-}
+const itemsFromBackend = [
+  { id: '1', content: 'First task' },
+  { id: '2', content: 'Second task' },
+  { id: '3', content: 'Third task' },
+  { id: '4', content: 'Fourth task' },
+  { id: '5', content: 'Fifth task' },
+];
 
-interface Column {
-  id: string;
-  title: string;
-}
-
-const defaultCols: Column[] = [
+const columnsFromBackend = [
   {
-    id: 'todo',
-    title: 'Todo',
+    name: 'Requested',
+    items: itemsFromBackend,
   },
   {
-    id: 'doing',
-    title: 'Work in progress',
+    name: 'To do',
+    items: [],
   },
   {
-    id: 'done',
-    title: 'Done',
+    name: 'In Progress',
+    items: [],
+  },
+  {
+    name: 'Done',
+    items: [],
   },
 ];
 
-// fake data generator
-const getItems = (count: number, columnId: string, offset = 0) =>
-  Array.from({ length: count }, (v, k) => k).map((k) => ({
-    id: `item-${k + offset}-${new Date().getTime()}`,
-    content: `item ${k + offset}`,
-    columnId: columnId,
-  }));
+export function Board({ data }: { data: BudgetStatus[] }) {
+  const [columns, setColumns] = useState(data);
+  const [isPending, startTransition] = useTransition();
 
-const reorder = (list: Task[], startIndex: number, endIndex: number) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-/**
- * Moves an item from one list to another list.
- */
-const move = (
-  source: Task[],
-  destination: Task[],
-  droppableSource: DraggableLocation,
-  droppableDestination: DraggableLocation
-) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-  removed.columnId = destination[0].columnId;
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  const result = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  return result;
-};
-
-const grid = 8;
-
-const getListStyle = (isDraggingOver: boolean) => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250,
-});
-
-export function Board() {
-  const [state, setState] = useState([
-    getItems(10, 'todo'),
-    getItems(5, 'doing', 10),
-    getItems(10, 'done', 15),
-  ]);
-
-  function onDragEnd(result: DropResult) {
+  const onDragEnd = async (result: DropResult) => {
+    if (!result.destination) return;
     const { source, destination } = result;
 
-    // dropped outside the list
-    if (!destination) {
-      return;
-    }
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[Number(source.droppableId)];
+      const destColumn = columns[Number(destination.droppableId)];
+      const sourceItems = [...sourceColumn.budgetPlans];
+      const [removed] = sourceItems.splice(source.index, 1);
+      const destItems = [...destColumn.budgetPlans, removed];
 
-    const sInd = +source.droppableId;
-    const dInd = +destination.droppableId;
+      const updatedSourceColumn = {
+        ...sourceColumn,
+        budgetPlans: sourceItems,
+      };
+      const updatedDestColumn = {
+        ...destColumn,
+        budgetPlans: destItems,
+      };
 
-    if (sInd === dInd) {
-      const items = reorder(state[sInd], source.index, destination.index);
-      const newState = [...state];
-      newState[sInd] = items;
-      setState(newState);
+      // Create a copy of the columns array with the updated columns
+      const updatedColumns = [...columns];
+      updatedColumns[Number(source.droppableId)] = updatedSourceColumn;
+      updatedColumns[Number(destination.droppableId)] = updatedDestColumn;
+
+      // Update the state with the new columns array
+      setColumns(updatedColumns);
+
+      startTransition(async () => {
+        await updateBudgetPlanStatus(removed.id, destColumn.id);
+      });
     } else {
-      const result = move(state[sInd], state[dInd], source, destination);
-      const newState = [...state];
-      newState[sInd] = result[sInd];
-      newState[dInd] = result[dInd];
-
-      setState(newState.filter((group) => group.length));
+      const column = columns[Number(source.droppableId)];
+      const copiedItems = [...column.budgetPlans];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      setColumns([...columns]);
     }
-  }
+  };
 
   return (
-    <div>
-      <div className="flex">
-        <DragDropContext onDragEnd={onDragEnd}>
-          {state.map((el, ind) => (
-            <StrictModeDroppable key={ind} droppableId={`${ind}`}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  style={getListStyle(snapshot.isDraggingOver)}
-                  {...provided.droppableProps}
-                >
-                  <h3>{defaultCols[ind].title}</h3>
-                  {el.map((item, index) => (
-                    <Draggable
-                      key={item.id}
-                      draggableId={item.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className={cn(
-                            'p-2',
-                            snapshot.isDragging ? 'bg-green-500' : 'bg-gray-500'
-                          )}
-                        >
-                          <div
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-around',
-                            }}
-                          >
-                            {item.content}
-                            {item.columnId}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const newState = [...state];
-                                newState[ind].splice(index, 1);
-                                setState(
-                                  newState.filter((group) => group.length)
+    <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+      <DragDropContext onDragEnd={async (result) => onDragEnd(result)}>
+        {Object.entries(columns).map(([columnId, column], index) => {
+          return (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+              className={isPending ? 'opacity-50' : 'opacity-100'}
+              key={columnId}
+            >
+              <h2>{column.name}</h2>
+              <div style={{ margin: 8 }}>
+                <StrictModeDroppable droppableId={columnId} key={columnId}>
+                  {(provided, snapshot) => {
+                    return (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        style={{
+                          background: snapshot.isDraggingOver
+                            ? 'lightblue'
+                            : 'lightgrey',
+                          padding: 4,
+                          width: 250,
+                          minHeight: 500,
+                        }}
+                      >
+                        {column.budgetPlans.map((item, index) => {
+                          return (
+                            <Draggable
+                              key={item.id}
+                              draggableId={String(item.id)}
+                              index={index}
+                            >
+                              {(provided, snapshot) => {
+                                return (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={{
+                                      userSelect: 'none',
+                                      padding: 16,
+                                      margin: '0 0 8px 0',
+                                      minHeight: '50px',
+                                      backgroundColor: snapshot.isDragging
+                                        ? '#263B4A'
+                                        : '#456C86',
+                                      color: 'white',
+                                      ...provided.draggableProps.style,
+                                    }}
+                                  >
+                                    {item.name}
+                                  </div>
                                 );
                               }}
-                            >
-                              delete
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </StrictModeDroppable>
-          ))}
-        </DragDropContext>
-      </div>
+                            </Draggable>
+                          );
+                        })}
+                        {provided.placeholder}
+                      </div>
+                    );
+                  }}
+                </StrictModeDroppable>
+              </div>
+            </div>
+          );
+        })}
+      </DragDropContext>
     </div>
   );
 }
