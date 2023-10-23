@@ -1,5 +1,5 @@
-import TableSkeleton from '@/components/skeletons/table-skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default function TransactionsLoading() {
-  return <TableSkeleton />;
+export default function loading() {
+  return <Skeleton className="h-52 w-full" />;
 }
