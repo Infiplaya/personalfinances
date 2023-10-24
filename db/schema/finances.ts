@@ -1,6 +1,7 @@
 import { InferModel, relations } from 'drizzle-orm';
 import {
   double,
+  int,
   mysqlEnum,
   mysqlTable,
   serial,
@@ -94,6 +95,7 @@ export const budgetPlans = mysqlTable('budgetPlans', {
   name: varchar('name', { length: 255 }).notNull(),
   description: text('description'),
   statusId: varchar('statusId', { length: 255 }).notNull(),
+  order: int('order').default(0),
 });
 
 export const budgetStatusesRelations = relations(
@@ -148,3 +150,5 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
 export type Category = typeof categories.$inferSelect;
 export type Currency = typeof currencies.$inferSelect;
 export type Transaction = typeof transactions.$inferSelect;
+export type BudgetPlan = typeof budgetPlans.$inferSelect;
+export type BudgetStatus = typeof budgetStatuses.$inferSelect;

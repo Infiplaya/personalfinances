@@ -2,7 +2,12 @@
 
 import { db } from '@/db';
 import { profiles, users } from '@/db/schema/auth';
-import { balances, budgetPlans, transactions } from '@/db/schema/finances';
+import {
+  balances,
+  BudgetPlan,
+  budgetPlans,
+  transactions,
+} from '@/db/schema/finances';
 import { TransactionForm } from '@/lib/validation/transaction';
 import { and, eq, inArray, InferModel } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -323,6 +328,25 @@ export async function updateBudgetPlanStatus(planId: string, statusId: string) {
         statusId: statusId,
       })
       .where(eq(budgetPlans.id, planId));
+
+    revalidatePath('/budget');
+    return { success: true, message: 'Successfully created new profile!' };
+  } catch (e) {
+    return { success: false, message: 'Something went wrong... Try Again' };
+  }
+}
+
+export async function updateBudgetOrder(newOrder: BudgetPlan[]) {
+  try {
+    for (let i = 0; i < newOrder.length; i++) {
+      const planId = newOrder[i].id;
+      await db
+        .update(budgetPlans)
+        .set({
+          order: i,
+        })
+        .where(eq(budgetPlans.id, planId));
+    }
 
     revalidatePath('/budget');
     return { success: true, message: 'Successfully created new profile!' };
