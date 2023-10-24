@@ -1,6 +1,13 @@
 'use client';
 import { updateBudgetPlanStatus } from '@/app/actions';
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { BudgetStatus } from '@/db/queries/budgets';
+import { cn } from '@/lib/utils';
 import React, { useState, useTransition } from 'react';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 import { StrictModeDroppable } from './strict-droppable';
@@ -34,7 +41,6 @@ const columnsFromBackend = [
 
 export function Board({ data }: { data: BudgetStatus[] }) {
   const [columns, setColumns] = useState(data);
-  const [isPending, startTransition] = useTransition();
 
   const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
@@ -64,9 +70,7 @@ export function Board({ data }: { data: BudgetStatus[] }) {
       // Update the state with the new columns array
       setColumns(updatedColumns);
 
-      startTransition(async () => {
-        await updateBudgetPlanStatus(removed.id, destColumn.id);
-      });
+      await updateBudgetPlanStatus(removed.id, destColumn.id);
     } else {
       const column = columns[Number(source.droppableId)];
       const copiedItems = [...column.budgetPlans];
@@ -77,74 +81,61 @@ export function Board({ data }: { data: BudgetStatus[] }) {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+    <div className="flex h-full items-center space-x-6 overflow-auto">
       <DragDropContext onDragEnd={async (result) => onDragEnd(result)}>
         {Object.entries(columns).map(([columnId, column], index) => {
           return (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-              className={isPending ? 'opacity-50' : 'opacity-100'}
-              key={columnId}
-            >
-              <h2>{column.name}</h2>
-              <div style={{ margin: 8 }}>
-                <StrictModeDroppable droppableId={columnId} key={columnId}>
-                  {(provided, snapshot) => {
-                    return (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                          background: snapshot.isDraggingOver
-                            ? 'lightblue'
-                            : 'lightgrey',
-                          padding: 4,
-                          width: 250,
-                          minHeight: 500,
-                        }}
-                      >
-                        {column.budgetPlans.map((item, index) => {
-                          return (
-                            <Draggable
-                              key={item.id}
-                              draggableId={String(item.id)}
-                              index={index}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={{
-                                      userSelect: 'none',
-                                      padding: 16,
-                                      margin: '0 0 8px 0',
-                                      minHeight: '50px',
-                                      backgroundColor: snapshot.isDragging
-                                        ? '#263B4A'
-                                        : '#456C86',
-                                      color: 'white',
-                                      ...provided.draggableProps.style,
-                                    }}
-                                  >
-                                    {item.name}
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    );
-                  }}
-                </StrictModeDroppable>
-              </div>
+            <div className="w-full rounded-md border-r-2" key={columnId}>
+              <h3 className="scroll-m-20 px-4 pb-2 text-2xl font-semibold tracking-tight transition-colors first:mt-0">
+                {column.name}
+              </h3>
+              <StrictModeDroppable droppableId={columnId} key={columnId}>
+                {(provided, snapshot) => {
+                  return (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className={cn(
+                        'min-h-[500px] w-full rounded-md lg:p-4',
+                        snapshot.isDraggingOver && 'border bg-gray-100'
+                      )}
+                    >
+                      {column.budgetPlans.map((item, index) => {
+                        return (
+                          <Draggable
+                            key={item.id}
+                            draggableId={String(item.id)}
+                            index={index}
+                          >
+                            {(provided, snapshot) => {
+                              return (
+                                <Card
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  className={cn(
+                                    'mb-5 transition-all hover:bg-gray-100 dark:hover:bg-gray-800',
+                                    snapshot.isDragging &&
+                                      'bg-gray-100 dark:bg-gray-800'
+                                  )}
+                                >
+                                  <CardHeader>
+                                    <CardTitle>{item.name}</CardTitle>
+                                    <CardDescription>
+                                      {item.description}
+                                    </CardDescription>
+                                  </CardHeader>
+                                </Card>
+                              );
+                            }}
+                          </Draggable>
+                        );
+                      })}
+                      {provided.placeholder}
+                    </div>
+                  );
+                }}
+              </StrictModeDroppable>
             </div>
           );
         })}

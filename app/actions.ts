@@ -324,7 +324,7 @@ export async function updateBudgetPlanStatus(planId: string, statusId: string) {
       })
       .where(eq(budgetPlans.id, planId));
 
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Successfully created new profile!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
