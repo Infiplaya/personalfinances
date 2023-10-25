@@ -382,30 +382,34 @@ export async function changeBudgetColumnName(formData: FormData) {
   }
 }
 
-export async function createBudgetColumn(formData: FormData) {
+export async function createBudgetColumn(prevState: any, formData: FormData) {
   const currentProfile = await getCurrentProfile();
 
   const columnFormSchema = z.object({
-    name: z.string(),
+    name: z.string().nonempty('Name cant be blank'),
     columnId: z.string(),
   });
 
-  const data = columnFormSchema.parse({
+  const result = columnFormSchema.safeParse({
     name: formData.get('name'),
     columnId: uuidv4(),
   });
 
+  if (!result.success) {
+    return { success: false, message: result.error.format().name?._errors[0] };
+  }
+
   try {
     await db.insert(budgetStatuses).values({
-      name: data.name,
-      id: data.columnId,
+      name: result.data.name,
+      id: result.data.columnId,
       profileId: currentProfile.id,
     });
 
     revalidatePath('/');
     return { success: true, message: 'Successfully updated the name!' };
   } catch (e) {
-    return { success: false, message: 'Something went wrong... Try Again' };
+    return { success: false, message: 'This column name is taken.' };
   }
 }
 
