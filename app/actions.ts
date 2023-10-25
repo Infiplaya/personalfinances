@@ -386,7 +386,7 @@ export async function createBudgetColumn(prevState: any, formData: FormData) {
   const currentProfile = await getCurrentProfile();
 
   const columnFormSchema = z.object({
-    name: z.string().nonempty('Name cant be blank'),
+    name: z.string().nonempty('Name cant be blank').min(1),
     columnId: z.string(),
   });
 
@@ -429,5 +429,57 @@ export async function deleteBudgetColumn(formData: FormData) {
     return { success: true, message: 'Successfully updated the name!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
+  }
+}
+
+export async function deleteBudgetItems(formData: FormData) {
+  const columnFormSchema = z.object({
+    columnId: z.string(),
+  });
+
+  const data = columnFormSchema.parse({
+    columnId: formData.get('columnId'),
+  });
+
+  try {
+    await db.delete(budgetPlans).where(eq(budgetPlans.statusId, data.columnId));
+
+    revalidatePath('/');
+    return { success: true, message: 'Successfully updated the name!' };
+  } catch (e) {
+    return { success: false, message: 'Something went wrong... Try Again' };
+  }
+}
+
+export async function createBudgetPlan(prevState: any, formData: FormData) {
+  console.log(formData.get('name'));
+  const planFormSchema = z.object({
+    id: z.string(),
+    name: z.string().nonempty('Name cant be blank').min(1),
+    columnId: z.string(),
+  });
+
+  const result = planFormSchema.safeParse({
+    id: uuidv4(),
+    name: formData.get('name'),
+    columnId: formData.get('columnId'),
+  });
+
+  if (!result.success) {
+    return { success: false, message: result.error.format().name?._errors[0] };
+  }
+
+  try {
+    await db.insert(budgetPlans).values({
+      name: result.data.name,
+      id: result.data.id,
+      statusId: result.data.columnId,
+      order: 0,
+    });
+
+    revalidatePath('/');
+    return { success: true, message: 'Created new plan!' };
+  } catch (e) {
+    return { success: false, message: 'This column name is taken.' };
   }
 }
