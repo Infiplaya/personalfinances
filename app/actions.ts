@@ -6,6 +6,7 @@ import {
   balances,
   BudgetPlan,
   budgetPlans,
+  budgetStatuses,
   transactions,
 } from '@/db/schema/finances';
 import { TransactionForm } from '@/lib/validation/transaction';
@@ -350,6 +351,78 @@ export async function updateBudgetOrder(newOrder: BudgetPlan[]) {
 
     revalidatePath('/budget');
     return { success: true, message: 'Successfully created new profile!' };
+  } catch (e) {
+    return { success: false, message: 'Something went wrong... Try Again' };
+  }
+}
+
+export async function changeBudgetColumnName(formData: FormData) {
+  const columnFormSchema = z.object({
+    name: z.string(),
+    columnId: z.string(),
+  });
+
+  const data = columnFormSchema.parse({
+    name: formData.get('name'),
+    columnId: formData.get('columnId'),
+  });
+
+  try {
+    await db
+      .update(budgetStatuses)
+      .set({
+        name: data.name,
+      })
+      .where(eq(budgetStatuses.id, data.columnId));
+
+    revalidatePath('/');
+    return { success: true, message: 'Successfully updated the name!' };
+  } catch (e) {
+    return { success: false, message: 'Something went wrong... Try Again' };
+  }
+}
+
+export async function createBudgetColumn(formData: FormData) {
+  const currentProfile = await getCurrentProfile();
+
+  const columnFormSchema = z.object({
+    name: z.string(),
+    columnId: z.string(),
+  });
+
+  const data = columnFormSchema.parse({
+    name: formData.get('name'),
+    columnId: uuidv4(),
+  });
+
+  try {
+    await db.insert(budgetStatuses).values({
+      name: data.name,
+      id: data.columnId,
+      profileId: currentProfile.id,
+    });
+
+    revalidatePath('/');
+    return { success: true, message: 'Successfully updated the name!' };
+  } catch (e) {
+    return { success: false, message: 'Something went wrong... Try Again' };
+  }
+}
+
+export async function deleteBudgetColumn(formData: FormData) {
+  const columnFormSchema = z.object({
+    columnId: z.string(),
+  });
+
+  const data = columnFormSchema.parse({
+    columnId: formData.get('columnId'),
+  });
+
+  try {
+    await db.delete(budgetStatuses).where(eq(budgetStatuses.id, data.columnId));
+
+    revalidatePath('/');
+    return { success: true, message: 'Successfully updated the name!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
