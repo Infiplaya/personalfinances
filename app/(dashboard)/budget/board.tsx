@@ -19,7 +19,7 @@ import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 // @ts-expect-error
 import { experimental_useFormState as useFormState } from 'react-dom';
 import { StrictModeDroppable } from './strict-droppable';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, X } from 'lucide-react';
 
 import { Separator } from '@/components/ui/separator';
 import { ChangeColumnName } from './change-column-name';
@@ -28,6 +28,7 @@ import { toast } from 'sonner';
 import { SubmitButton } from '../settings/submit-button';
 import { experimental_useOptimistic as useOptimistic } from 'react';
 import { BudgetPlan, BudgetStatus } from '@/db/schema/finances';
+import PlanCard from './plan-card';
 
 const initialState = {
   success: null,
@@ -108,13 +109,15 @@ export function Board({ data }: { data: Columns }) {
     setDisplayForm(true);
   }
 
-  console.log(optimisticColumns);
   return (
     <div className="mt-10 flex gap-10 overflow-auto">
       <DragDropContext onDragEnd={async (result) => onDragEnd(result)}>
         {Object.entries(optimisticColumns).map(([columnId, column]) => {
           return (
-            <div className="w-full rounded-md bg-white/5 py-4" key={columnId}>
+            <div
+              className="w-full rounded-md bg-black/5 py-4 dark:bg-white/5"
+              key={columnId}
+            >
               <div className="mb-4 flex items-center justify-between px-6">
                 <ChangeColumnName column={column} />
                 <div className="flex items-center">
@@ -149,25 +152,31 @@ export function Board({ data }: { data: Columns }) {
                           )}
                         >
                           <CardHeader>
-                            <form
-                              action={newPlanAction}
-                              className="flex items-center space-x-2"
-                            >
-                              <Input
-                                type="text"
-                                placeholder="Type name of plan..."
-                                id="name"
-                                name="name"
-                                ref={nameInputRef}
-                                autoFocus
-                              />
-                              <Input
-                                type="hidden"
-                                name="columnId"
-                                id="columnId"
-                                value={column.id}
-                              />
-                              <SubmitButton>Add</SubmitButton>
+                            <form action={newPlanAction}>
+                              <Button
+                                size="icon"
+                                variant="outline"
+                                className="h-6 w-6 mb-4"
+                              >
+                                <X onClick={resetForm} className="h-4 w-4" />
+                              </Button>
+                              <div className="flex items-center space-x-4">
+                                <Input
+                                  type="text"
+                                  placeholder="Type name of plan..."
+                                  id="name"
+                                  name="name"
+                                  ref={nameInputRef}
+                                  autoFocus
+                                />
+                                <Input
+                                  type="hidden"
+                                  name="columnId"
+                                  id="columnId"
+                                  value={column.id}
+                                />
+                                <SubmitButton>Add</SubmitButton>
+                              </div>
                             </form>
                           </CardHeader>
                         </Card>
@@ -182,29 +191,25 @@ export function Board({ data }: { data: Columns }) {
                           >
                             {(provided, snapshot) => {
                               return (
-                                <Card
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  className={cn(
-                                    'mb-5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800',
-                                    snapshot.isDragging &&
-                                      'bg-gray-100 dark:bg-gray-800'
-                                  )}
-                                >
-                                  <CardHeader>
-                                    <CardTitle>{item.name}</CardTitle>
-                                    <CardDescription>
-                                      {item.description}
-                                    </CardDescription>
-                                  </CardHeader>
-                                </Card>
+                                <PlanCard
+                                  provided={provided}
+                                  snapshot={snapshot}
+                                  item={item}
+                                />
                               );
                             }}
                           </Draggable>
                         );
                       })}
                       {provided.placeholder}
+                      <Button
+                        variant="secondary"
+                        className="flex w-full justify-start space-x-3"
+                        onClick={() => handleAddNewPlan(columnId)}
+                      >
+                        <PlusCircle className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                        <span>New Plan</span>
+                      </Button>
                     </div>
                   );
                 }}

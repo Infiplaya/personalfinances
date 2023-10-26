@@ -452,7 +452,6 @@ export async function deleteBudgetItems(formData: FormData) {
 }
 
 export async function createBudgetPlan(prevState: any, formData: FormData) {
-  console.log(formData.get('name'));
   const planFormSchema = z.object({
     id: z.string(),
     name: z.string().nonempty('Name cant be blank').min(1),
@@ -481,5 +480,47 @@ export async function createBudgetPlan(prevState: any, formData: FormData) {
     return { success: true, message: 'Created new plan!' };
   } catch (e) {
     return { success: false, message: 'This column name is taken.' };
+  }
+}
+
+export async function deleteBudgetPlan(planId: string) {
+  try {
+    await db.delete(budgetPlans).where(eq(budgetPlans.id, planId));
+    revalidatePath('/budget');
+    return { success: true, message: 'Deleted this plan' };
+  } catch (e) {
+    return { success: false, message: 'Something went wrong... Try Again' };
+  }
+}
+
+export async function changeBudgetPlanName(prevState: any, formData: FormData) {
+  const planFormSchema = z.object({
+    name: z.string(),
+    planId: z.string(),
+  });
+
+  const result = planFormSchema.safeParse({
+    name: formData.get('name'),
+    planId: formData.get('planId'),
+  });
+
+  if (!result.success) {
+    return { success: false, message: result.error.format().name?._errors[0] };
+  }
+
+  console.log(formData)
+
+  try {
+    await db
+      .update(budgetPlans)
+      .set({
+        name: result.data.name,
+      })
+      .where(eq(budgetPlans.id, result.data.planId));
+
+    revalidatePath('/');
+    return { success: true, message: 'Updated name of the plan' };
+  } catch (e) {
+    return { success: false, message: 'Something went wrong' };
   }
 }

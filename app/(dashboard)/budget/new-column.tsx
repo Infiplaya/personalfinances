@@ -21,7 +21,6 @@ const initialState = {
 
 export function NewColumn() {
   const [state, formAction] = useFormState(createBudgetColumn, initialState);
-  console.log(state);
 
   useEffect(() => {
     if (state.success === false) {
