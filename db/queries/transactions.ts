@@ -107,6 +107,8 @@ export async function calculateBalanceData(
 
 export const getBalanceData = cache(calculateBalanceData);
 
+export type BalanceChartData = Awaited<ReturnType<typeof calculateBalanceData>>;
+
 export async function calculateBalancesForUser(preferredCurrency: string) {
   const exchangeRate = await findExchangeRate('USD', preferredCurrency);
   const { user } = await validateSession();

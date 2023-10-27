@@ -4,7 +4,7 @@ import React from 'react';
 export default function DashboardLoading() {
   return (
     <main className="space-y-12">
-      <div className="grid-cols-12 gap-x-4 space-y-10 lg:grid lg:space-y-0">
+      {/* <div className="grid-cols-12 gap-x-4 space-y-10 lg:grid lg:space-y-0">
         <div className="lg:col-span-4">
           <Skeleton className="h-64 w-full" />
         </div>
@@ -23,7 +23,7 @@ export default function DashboardLoading() {
           <Skeleton className="h-72 w-full" />
         </div>
       </div>
-      <Skeleton className="h-72 w-full" />
+      <Skeleton className="h-72 w-full" /> */}
     </main>
   );
 }

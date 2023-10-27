@@ -3,20 +3,18 @@ import { cn, getMonth, moneyFormat } from '@/lib/utils';
 import { Label } from '../ui/label';
 
 import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
-import { getCurrentCurrency } from '@/db/queries/currencies';
 import { getTotalIncomeAndExpenses } from '@/db/queries/transactions';
 
 export default async function SummaryCard({
-  currentMonth,
+  isCurrentMonth,
+  currentCurrency,
 }: {
-  currentMonth?: number;
+  isCurrentMonth?: boolean;
+  currentCurrency: string;
 }) {
-  const currentCurrency = await getCurrentCurrency();
+  const currentMonth = isCurrentMonth ? new Date().getMonth() : undefined;
   const { totalBalance, totalExpenses, totalIncomes, month } =
-    await getTotalIncomeAndExpenses(
-      currentCurrency,
-      currentMonth ? currentMonth : undefined
-    );
+    await getTotalIncomeAndExpenses(currentCurrency, currentMonth);
 
   if (month) {
     return (

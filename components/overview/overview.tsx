@@ -1,76 +1,21 @@
 'use client';
 
-import { OverviewData } from '@/db/queries/transactions';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
-import { moneyFormat } from '@/lib/utils';
-import { useTransition } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { Skeleton } from '../ui/skeleton';
-import TimeOptions from '../dashboard/time-options';
+import { getOverviewData } from '@/db/queries/transactions';
+import OverviewChart from './overview-chart';
 
-export function Overview({
-  data,
+export async function Overview({
   currencyCode,
   overview,
 }: {
-  data: OverviewData;
   currencyCode: string;
   overview: number;
 }) {
-  const [isPending, startTransition] = useTransition();
+  const overviewData = await getOverviewData(currencyCode, overview);
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center space-x-12">
-          <CardTitleWithTooltip
-            message={'Your incomes and expenses in last 7 days'}
-          >
-            Incomes and Expenses
-          </CardTitleWithTooltip>
-          <TimeOptions
-            isPending={isPending}
-            startTransition={startTransition}
-            selectedTime={overview}
-            type="overview"
-          />
-        </div>
-      </CardHeader>
-      <CardContent>
-        {isPending ? (
-          <Skeleton className="h-[350px] w-full" />
-        ) : (
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={data}>
-              <XAxis
-                dataKey="date"
-                stroke="#888888"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                stroke="#888888"
-                fontSize={10}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `${moneyFormat(value, currencyCode)}`}
-              />
-              <Bar
-                dataKey={'totalExpenses'}
-                fill={'#F4364C'}
-                radius={[4, 4, 0, 0]}
-              />
-              <Bar
-                dataKey={'totalIncome'}
-                fill={'#39E75F'}
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        )}
-      </CardContent>
-    </Card>
+    <OverviewChart
+      data={overviewData}
+      currencyCode={currencyCode}
+      overview={overview}
+    />
   );
 }

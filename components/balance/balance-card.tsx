@@ -4,12 +4,7 @@ import { cn, moneyFormat } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 
-export async function BalanceCard({
-  currentBalance,
-}: {
-  currentBalance: number;
-}) {
-  const currencyCode = await getCurrentCurrency();
+export async function BalanceCard({ currencyCode }: { currencyCode: string }) {
   const balances = await getBalancesForUser(currencyCode);
   return (
     <Card>
