@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+'use client';
+import { Card, CardContent, CardHeader } from '../ui/card';
 import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { moneyFormat } from '@/lib/utils';
