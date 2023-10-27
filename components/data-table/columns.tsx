@@ -69,29 +69,18 @@ export const columns: ColumnDef<Transaction>[] = [
       );
     },
     cell: ({ row }) => {
-      return <div className="ml-4">{row.getValue('name')}</div>;
-    },
-  },
-  {
-    accessorKey: 'type',
-    header: ({ column }) => (
-      <div>
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Type
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      </div>
-    ),
-    cell: ({ row }) => {
       return (
-        <Link href={`/${row.getValue('type')}s`}>
-          <Badge className="ml-4" variant="outline">
-            {row.getValue('type')}
-          </Badge>
-        </Link>
+        <div className="ml-4 space-x-2">
+          <Link href={`/${row.original.type}s`}>
+            <Badge variant="secondary">{row.original.type}</Badge>
+          </Link>
+          <Link
+            href={`/transactions/${row.original.slug}`}
+            className="font-semibold"
+          >
+            {row.getValue('name')}
+          </Link>
+        </div>
       );
     },
   },
@@ -111,9 +100,7 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       return (
         <Link href={`/categories/${slugify(row.getValue('categoryName'))}`}>
-          <Badge className="ml-4" variant="outline">
-            {row.getValue('categoryName')}
-          </Badge>
+          <Badge className="ml-4">{row.getValue('categoryName')}</Badge>
         </Link>
       );
     },

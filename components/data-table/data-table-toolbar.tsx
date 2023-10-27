@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { RowsControls } from './data-table-rows';
 
@@ -31,29 +31,25 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const isFiltered = table.getState().columnFilters.length > 0;
+  const isFiltered = searchParams.has('type') || searchParams.has('category');
+
   return (
     <div className="my-6 flex w-full items-center justify-between">
       <div className="inline-flex space-x-6">
-        <SearchTable />
         <div className="mr-auto inline-flex space-x-2">
           {table.getColumn('categoryName') && (
-            <DataTableFacetedFilter
-              title="category"
-              options={categories}
-            />
+            <DataTableFacetedFilter title="category" options={categories} />
           )}
-          {table.getColumn('type') && (
-            <DataTableFacetedFilter
-              title="type"
-              options={[
-                { id: 0, name: 'expense' },
-                { id: 1, name: 'income' },
-              ]}
-            />
-          )}
+          <DataTableFacetedFilter
+            title="type"
+            options={[
+              { id: 0, name: 'expense' },
+              { id: 1, name: 'income' },
+            ]}
+          />
           {isFiltered && (
             <Button
               variant="ghost"
@@ -66,8 +62,6 @@ export function DataTableToolbar<TData>({
                 startTransition(() => {
                   router.replace(`${pathname}?${params.toString()}`);
                 });
-
-                table.resetColumnFilters();
               }}
               className="h-8 px-2 lg:px-3"
             >

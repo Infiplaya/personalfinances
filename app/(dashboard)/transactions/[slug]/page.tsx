@@ -14,6 +14,9 @@ import { TransactionForm } from '@/components/transactions/transaction-form';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { SimilarTransactions } from './similar-transactions';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Back } from '@/components/ui/back';
 
 async function getTransaction(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -70,6 +73,7 @@ export default async function TransactionsPage({
   }
   return (
     <div>
+      <Back link="/transactions" />
       <Dialog defaultOpen={edit ? true : false}>
         <DialogContent>
           <TransactionForm
@@ -80,7 +84,7 @@ export default async function TransactionsPage({
           />
         </DialogContent>
       </Dialog>
-      <div className="mb-3 space-x-3">
+      <div className="mb-3 mt-10 space-x-3">
         <Link href={`/${transaction.type}s`}>
           <Badge>{transaction.type}</Badge>
         </Link>
@@ -91,7 +95,9 @@ export default async function TransactionsPage({
         {moneyFormat(transaction.amount, transaction.currencyCode)}{' '}
       </h1>
       <p>{transaction?.description}</p>
-      <SimilarTransactions transaction={transaction} />
+      <Suspense fallback={<Skeleton className="mt-12 h-24 w-full" />}>
+        <SimilarTransactions transaction={transaction} />
+      </Suspense>
     </div>
   );
 }

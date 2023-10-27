@@ -1,7 +1,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function TableSkeleton() {
-  const skeletonElements = Array.from({ length: 10 }, (_, index) => (
+  const skeletonElements = Array.from({ length: 8 }, (_, index) => (
     <Skeleton key={index} className="h-8 w-full" />
   ));
   return (

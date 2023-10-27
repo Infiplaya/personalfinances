@@ -1,21 +1,17 @@
-import { DataTable } from '@/components/data-table/data-table';
 import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
 import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 
-import {
-  getTransactions,
-  getTransactionsCount,
-} from '@/db/queries/transactions';
+import { getTransactionsCount } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
-import { columns } from '../../../components/data-table/columns';
 import { RowsControls } from '@/components/data-table/data-table-rows';
 import { Metadata } from 'next';
 import Pagination from '@/components/data-table/pagination';
 import { Suspense } from 'react';
-import { Await } from '@/components/await';
 import TableSkeleton from '@/components/skeletons/table-skeleton';
+import { Transactions } from './transactions';
+import SearchTable from '@/components/data-table/search-table';
 
 export const metadata: Metadata = {
   title: 'Transactions',
@@ -52,16 +48,6 @@ export default async function TransactionsPage({ searchParams }: Props) {
         ])
       : [];
 
-  const promise = getTransactions(
-    limit,
-    page,
-    name,
-    column,
-    order,
-    categoriesFilter,
-    typesFilter
-  );
-
   const categoriesData = await getCategories();
 
   const currenciesData = await getCurrencies();
@@ -97,16 +83,25 @@ export default async function TransactionsPage({ searchParams }: Props) {
         </div>
       </div>
       <section>
-        <Suspense fallback={<TableSkeleton />}>
-          <Await promise={promise}>
-            {(transactions) => (
-              <DataTable
-                categories={categoriesData}
-                columns={columns}
-                data={transactions}
-              />
-            )}
-          </Await>
+        <SearchTable />
+        <Suspense
+          key={`${name}-${page}`}
+          fallback={
+            <div className="my-10">
+              <TableSkeleton />
+            </div>
+          }
+        >
+          <Transactions
+            page={page}
+            limit={limit}
+            name={name as string}
+            order={order}
+            categoriesFilter={categoriesFilter}
+            column={column}
+            categories={categoriesData}
+            typesFilter={typesFilter}
+          />
         </Suspense>
 
         <div className="mt-3 flex w-full items-center justify-between">
