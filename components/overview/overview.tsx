@@ -1,4 +1,4 @@
-'use client';
+
 
 import { getOverviewData } from '@/db/queries/transactions';
 import OverviewChart from './overview-chart';
