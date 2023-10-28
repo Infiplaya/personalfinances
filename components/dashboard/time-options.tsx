@@ -36,7 +36,7 @@ export default function TimeOptions({
       {timestamps.map((t) => (
         <Button
           key={t.time}
-          aria-disabled={isPending}
+          disabled={isPending}
           onClick={() => {
             const params = new URLSearchParams(window.location.search);
             params.set(type, String(t.time));
@@ -48,7 +48,9 @@ export default function TimeOptions({
             );
           }}
           size="sm"
-          variant={selectedTime === t.time ? 'default' : 'secondary'}
+          variant={
+            selectedTime === t.time && !isPending ? 'default' : 'secondary'
+          }
         >
           {t.label}
         </Button>

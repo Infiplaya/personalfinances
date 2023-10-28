@@ -4,6 +4,7 @@ import debounce from 'lodash.debounce';
 import { Loader2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useTransition } from 'react';
+import { Label } from '../ui/label';
 
 export default function SearchTable() {
   const [isPending, startTransition] = useTransition();
@@ -28,10 +29,11 @@ export default function SearchTable() {
 
   return (
     <div className="relative">
+      <Label>Search Transactions</Label>
       <Input
         placeholder="Type name..."
         onChange={(event) => handleDebouncedSearch(event.target.value)}
-        className="relative max-w-[200px]"
+        className="relative max-w-[200px] mt-2"
         aria-disabled={isPending}
         defaultValue={searchParams.get('name') as string}
       />

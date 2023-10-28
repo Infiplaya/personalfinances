@@ -70,13 +70,13 @@ export const columns: ColumnDef<Transaction>[] = [
     },
     cell: ({ row }) => {
       return (
-        <div className="ml-4 space-x-2">
+        <div className="ml-4 space-x-4">
           <Link href={`/${row.original.type}s`}>
             <Badge variant="secondary">{row.original.type}</Badge>
           </Link>
           <Link
             href={`/transactions/${row.original.slug}`}
-            className="font-semibold"
+            className="font-medium"
           >
             {row.getValue('name')}
           </Link>
@@ -99,7 +99,7 @@ export const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <Link href={`/categories/${slugify(row.getValue('categoryName'))}`}>
+        <Link className='ml-4' href={`/categories/${slugify(row.getValue('categoryName'))}`}>
           {row.getValue('categoryName')}
         </Link>
       );
