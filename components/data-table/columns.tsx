@@ -100,7 +100,7 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       return (
         <Link href={`/categories/${slugify(row.getValue('categoryName'))}`}>
-          <Badge className="ml-4">{row.getValue('categoryName')}</Badge>
+          {row.getValue('categoryName')}
         </Link>
       );
     },
