@@ -41,7 +41,7 @@ export default function MobileNavbar({
       </SheetTrigger>
       <SheetContent className="w-full lg:hidden" side="right">
         <SheetHeader>
-          <SheetTitle className="flex items-center space-x-24">
+          <SheetTitle className="flex items-center space-x-14">
             <Link
               onClick={() => {
                 router.push('/');
@@ -61,7 +61,7 @@ export default function MobileNavbar({
           </SheetTitle>
         </SheetHeader>
         <div className="flex h-full flex-col justify-between">
-          <ScrollArea className="h-[400px] w-full py-6">
+          <div className="mt-8">
             {links.map((link) => (
               <Link
                 key={link.href}
@@ -78,7 +78,7 @@ export default function MobileNavbar({
                 {link.label}
               </Link>
             ))}
-          </ScrollArea>
+          </div>
           <div className="ml-auto flex items-center space-x-3 pb-20">
             <CurrencyDropdown
               currencies={currencies}

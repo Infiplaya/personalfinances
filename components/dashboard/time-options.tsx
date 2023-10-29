@@ -32,7 +32,7 @@ export default function TimeOptions({
   const pathname = usePathname();
   const router = useRouter();
   return (
-    <div className="space-x-3">
+    <div className="space-x-2 inline-flex">
       {timestamps.map((t) => (
         <Button
           key={t.time}

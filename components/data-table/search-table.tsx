@@ -33,7 +33,7 @@ export default function SearchTable() {
       <Input
         placeholder="Type name..."
         onChange={(event) => handleDebouncedSearch(event.target.value)}
-        className="relative max-w-[200px] mt-2"
+        className="relative max-w-[250px] mt-1"
         aria-disabled={isPending}
         defaultValue={searchParams.get('name') as string}
       />

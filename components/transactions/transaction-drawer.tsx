@@ -32,7 +32,7 @@ export function TransactionDrawer({
     <Drawer.Root open={open} onOpenChange={setOpen} shouldScaleBackground>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="items-center space-x-2" size="sm">
+          <Button className="items-center  space-x-2" size="sm">
             <PlusCircle className="h-5 w-5 dark:text-gray-700" />{' '}
             <span>New Transaction</span>
           </Button>

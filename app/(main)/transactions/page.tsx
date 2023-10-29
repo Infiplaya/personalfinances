@@ -65,7 +65,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
 
   return (
     <main>
-      <div className="justify-end md:mb-6 md:flex">
+      <div className="flex flex-col gap-8 md:flex-row-reverse md:justify-between">
         <div className="hidden md:block">
           <TransactionDialog
             categories={categoriesData}
@@ -81,9 +81,9 @@ export default async function TransactionsPage({ searchParams }: Props) {
             currentCurrency={currentCurrency}
           />
         </div>
-      </div>
-      <section>
         <SearchTable />
+      </div>
+      <section className="my-3">
         <Suspense
           key={`${name}-${page}`}
           fallback={
