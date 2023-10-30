@@ -11,7 +11,7 @@ export interface Column extends BudgetStatus {
 
 export type Columns = { [key: string]: Column };
 
-async function selectAllBudgetStatuses() {
+async function selectStatusesWithPlans() {
   const currentProfile = await getCurrentProfile();
   const data = await db.query.budgetStatuses.findMany({
     with: {
@@ -29,4 +29,14 @@ async function selectAllBudgetStatuses() {
   }, {});
 }
 
-export const getAllBudgetStatuses = cache(selectAllBudgetStatuses);
+export const getStatusesWithPlans = cache(selectStatusesWithPlans);
+
+async function selectAllStatuses() {
+  const currentProfile = await getCurrentProfile();
+  return await db.query.budgetStatuses.findMany({
+    where: (budgetStatuses, { eq }) =>
+      eq(budgetStatuses.profileId, currentProfile.id),
+  });
+}
+
+export const getStatuses = cache(selectAllStatuses);

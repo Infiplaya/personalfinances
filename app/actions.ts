@@ -20,6 +20,7 @@ import { getCurrentProfile } from '@/db/queries/auth';
 import { validateSession } from '@/db/queries/transactions';
 import slugify from 'slugify';
 import { z } from 'zod';
+import { PlanForm } from '@/lib/validation/budget';
 
 export async function registerUser(formData: RegisterForm) {
   try {
@@ -508,7 +509,7 @@ export async function changeBudgetPlanName(prevState: any, formData: FormData) {
     return { success: false, message: result.error.format().name?._errors[0] };
   }
 
-  console.log(formData)
+  console.log(formData);
 
   try {
     await db
@@ -521,6 +522,28 @@ export async function changeBudgetPlanName(prevState: any, formData: FormData) {
     revalidatePath('/');
     return { success: true, message: 'Updated name of the plan' };
   } catch (e) {
+    return { success: false, message: 'Something went wrong' };
+  }
+}
+
+export async function updateBudgetPlan(formData: PlanForm, planId: string) {
+  const currentProfile = await getCurrentProfile();
+
+  try {
+    await db
+      .update(budgetPlans)
+      .set({
+        name: formData.name,
+        description: formData.description,
+        statusId: formData.statusId,
+      })
+      .where(eq(budgetPlans.id, planId));
+
+    revalidatePath('/budget');
+
+    return { success: true, message: 'Updated the plan' };
+  } catch (e) {
+    console.log(e);
     return { success: false, message: 'Something went wrong' };
   }
 }

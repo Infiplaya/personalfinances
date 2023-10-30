@@ -5,13 +5,6 @@ import {
   updateBudgetPlanStatus,
 } from '@/app/actions';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Columns } from '@/db/queries/budgets';
 import { cn } from '@/lib/utils';
 import { useEffect, useRef, useState, useTransition } from 'react';
@@ -25,17 +18,25 @@ import { Separator } from '@/components/ui/separator';
 import { ChangeColumnName } from './change-column-name';
 import ColumnOptions from './column-options';
 import { toast } from 'sonner';
-import { SubmitButton } from '../settings/submit-button';
 import { experimental_useOptimistic as useOptimistic } from 'react';
-import { BudgetPlan, BudgetStatus } from '@/db/schema/finances';
 import PlanCard from './plan-card';
+import { NameForm } from './name-form';
+import { Sheet } from '@/components/ui/sheet';
+import { EditPlan } from './edit-plan';
+import { BudgetStatus } from '@/db/schema/finances';
 
 const initialState = {
   success: null,
   message: null,
 };
 
-export function Board({ data }: { data: Columns }) {
+export function Board({
+  data,
+  statuses,
+}: {
+  data: Columns;
+  statuses: BudgetStatus[];
+}) {
   const [editedColumn, setEditedColumn] = useState<null | string>(null);
   const [displayForm, setDisplayForm] = useState(false);
   const nameInputRef = useRef<null | HTMLInputElement>(null);
@@ -132,7 +133,6 @@ export function Board({ data }: { data: Columns }) {
                 </div>
               </div>
               <Separator />
-
               <StrictModeDroppable droppableId={columnId} key={columnId}>
                 {(provided, snapshot) => {
                   return (
@@ -146,40 +146,12 @@ export function Board({ data }: { data: Columns }) {
                       )}
                     >
                       {displayForm && editedColumn === columnId ? (
-                        <Card
-                          className={cn(
-                            'mb-5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800'
-                          )}
-                        >
-                          <CardHeader>
-                            <form action={newPlanAction}>
-                              <Button
-                                size="icon"
-                                variant="outline"
-                                className="h-6 w-6 mb-4"
-                              >
-                                <X onClick={resetForm} className="h-4 w-4" />
-                              </Button>
-                              <div className="flex items-center space-x-4">
-                                <Input
-                                  type="text"
-                                  placeholder="Type name of plan..."
-                                  id="name"
-                                  name="name"
-                                  ref={nameInputRef}
-                                  autoFocus
-                                />
-                                <Input
-                                  type="hidden"
-                                  name="columnId"
-                                  id="columnId"
-                                  value={column.id}
-                                />
-                                <SubmitButton>Add</SubmitButton>
-                              </div>
-                            </form>
-                          </CardHeader>
-                        </Card>
+                        <NameForm
+                          newPlanAction={newPlanAction}
+                          resetForm={resetForm}
+                          nameInputRef={nameInputRef}
+                          column={column}
+                        />
                       ) : null}
 
                       {column.budgetPlans.map((item, index) => {
@@ -191,11 +163,16 @@ export function Board({ data }: { data: Columns }) {
                           >
                             {(provided, snapshot) => {
                               return (
-                                <PlanCard
-                                  provided={provided}
-                                  snapshot={snapshot}
-                                  item={item}
-                                />
+                                <>
+                                  <Sheet>
+                                    <PlanCard
+                                      provided={provided}
+                                      snapshot={snapshot}
+                                      item={item}
+                                    />
+                                    <EditPlan statuses={statuses} item={item} />
+                                  </Sheet>
+                                </>
                               );
                             }}
                           </Draggable>
