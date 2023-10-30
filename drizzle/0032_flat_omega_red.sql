@@ -1,0 +1,1 @@
+ALTER TABLE `budgetStatuses` ADD `createdAt` timestamp DEFAULT (now());

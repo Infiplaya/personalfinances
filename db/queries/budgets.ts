@@ -21,6 +21,7 @@ async function selectStatusesWithPlans() {
     },
     where: (budgetStatuses, { eq }) =>
       eq(budgetStatuses.profileId, currentProfile.id),
+    orderBy: (budgetStatuses, { asc }) => [asc(budgetStatuses.createdAt)],
   });
 
   return data.reduce((result: Columns, item, index) => {

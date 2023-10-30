@@ -81,6 +81,7 @@ export const budgetStatuses = mysqlTable(
     id: varchar('id', { length: 255 }).notNull().primaryKey(),
     name: varchar('name', { length: 255 }).notNull(),
     profileId: varchar('profileId', { length: 255 }).notNull(),
+    createdAt: timestamp('createdAt').defaultNow(),
   },
   (status) => ({
     nameIndex: uniqueIndex('profileIdName_idx').on(

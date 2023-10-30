@@ -414,6 +414,36 @@ export async function createBudgetColumn(prevState: any, formData: FormData) {
   }
 }
 
+export async function createStatusFromClient(name: string, columnId: string) {
+  const currentProfile = await getCurrentProfile();
+
+  const columnFormSchema = z.object({
+    name: z.string().nonempty('Name cant be blank').min(1),
+    columnId: z.string(),
+  });
+
+  const result = columnFormSchema.safeParse({
+    name,
+    columnId,
+  });
+
+  if (!result.success) {
+    return { success: false, message: result.error.format().name?._errors[0] };
+  }
+
+  try {
+    await db.insert(budgetStatuses).values({
+      name: result.data.name,
+      id: result.data.columnId,
+      profileId: currentProfile.id,
+    });
+
+    return { success: true, message: 'Created new status' };
+  } catch (e) {
+    return { success: false, message: 'This column name is taken.' };
+  }
+}
+
 export async function deleteBudgetColumn(formData: FormData) {
   const columnFormSchema = z.object({
     columnId: z.string(),
@@ -446,7 +476,7 @@ export async function deleteBudgetItems(formData: FormData) {
     await db.delete(budgetPlans).where(eq(budgetPlans.statusId, data.columnId));
 
     revalidatePath('/');
-    return { success: true, message: 'Successfully updated the name!' };
+    return { success: true, message: 'Successfullyc updated the name!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
@@ -477,7 +507,7 @@ export async function createBudgetPlan(prevState: any, formData: FormData) {
       order: 0,
     });
 
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Created new plan!' };
   } catch (e) {
     return { success: false, message: 'This column name is taken.' };
@@ -519,7 +549,7 @@ export async function changeBudgetPlanName(prevState: any, formData: FormData) {
       })
       .where(eq(budgetPlans.id, result.data.planId));
 
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Updated name of the plan' };
   } catch (e) {
     return { success: false, message: 'Something went wrong' };
@@ -527,8 +557,6 @@ export async function changeBudgetPlanName(prevState: any, formData: FormData) {
 }
 
 export async function updateBudgetPlan(formData: PlanForm, planId: string) {
-  const currentProfile = await getCurrentProfile();
-
   try {
     await db
       .update(budgetPlans)

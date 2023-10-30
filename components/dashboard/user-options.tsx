@@ -54,7 +54,7 @@ export default async function UserOptions() {
         <Link href="/" className="block">
           <Home className="h-5 w-5 dark:text-gray-300" />
         </Link>
-
+          <CommandMenu />
         <MobileNavbar
           currencies={currenciesData}
           currentCurrency={currentCurrency}

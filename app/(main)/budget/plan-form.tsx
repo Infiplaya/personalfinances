@@ -15,10 +15,9 @@ import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { BudgetPlan, BudgetStatus } from '@/db/schema/finances';
-import { usePathname } from 'next/navigation';
 import { PlanForm, planFormSchema } from '@/lib/validation/budget';
 import { Textarea } from '@/components/ui/textarea';
-import { updateBudgetPlan } from '@/app/actions';
+import { createStatusFromClient, updateBudgetPlan } from '@/app/actions';
 import {
   Popover,
   PopoverContent,
@@ -34,13 +33,17 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { CheckIcon } from 'lucide-react';
+import { useEffect, useState, useTransition } from 'react';
+import { v4 } from 'uuid';
+
+type UpdatedStatus = Omit<BudgetStatus, 'createdAt'>;
 
 export function PlanForm({
   plan,
   statuses,
 }: {
   plan: BudgetPlan;
-  statuses: BudgetStatus[];
+  statuses: UpdatedStatus[];
 }) {
   const form = useForm<PlanForm>({
     resolver: zodResolver(planFormSchema),
@@ -50,6 +53,11 @@ export function PlanForm({
       statusId: plan.statusId,
     },
   });
+
+  const [query, setQuery] = useState('');
+  const [updatedStatuses, setUpdatedStatuses] = useState(statuses);
+
+  const [isPending, startTransition] = useTransition();
 
   async function handleEditPlan(data: PlanForm) {
     const result = await updateBudgetPlan(data, plan.id);
@@ -61,11 +69,8 @@ export function PlanForm({
     }
   }
 
-  const currentStatus = statuses
-    .filter((s) => s.id === plan.statusId)
-    .map((s) => s.name)[0];
-
-  console.log(currentStatus);
+  const currentStatus = updatedStatuses.find((s) => s.id === plan.statusId)
+    ?.name;
 
   return (
     <Form {...form}>
@@ -103,8 +108,8 @@ export function PlanForm({
           control={form.control}
           name="statusId"
           render={({ field }) => (
-            <FormItem className="mt-2.5 flex flex-col">
-              <FormLabel>status</FormLabel>
+            <FormItem>
+              <FormLabel>Status</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -117,18 +122,55 @@ export function PlanForm({
                       )}
                     >
                       {field.value
-                        ? statuses.find((s) => s.id === field.value)?.name
+                        ? updatedStatuses.find((s) => s.id === field.value)
+                            ?.name
                         : currentStatus}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder={`Search code`} className="h-9" />
-                    <CommandEmpty>No status found.</CommandEmpty>
+                  <Command className="bg-red-500">
+                    <CommandInput
+                      placeholder={`Search or create`}
+                      className="h-9"
+                      onValueChange={setQuery}
+                      value={query}
+                    />
+                    <CommandEmpty>
+                      <Button
+                        variant="outline"
+                        disabled={isPending}
+                        onClick={() =>
+                          startTransition(async () => {
+                            const statusId = v4();
+                            const result = await createStatusFromClient(
+                              query,
+                              statusId
+                            );
+                            if (result.success) {
+                              toast.success(result.message);
+                              form.setValue('statusId', statusId);
+                              setUpdatedStatuses((prev) => [
+                                {
+                                  name: query,
+                                  id: statusId,
+                                  profileId: prev[0].profileId,
+                                },
+                                ...prev,
+                              ]);
+                              setQuery('');
+                            } else {
+                              toast.error(result.message);
+                            }
+                          })
+                        }
+                      >
+                        {isPending ? 'Creating' : `Create status ${query}`}
+                      </Button>
+                    </CommandEmpty>
                     <CommandGroup className="max-h-[200px] overflow-y-auto">
-                      {statuses.map((status) => (
+                      {updatedStatuses.map((status) => (
                         <CommandItem
                           value={status.id}
                           key={status.id}
