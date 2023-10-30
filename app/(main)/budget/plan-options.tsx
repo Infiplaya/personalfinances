@@ -6,12 +6,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Edit, MoreHorizontal, Trash } from 'lucide-react';
+import { Edit, Edit2, MoreHorizontal, Trash } from 'lucide-react';
 
 import { BudgetPlan } from '@/db/schema/finances';
 import { useTransition } from 'react';
 import { deleteBudgetPlan } from '@/app/actions';
 import { toast } from 'sonner';
+import { SheetTrigger } from '@/components/ui/sheet';
 
 export default function PlanOptions({
   plan,
@@ -53,6 +54,12 @@ export default function PlanOptions({
           <Edit className="h-4 w-4 text-gray-700 dark:text-gray-300" />{' '}
           <span className="ml-2">Rename</span>
         </DropdownMenuItem>
+        <SheetTrigger asChild>
+          <DropdownMenuItem>
+            <Edit2 className="h-4 w-4 text-gray-700 dark:text-gray-300" />{' '}
+            <span className="ml-2">Edit Plan</span>
+          </DropdownMenuItem>
+        </SheetTrigger>
       </DropdownMenuContent>
     </DropdownMenu>
   );

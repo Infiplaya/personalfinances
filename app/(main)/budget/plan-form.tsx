@@ -130,7 +130,7 @@ export function PlanForm({
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
-                  <Command className="bg-red-500">
+                  <Command>
                     <CommandInput
                       placeholder={`Search or create`}
                       className="h-9"

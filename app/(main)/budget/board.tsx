@@ -24,6 +24,7 @@ import { NameForm } from './name-form';
 import { Sheet } from '@/components/ui/sheet';
 import { EditPlan } from './edit-plan';
 import { BudgetStatus } from '@/db/schema/finances';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const initialState = {
   success: null,
@@ -84,6 +85,8 @@ export function Board({
         },
       });
 
+      toast.success('Changed plan status');
+
       await updateBudgetOrder(destItems);
 
       await updateBudgetPlanStatus(removed.id, destColumn.id);
@@ -101,6 +104,8 @@ export function Board({
         },
       });
 
+      toast.success('Changed plan order');
+
       await updateBudgetOrder(copiedItems);
     }
   };
@@ -111,90 +116,96 @@ export function Board({
   }
 
   return (
-    <div className="mt-10 flex gap-10 overflow-auto">
-      <DragDropContext onDragEnd={async (result) => onDragEnd(result)}>
-        {Object.entries(optimisticColumns).map(([columnId, column]) => {
-          return (
-            <div
-              className="w-full rounded-md bg-black/5 py-4 dark:bg-white/5"
-              key={columnId}
-            >
-              <div className="mb-4 flex items-center justify-between px-6">
-                <ChangeColumnName column={column} />
-                <div className="flex items-center">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleAddNewPlan(columnId)}
-                  >
-                    <PlusCircle className="h-4 w-4 text-gray-700 dark:text-gray-300" />
-                  </Button>
-                  <ColumnOptions column={column} />
-                </div>
-              </div>
-              <Separator />
-              <StrictModeDroppable droppableId={columnId} key={columnId}>
-                {(provided, snapshot) => {
-                  return (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className={cn(
-                        'mt-4 min-h-[500px] w-full rounded-md lg:p-4',
-                        snapshot.isDraggingOver &&
-                          'bg-gray-100 dark:bg-gray-900'
-                      )}
+    <ScrollArea>
+      <div className="mt-10 flex w-full flex-col gap-10 md:flex-row">
+        <DragDropContext onDragEnd={async (result) => onDragEnd(result)}>
+          {Object.entries(optimisticColumns).map(([columnId, column]) => {
+            return (
+              <div
+                className="w-full min-w-[350px] rounded-md border bg-gray-100 py-4 shadow-md dark:border-gray-800 dark:bg-gray-900"
+                key={columnId}
+              >
+                <div className="mb-4 flex items-center justify-between px-6">
+                  <ChangeColumnName column={column} />
+                  <div className="flex items-center">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleAddNewPlan(columnId)}
                     >
-                      {displayForm && editedColumn === columnId ? (
-                        <NameForm
-                          newPlanAction={newPlanAction}
-                          resetForm={resetForm}
-                          nameInputRef={nameInputRef}
-                          column={column}
-                        />
-                      ) : null}
-
-                      {column.budgetPlans.map((item, index) => {
-                        return (
-                          <Draggable
-                            key={item.id}
-                            draggableId={String(item.id)}
-                            index={index}
-                          >
-                            {(provided, snapshot) => {
-                              return (
-                                <>
-                                  <Sheet>
-                                    <PlanCard
-                                      provided={provided}
-                                      snapshot={snapshot}
-                                      item={item}
-                                    />
-                                    <EditPlan statuses={statuses} item={item} />
-                                  </Sheet>
-                                </>
-                              );
-                            }}
-                          </Draggable>
-                        );
-                      })}
-                      {provided.placeholder}
-                      <Button
-                        variant="secondary"
-                        className="flex w-full justify-start space-x-3"
-                        onClick={() => handleAddNewPlan(columnId)}
+                      <PlusCircle className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                    </Button>
+                    <ColumnOptions column={column} />
+                  </div>
+                </div>
+                <Separator />
+                <StrictModeDroppable droppableId={columnId} key={columnId}>
+                  {(provided, snapshot) => {
+                    return (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className={cn(
+                          'h-full min-h-[500px] w-full md:p-4',
+                          snapshot.isDraggingOver &&
+                            'bg-gray-200 dark:bg-white/10'
+                        )}
                       >
-                        <PlusCircle className="h-4 w-4 text-gray-700 dark:text-gray-300" />
-                        <span>New Plan</span>
-                      </Button>
-                    </div>
-                  );
-                }}
-              </StrictModeDroppable>
-            </div>
-          );
-        })}
-      </DragDropContext>
-    </div>
+                        {displayForm && editedColumn === columnId ? (
+                          <NameForm
+                            newPlanAction={newPlanAction}
+                            resetForm={resetForm}
+                            nameInputRef={nameInputRef}
+                            column={column}
+                          />
+                        ) : null}
+
+                        {column.budgetPlans.map((item, index) => {
+                          return (
+                            <Draggable
+                              key={item.id}
+                              draggableId={String(item.id)}
+                              index={index}
+                            >
+                              {(provided, snapshot) => {
+                                return (
+                                  <div>
+                                    <Sheet>
+                                      <PlanCard
+                                        provided={provided}
+                                        snapshot={snapshot}
+                                        item={item}
+                                      />
+                                      <EditPlan
+                                        statuses={statuses}
+                                        item={item}
+                                      />
+                                    </Sheet>
+                                  </div>
+                                );
+                              }}
+                            </Draggable>
+                          );
+                        })}
+                        {provided.placeholder}
+                        <Button
+                          variant="secondary"
+                          className="flex w-full justify-start space-x-3"
+                          onClick={() => handleAddNewPlan(columnId)}
+                        >
+                          <PlusCircle className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                          <span>New Plan</span>
+                        </Button>
+                      </div>
+                    );
+                  }}
+                </StrictModeDroppable>
+              </div>
+            );
+          })}
+        </DragDropContext>
+        <ScrollBar orientation="horizontal" />
+      </div>
+    </ScrollArea>
   );
 }

@@ -60,57 +60,59 @@ export default function PlanCard({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       className={cn(
-        'group mb-5 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800',
-        snapshot.isDragging && 'bg-gray-100 dark:bg-gray-800'
+        'group mb-5 flex items-start justify-between transition-colors hover:bg-gray-100 dark:hover:bg-gray-800',
+        snapshot.isDragging && 'bg-indigo-500/50 dark:bg-indigo-500/50'
       )}
     >
-      <SheetTrigger asChild>
+      {!renamePlan ? (
+        <SheetTrigger asChild>
+          <CardHeader className="w-full">
+            <CardTitle>{item.name}</CardTitle>
+            <CardDescription>{item.description}</CardDescription>
+          </CardHeader>
+        </SheetTrigger>
+      ) : (
         <CardHeader>
           <div className="flex items-center justify-between">
-            {renamePlan ? (
-              <form
-                action={editPlanName}
-                onSubmit={() => setRenamePlan(false)}
-                className="mr-1 flex w-full items-center justify-between gap-5"
-              >
-                <Input
-                  type="text"
-                  defaultValue={item.name}
-                  className="bg-gray-50 font-semibold leading-none tracking-tight dark:bg-gray-900"
-                  name="name"
-                  ref={inputRef}
-                />
-                <Button
-                  type="submit"
-                  variant="outline"
-                  className="hover:bg-gray-200 dark:hover:bg-gray-900"
-                  size="icon"
-                >
-                  <Check className="h-4 w-4 text-gray-700 dark:text-gray-300" />
-                </Button>
-                <Input type="hidden" value={item.id} name="planId" />
-              </form>
-            ) : (
-              <CardTitle>{item.name}</CardTitle>
-            )}
-            <div className="flex items-center">
+            <form
+              action={editPlanName}
+              onSubmit={() => setRenamePlan(false)}
+              className="mr-1 flex w-full items-center justify-between gap-5"
+            >
+              <Input
+                type="text"
+                defaultValue={item.name}
+                className="bg-gray-50 font-semibold leading-none tracking-tight dark:bg-gray-900"
+                name="name"
+                ref={inputRef}
+              />
               <Button
-                onClick={handleRenamePlan}
-                size="icon"
+                type="submit"
                 variant="outline"
-                className={cn(
-                  'opacity-0 group-hover:bg-white group-hover:opacity-100 group-hover:dark:bg-gray-900',
-                  renamePlan && 'hidden'
-                )}
+                className="hover:bg-gray-200 dark:hover:bg-gray-900"
+                size="icon"
               >
-                <Edit2 className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                <Check className="h-4 w-4 text-gray-700 dark:text-gray-300" />
               </Button>
-              <PlanOptions plan={item} handleRenamePlan={handleRenamePlan} />
-            </div>
+              <Input type="hidden" value={item.id} name="planId" />
+            </form>
           </div>
-          <CardDescription>{item.description}</CardDescription>
         </CardHeader>
-      </SheetTrigger>
+      )}
+      <div className="flex items-center">
+        <Button
+          onClick={handleRenamePlan}
+          size="icon"
+          variant="outline"
+          className={cn(
+            'opacity-0 group-hover:bg-white group-hover:opacity-100 group-hover:dark:bg-gray-900',
+            renamePlan && 'hidden'
+          )}
+        >
+          <Edit2 className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+        </Button>
+        <PlanOptions plan={item} handleRenamePlan={handleRenamePlan} />
+      </div>
     </Card>
   );
 }

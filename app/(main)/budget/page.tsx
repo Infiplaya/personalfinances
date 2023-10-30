@@ -4,9 +4,9 @@ import { NewColumn } from './new-column';
 
 export default async function Page() {
   const data = await getStatusesWithPlans();
-  const statuses= await getStatuses();
+  const statuses = await getStatuses();
   return (
-    <div>
+    <div className="min-h-screen">
       <NewColumn />
       <Board data={data} statuses={statuses} />
     </div>
