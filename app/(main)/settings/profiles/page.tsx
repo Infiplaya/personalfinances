@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
+import { getCurrentProfile, getProfileSettingsData, getUserProfiles } from '@/db/queries/auth';
 import { X } from 'lucide-react';
 import {
   AlertDialog,
@@ -23,27 +23,6 @@ export const metadata: Metadata = {
   description: 'Manage your profiles',
 };
 
-async function getProfileSettingsData() {
-  const userProfilesPromise = getUserProfiles();
-  const currenciesPromise = getCurrencies();
-  const currentCurrencyPromise = getCurrentCurrency();
-  const currentProfilePromise = getCurrentProfile();
-
-  const [userProfiles, currencies, currentCurrency, currentProfile] =
-    await Promise.all([
-      userProfilesPromise,
-      currenciesPromise,
-      currentCurrencyPromise,
-      currentProfilePromise,
-    ]);
-
-  return {
-    userProfiles,
-    currencies,
-    currentCurrency,
-    currentProfile,
-  };
-}
 
 export default async function ProfilesSettingsPage() {
   const { userProfiles, currencies, currentCurrency, currentProfile } =

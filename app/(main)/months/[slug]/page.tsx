@@ -6,6 +6,7 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { Suspense } from 'react';
 import TableSkeleton from '@/components/skeletons/table-skeleton';
+import { getTransactionFormData } from '@/db/queries/transactions';
 
 type Props = {
   params: { slug: string };
@@ -26,20 +27,6 @@ export async function generateMetadata(
   };
 }
 
-export async function getTransactionFormData() {
-  const categoriesData = getCategories();
-  const currenciesData = getCurrencies();
-  const currentCurrencyData = getCurrentCurrency();
-
-  const [categories, currencies, currentCurrency] = await Promise.all([
-    categoriesData,
-    currenciesData,
-    currentCurrencyData,
-  ]);
-
-  return { categories, currencies, currentCurrency };
-}
-
 export default async function MonthPage({
   params,
 }: {
@@ -47,7 +34,7 @@ export default async function MonthPage({
 }) {
   const { categories, currencies, currentCurrency } =
     await getTransactionFormData();
-    
+
   return (
     <main>
       <div>

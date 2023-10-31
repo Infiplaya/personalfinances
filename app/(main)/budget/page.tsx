@@ -2,7 +2,7 @@ import { getStatuses, getStatusesWithPlans } from '@/db/queries/budgets';
 import { Board } from './board';
 import { NewColumn } from './new-column';
 
-export async function getBoardData() {
+async function getBoardData() {
   const withPlansPromise = getStatusesWithPlans();
   const statusesPromise = getStatuses();
   const [data, statuses] = await Promise.all([

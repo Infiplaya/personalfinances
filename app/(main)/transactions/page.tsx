@@ -1,4 +1,7 @@
-import { getTransactionsCount } from '@/db/queries/transactions';
+import {
+  getTransactionFormData,
+  getTransactionsCount,
+} from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { RowsControls } from '@/components/data-table/data-table-rows';
 import { Metadata } from 'next';
@@ -8,7 +11,6 @@ import TableSkeleton from '@/components/skeletons/table-skeleton';
 import { Transactions } from './transactions';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import SearchTransactions from '@/components/data-table/search-transactions';
-import { getTransactionFormData } from '../months/[slug]/page';
 
 export const metadata: Metadata = {
   title: 'Transactions',

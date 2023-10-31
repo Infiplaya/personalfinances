@@ -4,6 +4,7 @@ import { cache } from 'react';
 import { validateSession } from './transactions';
 import { profiles, users } from '../schema/auth';
 import { and, eq } from 'drizzle-orm';
+import { getCurrencies, getCurrentCurrency } from './currencies';
 
 export async function selectCurrentProfile() {
   const { user } = await validateSession();
@@ -39,5 +40,26 @@ export async function selectUserProfiles() {
 
 export const getUserProfiles = cache(selectUserProfiles);
 
+export async function getProfileSettingsData() {
+  const userProfilesPromise = getUserProfiles();
+  const currenciesPromise = getCurrencies();
+  const currentCurrencyPromise = getCurrentCurrency();
+  const currentProfilePromise = getCurrentProfile();
 
-export type Profile = typeof profiles.$inferSelect
+  const [userProfiles, currencies, currentCurrency, currentProfile] =
+    await Promise.all([
+      userProfilesPromise,
+      currenciesPromise,
+      currentCurrencyPromise,
+      currentProfilePromise,
+    ]);
+
+  return {
+    userProfiles,
+    currencies,
+    currentCurrency,
+    currentProfile,
+  };
+}
+
+export type Profile = typeof profiles.$inferSelect;

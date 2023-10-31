@@ -4,7 +4,7 @@ import { db } from '@/db';
 import { getCurrentProfile } from '@/db/queries/auth';
 import { getCategories } from '@/db/queries/categories';
 import { getCurrencies } from '@/db/queries/currencies';
-import { getAllTransactionsSlugs } from '@/db/queries/transactions';
+import { getAllTransactionsSlugs, getTransactionFormData } from '@/db/queries/transactions';
 import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
 import { and, eq } from 'drizzle-orm';
@@ -18,7 +18,6 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Back } from '@/components/ui/back';
 import { DrawerContent, DrawerRoot } from '@/components/ui/drawer';
-import { getTransactionFormData } from '../../months/[slug]/page';
 
 async function getTransaction(slug: string) {
   const currentProfile = await getCurrentProfile();

@@ -23,9 +23,10 @@ import {
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 import { cache } from 'react';
-import { getCurrentCurrency } from './currencies';
+import { getCurrencies, getCurrentCurrency } from './currencies';
 import { getCurrentProfile } from './auth';
 import { profiles } from '../schema/auth';
+import { getCategories } from './categories';
 
 export async function validateSession() {
   const session = await getServerSession(authOptions);
@@ -374,3 +375,18 @@ async function selectSimilarTransactions(
 }
 
 export const getSimilarTransactions = cache(selectSimilarTransactions);
+
+
+export async function getTransactionFormData() {
+  const categoriesData = getCategories();
+  const currenciesData = getCurrencies();
+  const currentCurrencyData = getCurrentCurrency();
+
+  const [categories, currencies, currentCurrency] = await Promise.all([
+    categoriesData,
+    currenciesData,
+    currentCurrencyData,
+  ]);
+
+  return { categories, currencies, currentCurrency };
+}
