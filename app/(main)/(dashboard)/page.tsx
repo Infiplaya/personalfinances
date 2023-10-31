@@ -43,8 +43,8 @@ export default async function Home({ searchParams }: Props) {
       <Suspense fallback={<CardsSkeleton />}>
         <Cards currencyCode={currencyCode} />
       </Suspense>
-      <div className="grid gap-x-4 lg:grid-cols-6">
-        <div className="lg:col-span-4">
+      <div className="grid md:grid-cols-6 md:gap-x-4">
+        <div className="md:col-span-4">
           <Suspense fallback={<BalanceChartSkeleton />}>
             <BalanceChart
               balanceTime={balanceTime}
@@ -52,7 +52,7 @@ export default async function Home({ searchParams }: Props) {
             />
           </Suspense>
         </div>
-        <div className="mt-12 lg:col-span-2 lg:mt-0">
+        <div className="mt-12 md:col-span-2 md:mt-0">
           <Suspense fallback={<RecentTransactionsSkeleton />}>
             <RecentTransactions />
           </Suspense>
