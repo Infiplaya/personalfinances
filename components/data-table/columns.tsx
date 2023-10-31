@@ -103,7 +103,7 @@ export const columns: ColumnDef<Transaction>[] = [
           className="ml-4"
           href={`/categories/${slugify(row.getValue('categoryName'))}`}
         >
-          {row.getValue('categoryName')}
+          <span className="inline-flex">{row.getValue('categoryName')}</span>
         </Link>
       );
     },
@@ -212,7 +212,9 @@ export const columns: ColumnDef<Transaction>[] = [
                 }}
               >
                 <AlertDialogAction asChild>
-                  <Button type="submit">Delete</Button>
+                  <Button type="submit" className="w-full">
+                    Delete
+                  </Button>
                 </AlertDialogAction>
               </form>
             </AlertDialogFooter>

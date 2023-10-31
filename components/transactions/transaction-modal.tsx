@@ -5,6 +5,7 @@ import { TransactionForm } from '@/components/transactions/transaction-form';
 import { Category, Currency } from '@/db/schema/finances';
 import { useState } from 'react';
 import { Button } from '../ui/button';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +15,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { PlusCircle } from 'lucide-react';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { DrawerContent, DrawerRoot, DrawerTrigger } from '../ui/drawer';
 
-export function TransactionDialog({
+export function TransactionModal({
   categories,
   currencies,
   currentCurrency,
@@ -28,14 +31,59 @@ export function TransactionDialog({
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'expense'
   );
+
+  const filteredCategories =
+    selectedType === 'expense'
+      ? categories.filter((c) => c.type === 'expense')
+      : categories.filter((c) => c.type === 'income');
+
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <DrawerRoot open={open} onOpenChange={setOpen} shouldScaleBackground>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="inline-flex items-center space-x-2">
+              <PlusCircle className="h-5 w-5 dark:text-gray-700" />{' '}
+              <span>New Transaction</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Choose Type</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DrawerTrigger className="w-full text-left" asChild>
+              <DropdownMenuItem onClick={() => setSelectedType('expense')}>
+                Expense
+              </DropdownMenuItem>
+            </DrawerTrigger>
+
+            <DrawerTrigger className="w-full text-left" asChild>
+              <DropdownMenuItem onClick={() => setSelectedType('income')}>
+                Income
+              </DropdownMenuItem>
+            </DrawerTrigger>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DrawerContent>
+          <TransactionForm
+            currencies={currencies}
+            categories={filteredCategories}
+            type={selectedType}
+            currentCurrency={currentCurrency}
+            closeModal={() => setOpen(false)}
+          />
+        </DrawerContent>
+      </DrawerRoot>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            className="inline-flex items-center space-x-2"
-            size="sm"
-          >
+          <Button className="inline-flex items-center space-x-2">
             <PlusCircle className="h-5 w-5 dark:text-gray-700" />{' '}
             <span>New Transaction</span>
           </Button>

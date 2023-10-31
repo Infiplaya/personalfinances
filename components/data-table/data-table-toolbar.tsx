@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 
 import { DataTableFacetedFilter } from './data-table-filter';
 import { Category } from '@/db/schema/finances';
-import SearchTable from './search-table';
+import SearchTable from './search-transactions';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -72,7 +72,7 @@ export function DataTableToolbar<TData>({
         </div>
       </div>
 
-      <div className="hidden space-x-12 lg:block">
+      <div className="flex space-x-12">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -100,7 +100,9 @@ export function DataTableToolbar<TData>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-        <RowsControls />
+        <div className="hidden md:block">
+          <RowsControls />
+        </div>
       </div>
     </div>
   );

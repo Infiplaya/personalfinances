@@ -15,6 +15,7 @@ import {
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { links } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const settingsLinks = [
   {
@@ -49,6 +50,8 @@ export function CommandMenu() {
     command();
   }, []);
 
+  const isMobile = useIsMobile();
+
   return (
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>
@@ -58,8 +61,8 @@ export function CommandMenu() {
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
-        <CommandList>
+        <CommandInput placeholder="Type a command or search..." autoFocus />
+        <CommandList className={isMobile ? 'max-h-full' : ''}>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
             {links.map((link) => (

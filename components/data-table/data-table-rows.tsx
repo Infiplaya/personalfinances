@@ -32,9 +32,9 @@ export function RowsControls({}) {
       defaultValue={'10'}
       disabled={isPending}
     >
-      <div className="inline-flex items-center space-x-4">
+      <div className="inline-flex items-center space-x-2">
         <Label className="hidden whitespace-nowrap md:block">
-          Rows Per Page
+          Rows
         </Label>
         <SelectTrigger className="max-w-[6rem]">
           <SelectValue />

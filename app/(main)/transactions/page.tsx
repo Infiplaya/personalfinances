@@ -1,5 +1,3 @@
-import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
-import { TransactionDialog } from '@/components/transactions/transaction-dialog';
 import { getCategories } from '@/db/queries/categories';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 
@@ -11,7 +9,8 @@ import Pagination from '@/components/data-table/pagination';
 import { Suspense } from 'react';
 import TableSkeleton from '@/components/skeletons/table-skeleton';
 import { Transactions } from './transactions';
-import SearchTable from '@/components/data-table/search-table';
+import { TransactionModal } from '@/components/transactions/transaction-modal';
+import SearchTransactions from '@/components/data-table/search-transactions';
 
 export const metadata: Metadata = {
   title: 'Transactions',
@@ -66,22 +65,12 @@ export default async function TransactionsPage({ searchParams }: Props) {
   return (
     <main>
       <div className="flex flex-col gap-8 md:flex-row-reverse md:justify-between">
-        <div className="hidden md:block">
-          <TransactionDialog
-            categories={categoriesData}
-            currencies={currenciesData}
-            currentCurrency={currentCurrency}
-          />
-        </div>
-
-        <div className="md:hidden">
-          <TransactionDrawer
-            categories={categoriesData}
-            currencies={currenciesData}
-            currentCurrency={currentCurrency}
-          />
-        </div>
-        <SearchTable />
+        <TransactionModal
+          categories={categoriesData}
+          currencies={currenciesData}
+          currentCurrency={currentCurrency}
+        />
+        <SearchTransactions />
       </div>
       <section className="my-3">
         <Suspense

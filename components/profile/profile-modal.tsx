@@ -3,9 +3,11 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { SelectProfile } from '@/db/schema/auth';
 import { Currency } from '@/db/schema/finances';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { Edit } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '../ui/button';
+import { DrawerContent, DrawerRoot, DrawerTrigger } from '../ui/drawer';
 import { ProfileForm } from './profile-form';
 
 export function ProfileModal({
@@ -19,6 +21,32 @@ export function ProfileModal({
   edit: boolean;
 }) {
   const [showDialog, setShowDialog] = useState(false);
+  const isMobile = useIsMobile();
+  if (isMobile) {
+    return (
+      <DrawerRoot onOpenChange={setShowDialog} open={showDialog}>
+        {edit ? (
+          <DrawerTrigger disabled={profile.name === 'default'}>
+            <Edit className="h-4 w-4" />
+          </DrawerTrigger>
+        ) : (
+          <DrawerTrigger asChild>
+            <Button>New Profile</Button>
+          </DrawerTrigger>
+        )}
+        <DrawerContent>
+          <ProfileForm
+            currencies={currencies}
+            currentCurrency={profile.currencyCode}
+            edit={edit}
+            name={profile.name}
+            profileId={profile.id}
+            closeModal={() => setShowDialog(false)}
+          />
+        </DrawerContent>
+      </DrawerRoot>
+    );
+  }
   return (
     <Dialog onOpenChange={setShowDialog} open={showDialog}>
       {edit ? (

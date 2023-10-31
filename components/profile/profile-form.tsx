@@ -36,6 +36,7 @@ import { Currency } from '@/db/schema/finances';
 import { createNewProfile, updateUserProfile } from '@/app/actions';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import { ScrollArea } from '../ui/scroll-area';
 
 export function ProfileForm({
   closeModal,
@@ -142,31 +143,36 @@ export function ProfileForm({
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder={`Search code`} className="h-9" />
-                    <CommandEmpty>No currency found.</CommandEmpty>
-                    <CommandGroup className="max-h-[200px] overflow-y-auto">
-                      {currencies.map((currency) => (
-                        <CommandItem
-                          value={currency.code}
-                          key={currency.code}
-                          onSelect={() => {
-                            form.setValue('currencyCode', currency.code);
-                          }}
-                        >
-                          {currency.code}
-                          <CheckIcon
-                            className={cn(
-                              'ml-auto h-4 w-4',
-                              currency.code === field.value
-                                ? 'opacity-100'
-                                : 'opacity-0'
-                            )}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </Command>
+                  <ScrollArea className="h-72 rounded-md border">
+                    <Command className='p-2'>
+                      <CommandInput
+                        placeholder={`Search code`}
+                        className="h-9"
+                      />
+                      <CommandEmpty>No currency found.</CommandEmpty>
+                      <CommandGroup>
+                        {currencies.map((currency) => (
+                          <CommandItem
+                            value={currency.code}
+                            key={currency.code}
+                            onSelect={() => {
+                              form.setValue('currencyCode', currency.code);
+                            }}
+                          >
+                            {currency.code}
+                            <CheckIcon
+                              className={cn(
+                                'ml-auto h-4 w-4',
+                                currency.code === field.value
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </ScrollArea>
                 </PopoverContent>
               </Popover>
               <FormMessage />

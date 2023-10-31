@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Back } from '@/components/ui/back';
+import { DrawerContent, DrawerRoot } from '@/components/ui/drawer';
 
 async function getTransaction(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -74,16 +75,16 @@ export default async function TransactionsPage({
   return (
     <div>
       <Back link="/transactions" />
-      <Dialog defaultOpen={edit ? true : false}>
-        <DialogContent>
+      <DrawerRoot defaultOpen={edit ? true : false}>
+        <DrawerContent>
           <TransactionForm
             categories={categories.filter((c) => c.type === transaction.type)}
             currencies={currencies}
             transaction={transaction}
             edit={true}
           />
-        </DialogContent>
-      </Dialog>
+        </DrawerContent>
+      </DrawerRoot>
       <div className="mb-3 mt-10 space-x-3">
         <Link href={`/${transaction.type}s`}>
           <Badge>{transaction.type}</Badge>
