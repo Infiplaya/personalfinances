@@ -1,6 +1,4 @@
 import TableSkeleton from '@/components/skeletons/table-skeleton';
-import { TransactionDialog } from '@/components/transactions/transaction-dialog';
-import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
 import { TransactionsTable } from '@/components/transactions/transactions-table';
 import { db } from '@/db';
 import { getCurrentProfile } from '@/db/queries/auth';
@@ -9,6 +7,7 @@ import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { calculateTotalForCategory } from '@/db/queries/transactions';
 import { Suspense } from 'react';
 import type { Metadata, ResolvingMetadata } from 'next';
+import { TransactionModal } from '@/components/transactions/transaction-modal';
 
 async function getCategory(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -82,21 +81,11 @@ export default async function CategoriesPage({
         </div>
 
         <div className="flex w-full justify-end px-3 md:my-6">
-          <div className="hidden md:block">
-            <TransactionDialog
-              categories={categories}
-              currencies={currencies}
-              currentCurrency={currentCurrency}
-            />
-          </div>
-
-          <div className="md:hidden">
-            <TransactionDrawer
-              categories={categories}
-              currencies={currencies}
-              currentCurrency={currentCurrency}
-            />
-          </div>
+          <TransactionModal
+            categories={categories}
+            currencies={currencies}
+            currentCurrency={currentCurrency}
+          />
         </div>
       </div>
       <Suspense fallback={<TableSkeleton />}>

@@ -1,11 +1,12 @@
-import { TransactionDrawer } from '@/components/transactions/transaction-drawer';
-import { TransactionDialog } from '@/components/transactions/transaction-dialog';
+
 import { getCategories } from '@/db/queries/categories';
 import { getMonthIndex } from '@/lib/utils';
 import { TransactionByMonth } from './transactions-by-month';
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { Metadata, ResolvingMetadata } from 'next';
-import { getTransactionsByMonth } from '@/db/queries/transactions';
+import { TransactionModal } from '@/components/transactions/transaction-modal';
+import { Suspense } from 'react';
+import TableSkeleton from '@/components/skeletons/table-skeleton';
 
 type Props = {
   params: { slug: string };
@@ -49,23 +50,15 @@ export default async function MonthPage({
         </h1>
       </div>
       <div className="flex w-full justify-end px-3 md:my-6">
-        <div className="hidden md:block">
-          <TransactionDialog
-            categories={categories}
-            currencies={currencies}
-            currentCurrency={currentCurrency}
-          />
-        </div>
-
-        <div className="md:hidden">
-          <TransactionDrawer
-            categories={categories}
-            currencies={currencies}
-            currentCurrency={currentCurrency}
-          />
-        </div>
+        <TransactionModal
+          categories={categories}
+          currencies={currencies}
+          currentCurrency={currentCurrency}
+        />
       </div>
-      <TransactionByMonth month={getMonthIndex(params.slug)} />
+      <Suspense fallback={<TableSkeleton />}>
+        <TransactionByMonth month={getMonthIndex(params.slug)} />
+      </Suspense>
     </main>
   );
 }
