@@ -26,7 +26,7 @@ export default function ViewTransaction({
     return (
       <DrawerRoot open={open} onOpenChange={setOpen}>
         <InterceptedDrawerContent>
-          <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl">
+          <h1 className="scroll-m-20 text-xl font-extrabold tracking-tight">
             {transaction.name} -{' '}
             {moneyFormat(transaction.amount, transaction.currencyCode)}{' '}
           </h1>
@@ -39,7 +39,7 @@ export default function ViewTransaction({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <InterceptedDialogContent>
-        <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl">
+        <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight">
           {transaction.name} -{' '}
           {moneyFormat(transaction.amount, transaction.currencyCode)}{' '}
         </h1>

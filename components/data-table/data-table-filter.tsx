@@ -22,6 +22,8 @@ import { Separator } from '@/components/ui/separator';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { Spinner } from '../ui/spinner';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { Loader, Loader2 } from 'lucide-react';
 
 export type FilterOption = {
   id: number;
@@ -44,9 +46,9 @@ export function DataTableFacetedFilter<TData, TValue>({
       : params.get('type')?.split('.')
   );
 
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
 
   return (
     <Popover>
@@ -95,47 +97,18 @@ export function DataTableFacetedFilter<TData, TValue>({
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {isPending ? <Spinner /> : null}
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.name);
                 return (
-                  <CommandItem
-                    key={option.name}
-                    onSelect={() => {
-                      const params = new URLSearchParams(
-                        window.location.search
-                      );
-
-                      if (isSelected) {
-                        selectedValues.delete(option.name);
-                      } else {
-                        selectedValues.add(option.name);
-                      }
-                      const filterValues = Array.from(selectedValues);
-
-                      if (selectedValues.size > 0) {
-                        params.set(title, filterValues.join('.'));
-                      } else {
-                        params.delete(title);
-                      }
-
-                      startTransition(() => {
-                        router.replace(`${pathname}?${params.toString()}`);
-                      });
-                    }}
-                  >
-                    <div
-                      className={cn(
-                        'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
-                        isSelected
-                          ? 'bg-primary text-primary-foreground'
-                          : 'opacity-50 [&_svg]:invisible'
-                      )}
-                    >
-                      <CheckIcon className={cn('h-4 w-4')} aria-hidden="true" />
-                    </div>
-                    <span>{option.name}</span>
-                  </CommandItem>
+                  <SelectItem
+                    isSelected={isSelected}
+                    selectedValues={selectedValues}
+                    option={option}
+                    title={title}
+                    key={option.id}
+                    pathname={pathname}
+                    router={router}
+                  />
                 );
               })}
             </CommandGroup>
@@ -164,5 +137,67 @@ export function DataTableFacetedFilter<TData, TValue>({
         </Command>
       </PopoverContent>
     </Popover>
+  );
+}
+
+export default function SelectItem({
+  option,
+  selectedValues,
+  isSelected,
+  title,
+  router,
+  pathname,
+}: {
+  option: FilterOption;
+  selectedValues: Set<string>;
+  isSelected: boolean;
+  title: string;
+  router: AppRouterInstance;
+  pathname: string;
+}) {
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <CommandItem
+      key={option.name}
+      disabled={isPending}
+      onSelect={() => {
+        const params = new URLSearchParams(window.location.search);
+
+        if (isSelected) {
+          selectedValues.delete(option.name);
+        } else {
+          selectedValues.add(option.name);
+        }
+        const filterValues = Array.from(selectedValues);
+
+        if (selectedValues.size > 0) {
+          params.set(title, filterValues.join('.'));
+        } else {
+          params.delete(title);
+        }
+
+        startTransition(() => {
+          router.replace(`${pathname}?${params.toString()}`);
+        });
+      }}
+    >
+      {isPending ? (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin text-gray-800 dark:text-gray-200" />
+      ) : (
+        <div
+          className={cn(
+            'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
+            isSelected
+              ? 'bg-primary text-primary-foreground'
+              : 'opacity-50 [&_svg]:invisible'
+          )}
+        >
+          <CheckIcon className={cn('h-4 w-4')} aria-hidden="true" />
+        </div>
+      )}
+
+      <span>{option.name}</span>
+    </CommandItem>
   );
 }
