@@ -16,7 +16,7 @@ export function EditPlan({
   statuses: BudgetStatus[];
 }) {
   return (
-    <SheetContent className="md:min-w-[1000px]">
+    <SheetContent className="w-2/3 md:w-auto md:min-w-[1000px]">
       <SheetHeader>
         <SheetTitle>Edit Plan</SheetTitle>
         <SheetDescription>Make changes to this plan.</SheetDescription>
