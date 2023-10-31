@@ -1,6 +1,3 @@
-import { getCategories } from '@/db/queries/categories';
-import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
-
 import { getTransactionsCount } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { RowsControls } from '@/components/data-table/data-table-rows';
@@ -11,6 +8,7 @@ import TableSkeleton from '@/components/skeletons/table-skeleton';
 import { Transactions } from './transactions';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import SearchTransactions from '@/components/data-table/search-transactions';
+import { getTransactionFormData } from '../months/[slug]/page';
 
 export const metadata: Metadata = {
   title: 'Transactions',
@@ -23,6 +21,9 @@ interface Props {
   };
 }
 export default async function TransactionsPage({ searchParams }: Props) {
+  const { categories, currencies, currentCurrency } =
+    await getTransactionFormData();
+
   const page =
     typeof searchParams.page === 'string' ? Number(searchParams.page) : 1;
   const limit =
@@ -47,12 +48,6 @@ export default async function TransactionsPage({ searchParams }: Props) {
         ])
       : [];
 
-  const categoriesData = await getCategories();
-
-  const currenciesData = await getCurrencies();
-
-  const currentCurrency = await getCurrentCurrency();
-
   const start = (Number(page) - 1) * Number(limit);
   const end = start + Number(limit);
   const totalTransactions = await getTransactionsCount(
@@ -66,8 +61,8 @@ export default async function TransactionsPage({ searchParams }: Props) {
     <main>
       <div className="flex flex-col gap-8 md:flex-row-reverse md:justify-between">
         <TransactionModal
-          categories={categoriesData}
-          currencies={currenciesData}
+          categories={categories}
+          currencies={currencies}
           currentCurrency={currentCurrency}
         />
         <SearchTransactions />
@@ -88,7 +83,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
             order={order}
             categoriesFilter={categoriesFilter}
             column={column}
-            categories={categoriesData}
+            categories={categories}
             typesFilter={typesFilter}
           />
         </Suspense>

@@ -23,11 +23,31 @@ export const metadata: Metadata = {
   description: 'Manage your profiles',
 };
 
+async function getProfileSettingsData() {
+  const userProfilesPromise = getUserProfiles();
+  const currenciesPromise = getCurrencies();
+  const currentCurrencyPromise = getCurrentCurrency();
+  const currentProfilePromise = getCurrentProfile();
+
+  const [userProfiles, currencies, currentCurrency, currentProfile] =
+    await Promise.all([
+      userProfilesPromise,
+      currenciesPromise,
+      currentCurrencyPromise,
+      currentProfilePromise,
+    ]);
+
+  return {
+    userProfiles,
+    currencies,
+    currentCurrency,
+    currentProfile,
+  };
+}
+
 export default async function ProfilesSettingsPage() {
-  const userProfiles = await getUserProfiles();
-  const currencies = await getCurrencies();
-  const currentCurrency = await getCurrentCurrency();
-  const currentProfile = await getCurrentProfile();
+  const { userProfiles, currencies, currentCurrency, currentProfile } =
+    await getProfileSettingsData();
 
   return (
     <div className="space-y-6">

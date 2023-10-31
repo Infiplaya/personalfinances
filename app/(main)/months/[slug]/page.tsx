@@ -1,4 +1,3 @@
-
 import { getCategories } from '@/db/queries/categories';
 import { getMonthIndex } from '@/lib/utils';
 import { TransactionByMonth } from './transactions-by-month';
@@ -27,11 +26,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function MonthPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function getTransactionFormData() {
   const categoriesData = getCategories();
   const currenciesData = getCurrencies();
   const currentCurrencyData = getCurrentCurrency();
@@ -42,6 +37,17 @@ export default async function MonthPage({
     currentCurrencyData,
   ]);
 
+  return { categories, currencies, currentCurrency };
+}
+
+export default async function MonthPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const { categories, currencies, currentCurrency } =
+    await getTransactionFormData();
+    
   return (
     <main>
       <div>

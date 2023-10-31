@@ -8,6 +8,7 @@ import { calculateTotalForCategory } from '@/db/queries/transactions';
 import { Suspense } from 'react';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
+import { Category } from '@/db/schema/finances';
 
 async function getCategory(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -22,13 +23,32 @@ async function getCategory(slug: string) {
   });
 }
 
+async function getCategoryPageData(category: Category) {
+  const totalAmountPromise = calculateTotalForCategory(category.name);
+  const totalMonthPromise = calculateTotalForCategory(category.name, true);
+  const categoriesPromise = getCategories();
+  const currenciesPromise = getCurrencies();
+  const currentCurrencyPromise = getCurrentCurrency();
+
+  const [totalAmount, totalMonth, categories, currencies, currentCurrency] =
+    await Promise.all([
+      totalAmountPromise,
+      totalMonthPromise,
+      categoriesPromise,
+      currenciesPromise,
+      currentCurrencyPromise,
+    ]);
+
+  return { totalAmount, totalMonth, categories, currencies, currentCurrency };
+}
+
 type Props = {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const slug = params.slug;
@@ -47,27 +67,12 @@ export default async function CategoriesPage({
   params: { slug: string };
 }) {
   const category = await getCategory(params.slug);
+  const { totalAmount, categories, currencies, currentCurrency, totalMonth } =
+    await getCategoryPageData(category as Category);
 
   if (!category) {
     return <p>No such category transactions.</p>;
   }
-
-  const totalAmountData = calculateTotalForCategory(category.name);
-
-  const totalMonthData = calculateTotalForCategory(category.name, true);
-
-  const categoriesData = getCategories();
-  const currenciesData = getCurrencies();
-  const currentCurrencyData = getCurrentCurrency();
-
-  const [totalAmount, totalMonth, categories, currencies, currentCurrency] =
-    await Promise.all([
-      totalAmountData,
-      totalMonthData,
-      categoriesData,
-      currenciesData,
-      currentCurrencyData,
-    ]);
 
   return (
     <main>

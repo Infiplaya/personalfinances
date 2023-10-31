@@ -18,6 +18,7 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Back } from '@/components/ui/back';
 import { DrawerContent, DrawerRoot } from '@/components/ui/drawer';
+import { getTransactionFormData } from '../../months/[slug]/page';
 
 async function getTransaction(slug: string) {
   const currentProfile = await getCurrentProfile();
@@ -66,8 +67,7 @@ export default async function TransactionsPage({
   const transaction = await getTransaction(params.slug);
   const edit = searchParams.edit;
 
-  const categories = await getCategories();
-  const currencies = await getCurrencies();
+  const { categories, currencies } = await getTransactionFormData();
 
   if (!transaction) {
     return <Card>No Transaction</Card>;
