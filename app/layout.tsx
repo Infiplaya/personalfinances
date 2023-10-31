@@ -14,15 +14,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: {
   children: ReactNode;
+  modal: ReactNode;
 }) {
   return (
     <html lang="en" className="h-full">
       <body className={cn(inter.className, 'h-full')}>
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
+        {modal}
       </body>
     </html>
   );

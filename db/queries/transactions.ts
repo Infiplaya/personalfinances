@@ -390,3 +390,17 @@ export async function getTransactionFormData() {
 
   return { categories, currencies, currentCurrency };
 }
+
+export async function getTransaction(slug: string) {
+  const currentProfile = await getCurrentProfile();
+
+  return await db.query.transactions.findFirst({
+    where: and(
+      eq(transactions.slug, slug),
+      eq(transactions.profileId, currentProfile.id)
+    ),
+    with: {
+      category: true,
+    },
+  });
+}

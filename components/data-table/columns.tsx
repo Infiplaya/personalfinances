@@ -180,7 +180,7 @@ export const columns: ColumnDef<Transaction>[] = [
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
 
-              <Link href={`/transactions/${transaction.slug}?edit=true`}>
+              <Link href={`/transactions/${transaction.slug}/edit`}>
                 <DropdownMenuItem>Edit</DropdownMenuItem>
               </Link>
               <AlertDialogTrigger asChild>

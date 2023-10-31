@@ -9,15 +9,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <>
       <Navbar />
       <div>
         <Sidebar />
-        <div className="py-10 lg:ml-64 px-4 lg:px-12 mx-auto">{children}</div>
+        <div className="mx-auto px-4 py-10 lg:ml-64 lg:px-12">{children}</div>
+        {modal}
       </div>
     </>
   );

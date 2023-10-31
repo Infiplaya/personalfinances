@@ -1,14 +1,15 @@
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { db } from '@/db';
 import { getCurrentProfile } from '@/db/queries/auth';
-import { getCategories } from '@/db/queries/categories';
-import { getCurrencies } from '@/db/queries/currencies';
-import { getAllTransactionsSlugs, getTransactionFormData } from '@/db/queries/transactions';
+import {
+  getAllTransactionsSlugs,
+  getTransaction,
+  getTransactionFormData,
+} from '@/db/queries/transactions';
 import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
 import { and, eq } from 'drizzle-orm';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { TransactionForm } from '@/components/transactions/transaction-form';
 
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -18,20 +19,7 @@ import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Back } from '@/components/ui/back';
 import { DrawerContent, DrawerRoot } from '@/components/ui/drawer';
-
-async function getTransaction(slug: string) {
-  const currentProfile = await getCurrentProfile();
-
-  return await db.query.transactions.findFirst({
-    where: and(
-      eq(transactions.slug, slug),
-      eq(transactions.profileId, currentProfile.id)
-    ),
-    with: {
-      category: true,
-    },
-  });
-}
+import EditTransaction from './edit/edit-transaction';
 
 type Props = {
   params: { slug: string };
@@ -74,16 +62,12 @@ export default async function TransactionsPage({
   return (
     <div>
       <Back link="/transactions" />
-      <DrawerRoot defaultOpen={edit ? true : false}>
-        <DrawerContent>
-          <TransactionForm
-            categories={categories.filter((c) => c.type === transaction.type)}
-            currencies={currencies}
-            transaction={transaction}
-            edit={true}
-          />
-        </DrawerContent>
-      </DrawerRoot>
+      <EditTransaction
+        categories={categories}
+        currencies={currencies}
+        edit={edit ? true : false}
+        transaction={transaction}
+      />
       <div className="mb-3 mt-10 space-x-3">
         <Link href={`/${transaction.type}s`}>
           <Badge>{transaction.type}</Badge>
