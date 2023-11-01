@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
 import PlanOptions from './plan-options';
 // @ts-expect-error experimental hook
-import {  useFormState } from 'react-dom';
+import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
 import { Check, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -94,19 +94,19 @@ export default function PlanCard({
       )}
     >
       {isMobile ? (
-        <SheetTrigger asChild>
-          <CardHeader className="w-full">
-            <CardTitle>{item.name}</CardTitle>
-            <CardDescription>{item.description}</CardDescription>
-          </CardHeader>
-        </SheetTrigger>
-      ) : (
         <DrawerTrigger asChild>
           <CardHeader className="w-full">
             <CardTitle>{item.name}</CardTitle>
             <CardDescription>{item.description}</CardDescription>
           </CardHeader>
         </DrawerTrigger>
+      ) : (
+        <SheetTrigger asChild>
+          <CardHeader className="w-full">
+            <CardTitle>{item.name}</CardTitle>
+            <CardDescription>{item.description}</CardDescription>
+          </CardHeader>
+        </SheetTrigger>
       )}
 
       <div className="flex items-center p-2">
