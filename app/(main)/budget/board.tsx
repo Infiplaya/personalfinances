@@ -25,6 +25,7 @@ import { EditPlanDesktop } from './desktop-edit-plan';
 import { BudgetStatus } from '@/db/schema/finances';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { DrawerRoot } from '@/components/ui/drawer';
+import { EditPlanMobile } from './mobile-edit-plan';
 
 const initialState = {
   success: null,
@@ -178,6 +179,10 @@ export function Board({
                                         snapshot={snapshot}
                                         item={item}
                                         isMobile={true}
+                                      />
+                                      <EditPlanMobile
+                                        statuses={statuses}
+                                        item={item}
                                       />
                                     </DrawerRoot>
                                   ) : (
