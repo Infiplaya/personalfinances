@@ -25,7 +25,8 @@ import { ProfileForm } from './profile-form';
 import { Currency } from '@/db/schema/finances';
 // @ts-expect-error experimental hook
 import { useFormState } from 'react-dom';
-import { experimental_useFormStatus as useFormStatus } from 'react-dom';
+// @ts-expect-error experimental hook
+import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
