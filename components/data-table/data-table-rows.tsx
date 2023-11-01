@@ -33,9 +33,7 @@ export function RowsControls() {
       disabled={isPending}
     >
       <div className="inline-flex items-center space-x-2">
-        <Label className="hidden whitespace-nowrap md:block">
-          Rows
-        </Label>
+        <Label className="hidden whitespace-nowrap md:block">Rows</Label>
         <SelectTrigger className="max-w-[6rem]">
           <SelectValue />
         </SelectTrigger>

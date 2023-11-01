@@ -39,16 +39,20 @@ export function DataTableToolbar<TData>({
           {table.getColumn('categoryName') && (
             <DataTableFacetedFilter title="category" options={categories} />
           )}
-          <DataTableFacetedFilter
-            title="type"
-            options={[
-              { id: 0, name: 'expense' },
-              { id: 1, name: 'income' },
-            ]}
-          />
+          {table.getColumn('name') && (
+            <DataTableFacetedFilter
+              title="type"
+              options={[
+                { id: 0, name: 'expense' },
+                { id: 1, name: 'income' },
+              ]}
+            />
+          )}
+
           {isFiltered && (
             <Button
-              variant="ghost"
+              variant="outline"
+              size="sm"
               disabled={isPending}
               onClick={() => {
                 const params = new URLSearchParams(window.location.search);
@@ -71,7 +75,7 @@ export function DataTableToolbar<TData>({
       <div className="flex space-x-12">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" size="sm" className="ml-auto">
               Columns
               <ChevronDown className="ml-2 h-4 w-4 text-gray-600 dark:text-gray-400" />
             </Button>
@@ -84,7 +88,7 @@ export function DataTableToolbar<TData>({
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize"
+                    className="text-xs capitalize"
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
