@@ -34,12 +34,8 @@ export default function PlanOptions({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          size="icon"
-          variant="outline"
-          className="opacity-0 group-hover:bg-white group-hover:opacity-100 group-hover:dark:bg-gray-900"
-        >
-          <MoreHorizontal className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+        <Button size="icon" variant="ghost">
+          <MoreHorizontal className="h-4 w-4 text-gray-700 dark:text-gray-300" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-48">

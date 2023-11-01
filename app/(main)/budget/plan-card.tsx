@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { Check, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SheetTrigger } from '@/components/ui/sheet';
+import { DrawerTrigger } from '@/components/ui/drawer';
 
 const initialState = {
   success: null,
@@ -28,10 +29,12 @@ export default function PlanCard({
   provided,
   snapshot,
   item,
+  isMobile,
 }: {
   provided: DraggableProvided;
   snapshot: DraggableStateSnapshot;
   item: BudgetPlan;
+  isMobile: boolean;
 }) {
   const [renamePlan, setRenamePlan] = useState(false);
   const [state, editPlanName] = useFormState(
@@ -54,17 +57,43 @@ export default function PlanCard({
       inputRef.current.focus();
     }
   }
+
+  if (renamePlan) {
+    return (
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <form
+            action={editPlanName}
+            onSubmit={() => setRenamePlan(false)}
+            className="mr-1 flex w-full items-center justify-between gap-5"
+          >
+            <Input
+              type="text"
+              defaultValue={item.name}
+              className="bg-gray-50 font-semibold leading-none tracking-tight dark:bg-gray-900"
+              name="name"
+              ref={inputRef}
+            />
+            <Button type="submit" size="icon">
+              <Check className="h-4 w-4 text-gray-300 dark:text-gray-700" />
+            </Button>
+            <Input type="hidden" value={item.id} name="planId" />
+          </form>
+        </div>
+      </CardHeader>
+    );
+  }
   return (
     <Card
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       className={cn(
-        'group mb-5 flex items-start justify-between transition-colors hover:bg-gray-100 dark:hover:bg-gray-800',
+        'group mb-5 flex items-start justify-between transition-colors hover:bg-white dark:hover:bg-gray-950',
         snapshot.isDragging && 'bg-indigo-500/50 dark:bg-indigo-500/50'
       )}
     >
-      {!renamePlan ? (
+      {isMobile ? (
         <SheetTrigger asChild>
           <CardHeader className="w-full">
             <CardTitle>{item.name}</CardTitle>
@@ -72,43 +101,16 @@ export default function PlanCard({
           </CardHeader>
         </SheetTrigger>
       ) : (
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <form
-              action={editPlanName}
-              onSubmit={() => setRenamePlan(false)}
-              className="mr-1 flex w-full items-center justify-between gap-5"
-            >
-              <Input
-                type="text"
-                defaultValue={item.name}
-                className="bg-gray-50 font-semibold leading-none tracking-tight dark:bg-gray-900"
-                name="name"
-                ref={inputRef}
-              />
-              <Button
-                type="submit"
-                variant="outline"
-                className="hover:bg-gray-200 dark:hover:bg-gray-900"
-                size="icon"
-              >
-                <Check className="h-4 w-4 text-gray-700 dark:text-gray-300" />
-              </Button>
-              <Input type="hidden" value={item.id} name="planId" />
-            </form>
-          </div>
-        </CardHeader>
+        <DrawerTrigger asChild>
+          <CardHeader className="w-full">
+            <CardTitle>{item.name}</CardTitle>
+            <CardDescription>{item.description}</CardDescription>
+          </CardHeader>
+        </DrawerTrigger>
       )}
-      <div className="flex items-center">
-        <Button
-          onClick={handleRenamePlan}
-          size="icon"
-          variant="outline"
-          className={cn(
-            'opacity-0 group-hover:bg-white group-hover:opacity-100 group-hover:dark:bg-gray-900',
-            renamePlan && 'hidden'
-          )}
-        >
+
+      <div className="flex items-center p-2">
+        <Button onClick={handleRenamePlan} size="icon" variant="ghost">
           <Edit2 className="h-4 w-4 text-gray-700 dark:text-gray-300" />
         </Button>
         <PlanOptions plan={item} handleRenamePlan={handleRenamePlan} />

@@ -83,7 +83,7 @@ export function TransactionModal({
     <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="inline-flex items-center space-x-2">
+          <Button className="inline-flex items-center space-x-2" size="sm">
             <PlusCircle className="h-5 w-5 dark:text-gray-700" />{' '}
             <span>New Transaction</span>
           </Button>

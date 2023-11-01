@@ -117,6 +117,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
+                    disabled={isPending}
                     onSelect={() => {
                       const params = new URLSearchParams(
                         window.location.search
@@ -163,19 +164,15 @@ export default function SelectItem({
       disabled={isPending}
       onSelect={() => {
         const params = new URLSearchParams(window.location.search);
+        isSelected
+          ? selectedValues.delete(option.name)
+          : selectedValues.add(option.name);
 
-        if (isSelected) {
-          selectedValues.delete(option.name);
-        } else {
-          selectedValues.add(option.name);
-        }
         const filterValues = Array.from(selectedValues);
 
-        if (selectedValues.size > 0) {
-          params.set(title, filterValues.join('.'));
-        } else {
-          params.delete(title);
-        }
+        selectedValues.size > 0
+          ? params.set(title, filterValues.join('.'))
+          : params.delete(title);
 
         startTransition(() => {
           router.replace(`${pathname}?${params.toString()}`);

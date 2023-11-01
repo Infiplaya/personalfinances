@@ -78,7 +78,7 @@ export default async function TransactionsPage({
         {transaction.name} -{' '}
         {moneyFormat(transaction.amount, transaction.currencyCode)}{' '}
       </h1>
-      <p>{transaction?.description}</p>
+      <p>{transaction.description ? transaction.description : 'No description provided'}</p>
       <Suspense fallback={<Skeleton className="mt-12 h-24 w-full" />}>
         <SimilarTransactions transaction={transaction} />
       </Suspense>

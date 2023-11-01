@@ -8,7 +8,7 @@ import {
 import { BudgetPlan, BudgetStatus } from '@/db/schema/finances';
 import { PlanForm } from './plan-form';
 
-export function EditPlan({
+export function EditPlanDesktop({
   item,
   statuses,
 }: {

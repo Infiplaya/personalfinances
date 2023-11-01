@@ -1,10 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { getSimilarTransactions } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import Link from 'next/link';
@@ -12,14 +7,37 @@ import slugify from 'slugify';
 
 export async function SimilarTransactions({
   transaction,
+  list,
 }: {
   transaction: Transaction;
+  list?: Boolean;
 }) {
   const transactions = await getSimilarTransactions(
     transaction.name,
     transaction.type,
     transaction.categoryName
   );
+
+  if (list) {
+    return (
+      <div className="mt-4">
+        <h3 className="font-semibold text-gray-700 dark:text-gray-300">
+          Similar Transactions
+        </h3>
+        <ul className="my-2 ml-6 list-disc text-gray-700 dark:text-gray-300 [&>li]:mt-2">
+          {transactions.map((t) => (
+            <a
+              href={`/transactions/${slugify(t.name)}`}
+              key={t.id}
+              className="hover:underline"
+            >
+              <li>{t.name}</li>
+            </a>
+          ))}
+        </ul>
+      </div>
+    );
+  }
   return (
     <div className="mt-10">
       <h2 className="text-lg font-semibold">Similar transactions</h2>{' '}
@@ -30,16 +48,15 @@ export async function SimilarTransactions({
             key={t.id}
             className="block"
           >
-            <Card className="bg-gray-100 dark:bg-gray-950">
+            <Card className="bg-gray-100 transition-colors hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900">
               <CardHeader>
                 <CardTitle className="space-x-3">
                   <div className="mb-4 space-x-2">
                     <Badge variant="secondary">{t.categoryName}</Badge>
                     <Badge variant="secondary">{t.type}</Badge>
                   </div>
-                  <span>{t.name}</span>{' '}
+                  <span className="text-lg md:text-xl">{t.name}</span>{' '}
                 </CardTitle>
-                <CardDescription>{t.description}</CardDescription>
               </CardHeader>
             </Card>
           </Link>
