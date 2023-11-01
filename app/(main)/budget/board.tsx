@@ -17,7 +17,7 @@ import { Separator } from '@/components/ui/separator';
 import { ChangeColumnName } from './change-column-name';
 import ColumnOptions from './column-options';
 import { toast } from 'sonner';
-import { experimental_useOptimistic as useOptimistic } from 'react';
+import { useOptimistic } from 'react';
 import PlanCard from './plan-card';
 import { NameForm } from './name-form';
 import { Sheet } from '@/components/ui/sheet';
