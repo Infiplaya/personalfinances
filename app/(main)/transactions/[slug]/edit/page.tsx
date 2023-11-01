@@ -6,11 +6,6 @@ import {
 import { Back } from '@/components/ui/back';
 import { TransactionForm } from '@/components/transactions/transaction-form';
 
-type Props = {
-  params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
 export default async function EditTransactionPage({
   params,
 }: {

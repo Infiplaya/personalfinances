@@ -2,12 +2,8 @@
 
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
-
-import { Input } from '@/components/ui/input';
-
 import { DataTableFacetedFilter } from './data-table-filter';
 import { Category } from '@/db/schema/finances';
-import SearchTable from './search-transactions';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,

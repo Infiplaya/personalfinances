@@ -1,6 +1,6 @@
 'use client';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Sheet,
   SheetContent,
@@ -11,7 +11,6 @@ import {
 import Link from 'next/link';
 import { cn, links } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Home, Settings } from 'lucide-react';
 import { ThemeSwitcher } from './theme-switcher';
 import { Button } from '../ui/button';

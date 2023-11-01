@@ -1,24 +1,18 @@
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { db } from '@/db';
-import { getCurrentProfile } from '@/db/queries/auth';
 import {
   getAllTransactionsSlugs,
   getTransaction,
   getTransactionFormData,
 } from '@/db/queries/transactions';
-import { transactions } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
-import { and, eq } from 'drizzle-orm';
-import { TransactionForm } from '@/components/transactions/transaction-form';
 
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 import { SimilarTransactions } from './similar-transactions';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Back } from '@/components/ui/back';
-import { DrawerContent, DrawerRoot } from '@/components/ui/drawer';
 import EditTransaction from './edit/edit-transaction';
 
 type Props = {
@@ -27,8 +21,7 @@ type Props = {
 };
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
+  { params }: Props,
 ): Promise<Metadata> {
   const slug = params.slug;
 

@@ -2,7 +2,6 @@ import { getTransaction } from '@/db/queries/transactions';
 import { notFound } from 'next/navigation';
 import ViewTransaction from './view-transaction';
 import { moneyFormat } from '@/lib/utils';
-import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';

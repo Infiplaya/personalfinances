@@ -20,7 +20,7 @@ import { RegisterForm, registerFormSchema } from '@/lib/validation/auth';
 import { toast } from 'sonner';
 
 export function RegisterForm() {
-  const [error, setError] = useState('');
+  const [error] = useState('');
   const form = useForm<RegisterForm>({
     resolver: zodResolver(registerFormSchema),
   });

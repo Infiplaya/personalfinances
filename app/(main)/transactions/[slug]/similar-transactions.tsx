@@ -10,7 +10,7 @@ export async function SimilarTransactions({
   list,
 }: {
   transaction: Transaction;
-  list?: Boolean;
+  list?: boolean;
 }) {
   const transactions = await getSimilarTransactions(
     transaction.name,

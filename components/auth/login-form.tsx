@@ -19,7 +19,7 @@ import { LoginForm, loginFormSchema } from '@/lib/validation/auth';
 import { signIn } from 'next-auth/react';
 
 export function LoginForm() {
-  const [error, setError] = useState('');
+  const [error] = useState('');
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginFormSchema),
   });

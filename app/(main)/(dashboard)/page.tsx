@@ -1,4 +1,3 @@
-import { BalanceCard } from '@/components/balance/balance-card';
 import { BalanceChart } from '@/components/balance/balance-chart';
 import { Overview } from '@/components/overview/overview';
 import RecentTransactions from '@/components/transactions/recent-transactions';

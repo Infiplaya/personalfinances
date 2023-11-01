@@ -10,7 +10,7 @@ import {
   transactions,
 } from '@/db/schema/finances';
 import { TransactionForm } from '@/lib/validation/transaction';
-import { and, eq, inArray, InferModel } from 'drizzle-orm';
+import { eq, inArray, InferModel } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { hash } from 'bcryptjs';
 import { ProfileForm, RegisterForm } from '@/lib/validation/auth';
@@ -62,7 +62,7 @@ export async function registerUser(formData: RegisterForm) {
         email: newUser.email,
       },
     };
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.log(e);
     return {
       success: false,
@@ -196,7 +196,7 @@ const currencySchema = z.object({
   code: z.string().nonempty(),
 });
 
-export async function changeCurrency(prevState: any, formData: FormData) {
+export async function changeCurrency(prevState: unknown, formData: FormData) {
   const currentProfile = await getCurrentProfile();
   const data = currencySchema.parse({
     code: formData.get('code'),
@@ -277,7 +277,10 @@ const profileSchema = z.object({
   name: z.string().nonempty(),
 });
 
-export async function changeCurrentProfile(prevState: any, formData: FormData) {
+export async function changeCurrentProfile(
+  prevState: unknown,
+  formData: FormData
+) {
   const { user } = await validateSession();
 
   const data = profileSchema.parse({
@@ -300,7 +303,7 @@ export async function changeCurrentProfile(prevState: any, formData: FormData) {
   }
 }
 
-export async function deleteProfile(profileId: string, formData: FormData) {
+export async function deleteProfile(profileId: string) {
   const { user } = await validateSession();
   const currentProfile = await getCurrentProfile();
 
@@ -383,7 +386,10 @@ export async function changeBudgetColumnName(formData: FormData) {
   }
 }
 
-export async function createBudgetColumn(prevState: any, formData: FormData) {
+export async function createBudgetColumn(
+  prevState: unknown,
+  formData: FormData
+) {
   const currentProfile = await getCurrentProfile();
 
   const columnFormSchema = z.object({
@@ -482,7 +488,7 @@ export async function deleteBudgetItems(formData: FormData) {
   }
 }
 
-export async function createBudgetPlan(prevState: any, formData: FormData) {
+export async function createBudgetPlan(prevState: unknown, formData: FormData) {
   const planFormSchema = z.object({
     id: z.string(),
     name: z.string().nonempty('Name cant be blank').min(1),
@@ -524,7 +530,10 @@ export async function deleteBudgetPlan(planId: string) {
   }
 }
 
-export async function changeBudgetPlanName(prevState: any, formData: FormData) {
+export async function changeBudgetPlanName(
+  prevState: unknown,
+  formData: FormData
+) {
   const planFormSchema = z.object({
     name: z.string(),
     planId: z.string(),

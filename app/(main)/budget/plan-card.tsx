@@ -12,8 +12,8 @@ import { cn } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
 import PlanOptions from './plan-options';
-// @ts-expect-error
-import { experimental_useFormState as useFormState } from 'react-dom';
+// @ts-expect-error experimental hook
+import {  useFormState } from 'react-dom';
 import { toast } from 'sonner';
 import { Check, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';

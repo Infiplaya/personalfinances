@@ -19,7 +19,7 @@ DrawerPortal.displayName = Drawer.Portal.displayName;
 const InterceptedDrawerContent = React.forwardRef<
   React.ElementRef<typeof Drawer.Content>,
   React.ComponentPropsWithoutRef<typeof Drawer.Content>
->(({ className, children, ...props }, ref) => {
+>(({ className, children }, ref) => {
   const router = useRouter();
 
   const onDismiss = React.useCallback(() => {

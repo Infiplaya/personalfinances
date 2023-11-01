@@ -1,7 +1,7 @@
 'use server';
 import { db } from '@/db';
 import { cache } from 'react';
-import { BudgetPlan, BudgetStatus, budgetStatuses } from '../schema/finances';
+import { BudgetPlan, BudgetStatus } from '../schema/finances';
 import { getCurrentProfile } from './auth';
 
 export interface Column extends BudgetStatus {

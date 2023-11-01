@@ -9,11 +9,10 @@ import { Columns } from '@/db/queries/budgets';
 import { cn } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
-// @ts-expect-error
-import { experimental_useFormState as useFormState } from 'react-dom';
+// @ts-expect-error experimental hook
+import { useFormState } from 'react-dom';
 import { StrictModeDroppable } from './strict-droppable';
 import { PlusCircle } from 'lucide-react';
-
 import { Separator } from '@/components/ui/separator';
 import { ChangeColumnName } from './change-column-name';
 import ColumnOptions from './column-options';
@@ -24,7 +23,6 @@ import { NameForm } from './name-form';
 import { Sheet } from '@/components/ui/sheet';
 import { EditPlanDesktop } from './desktop-edit-plan';
 import { BudgetStatus } from '@/db/schema/finances';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { DrawerRoot } from '@/components/ui/drawer';
 

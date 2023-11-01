@@ -35,7 +35,6 @@ import { DataTableToolbar } from './data-table-toolbar';
 import { Category } from '@/db/schema/finances';
 import { Button } from '@/components/ui/button';
 import { deleteTransactions } from '@/app/actions';
-import { Spinner } from '../ui/spinner';
 import { cn } from '@/lib/utils';
 
 interface DataTableProps<TData, TValue> {

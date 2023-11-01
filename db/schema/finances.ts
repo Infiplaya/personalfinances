@@ -1,4 +1,4 @@
-import { InferModel, relations } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
 import {
   double,
   int,
@@ -110,7 +110,7 @@ export const budgetStatusesRelations = relations(
   })
 );
 
-export const budgetPlansRelations = relations(budgetPlans, ({ one, many }) => ({
+export const budgetPlansRelations = relations(budgetPlans, ({ one }) => ({
   budgetStatus: one(budgetStatuses, {
     fields: [budgetPlans.statusId],
     references: [budgetStatuses.id],

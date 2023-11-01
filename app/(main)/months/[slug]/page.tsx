@@ -1,8 +1,6 @@
-import { getCategories } from '@/db/queries/categories';
 import { getMonthIndex } from '@/lib/utils';
 import { TransactionByMonth } from './transactions-by-month';
-import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { Suspense } from 'react';
 import TableSkeleton from '@/components/skeletons/table-skeleton';
@@ -14,8 +12,7 @@ type Props = {
 };
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
+  { params }: Props,
 ): Promise<Metadata> {
   const slug = params.slug;
 

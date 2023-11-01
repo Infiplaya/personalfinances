@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { getRecentTransactions } from '@/db/queries/transactions';
 import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 import { TransactionItem } from './transaction-item';

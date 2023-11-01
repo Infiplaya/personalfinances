@@ -23,8 +23,8 @@ import {
 import { changeCurrentProfile } from '@/app/actions';
 import { ProfileForm } from './profile-form';
 import { Currency } from '@/db/schema/finances';
-// @ts-ignore
-import { experimental_useFormState as useFormState } from 'react-dom';
+// @ts-expect-error experimental hook
+import { useFormState } from 'react-dom';
 import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -94,7 +94,7 @@ export function ProfileSwitcher({
   const [showDialog, setShowDialog] = React.useState(false);
   const [selectedProfile, setSelectedProfile] =
     React.useState<Profile>(currentProfile);
-  const [state, formAction] = useFormState(changeCurrentProfile, initialState);
+  const [, formAction] = useFormState(changeCurrentProfile, initialState);
 
   return (
     <Dialog open={showDialog} onOpenChange={setShowDialog}>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 
-export function RowsControls({}) {
+export function RowsControls() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();

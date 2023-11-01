@@ -1,6 +1,4 @@
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
-import { type Column } from '@tanstack/react-table';
-
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -21,15 +19,15 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
-import { Spinner } from '../ui/spinner';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { Loader, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 export type FilterOption = {
   id: number;
   name: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface DataTableFacetedFilter<TData, TValue> {
   title: string;
   options: FilterOption[];

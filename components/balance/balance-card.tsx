@@ -1,7 +1,6 @@
-import { getCurrentCurrency } from '@/db/queries/currencies';
 import { getBalancesForUser } from '@/db/queries/transactions';
 import { cn, moneyFormat } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardHeader } from '../ui/card';
 import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 
 export async function BalanceCard({ currencyCode }: { currencyCode: string }) {

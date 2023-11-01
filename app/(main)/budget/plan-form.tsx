@@ -33,7 +33,7 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { CheckIcon } from 'lucide-react';
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { v4 } from 'uuid';
 
 type UpdatedStatus = Omit<BudgetStatus, 'createdAt'>;

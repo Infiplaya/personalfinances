@@ -1,8 +1,6 @@
 'use client';
 
-import { Check, ChevronsUpDown } from 'lucide-react';
-
-import { cn } from '@/lib/utils';
+import { ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -17,8 +15,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Currency } from '@/db/schema/finances';
-// @ts-ignore
-import { experimental_useFormState as useFormState } from 'react-dom';
+// @ts-expect-error experimental hook
+import {  useFormState } from 'react-dom';
 import { experimental_useFormStatus as useFormStatus } from 'react-dom';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -55,7 +53,7 @@ export function CurrencyDropdown({
   currentCurrency: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [state, formAction] = useFormState(changeCurrency, initialState);
+  const [, formAction] = useFormState(changeCurrency, initialState);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -73,7 +71,7 @@ export function CurrencyDropdown({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent >
+      <PopoverContent>
         <Command>
           <CommandInput placeholder="Search currency..." />
           <CommandEmpty>No currency found.</CommandEmpty>
@@ -94,7 +92,4 @@ export function CurrencyDropdown({
       </PopoverContent>
     </Popover>
   );
-}
-
-{
 }

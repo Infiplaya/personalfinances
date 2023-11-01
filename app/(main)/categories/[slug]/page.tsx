@@ -1,16 +1,11 @@
 import TableSkeleton from '@/components/skeletons/table-skeleton';
 import { TransactionsTable } from '@/components/transactions/transactions-table';
-import { db } from '@/db';
-import { getCurrentProfile } from '@/db/queries/auth';
 import {
-  getCategories,
   getCategory,
   getCategoryPageData,
 } from '@/db/queries/categories';
-import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
-import { calculateTotalForCategory } from '@/db/queries/transactions';
 import { Suspense } from 'react';
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { Category } from '@/db/schema/finances';
 
@@ -21,7 +16,6 @@ type Props = {
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const slug = params.slug;
 

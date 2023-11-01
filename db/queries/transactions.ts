@@ -84,7 +84,7 @@ export async function calculateBalanceData(
   balanceDays: number
 ) {
   const currentDate = new Date();
-  let timestamp = new Date(currentDate);
+  const timestamp = new Date(currentDate);
   timestamp.setDate(currentDate.getDate() - balanceDays);
 
   const exchangeRate = await findExchangeRate('USD', preferredCurrency);
@@ -142,6 +142,8 @@ type Column =
   | 'slug'
   | undefined;
 
+type FilterType = 'expense' | 'income';
+
 export async function selectTransactions(
   limit: number,
   page: number,
@@ -149,7 +151,7 @@ export async function selectTransactions(
   column: Column,
   order: Order,
   categoriesFilter: string[],
-  typesFilter: any
+  typesFilter: FilterType[]
 ) {
   const currentProfile = await getCurrentProfile();
   const offset = (page - 1) * limit;
@@ -235,7 +237,7 @@ export const getSummariesForMonths = cache(calculateSummariesForMonths);
 export async function countTransactions(
   name: string | string[] | undefined,
   categoriesFilter: string[],
-  typesFilter: any
+  typesFilter: FilterType[]
 ) {
   const currentProfile = await getCurrentProfile();
   const count = await db
@@ -375,7 +377,6 @@ async function selectSimilarTransactions(
 }
 
 export const getSimilarTransactions = cache(selectSimilarTransactions);
-
 
 export async function getTransactionFormData() {
   const categoriesData = getCategories();

@@ -1,6 +1,5 @@
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { getCurrentProfile, getProfileSettingsData, getUserProfiles } from '@/db/queries/auth';
+import { getProfileSettingsData } from '@/db/queries/auth';
 import { X } from 'lucide-react';
 import {
   AlertDialog,
@@ -13,7 +12,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { ProfileModal } from '@/components/profile/profile-modal';
 import { deleteProfile } from '@/app/actions';
 import { Metadata } from 'next';

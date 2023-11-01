@@ -8,7 +8,7 @@ import React, { Ref } from 'react';
 import { SubmitButton } from '../settings/submit-button';
 
 interface Props {
-  newPlanAction: any;
+  newPlanAction: () => void;
   resetForm: () => void;
   nameInputRef: null | Ref<HTMLInputElement>;
   column: BudgetStatus;

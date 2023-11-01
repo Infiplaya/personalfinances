@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { CreditCard, Dot, Settings, User } from 'lucide-react';
+import { Dot, Settings, User } from 'lucide-react';
 
 import {
   CommandDialog,
