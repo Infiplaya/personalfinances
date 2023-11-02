@@ -35,7 +35,7 @@ export default function PlanOptions({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="ghost">
-          <MoreHorizontal className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+          <MoreHorizontal className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-48">
@@ -43,16 +43,16 @@ export default function PlanOptions({
           disabled={isPending}
           onClick={() => handleDeletePlan(plan.id)}
         >
-          <Trash className="h-4 w-4 text-gray-700 dark:text-gray-300" />{' '}
+          <Trash className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />{' '}
           <span className="ml-2">Delete</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleRenamePlan}>
-          <Edit className="h-4 w-4 text-gray-700 dark:text-gray-300" />{' '}
+          <Edit className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />{' '}
           <span className="ml-2">Rename</span>
         </DropdownMenuItem>
         <SheetTrigger asChild>
           <DropdownMenuItem>
-            <Edit2 className="h-4 w-4 text-gray-700 dark:text-gray-300" />{' '}
+            <Edit2 className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />{' '}
             <span className="ml-2">Edit Plan</span>
           </DropdownMenuItem>
         </SheetTrigger>

@@ -178,7 +178,7 @@ export default function SelectItem({
       }}
     >
       {isPending ? (
-        <Loader2 className="mr-2 h-4 w-4 animate-spin text-gray-800 dark:text-gray-200" />
+        <Loader2 className="mr-2 h-4 w-4 animate-spin text-neutral-800 dark:text-neutral-200" />
       ) : (
         <div
           className={cn(

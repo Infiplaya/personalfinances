@@ -10,7 +10,7 @@ export function TransactionItem({
   return (
     <Link
       href={`/transactions/${transaction.slug}`}
-      className="flex justify-between rounded-md px-2 py-2.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+      className="flex justify-between rounded-md px-2 py-2.5 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800"
     >
       <span>{transaction.name}</span>
       <span

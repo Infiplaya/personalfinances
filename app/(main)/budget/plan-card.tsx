@@ -70,12 +70,12 @@ export default function PlanCard({
             <Input
               type="text"
               defaultValue={item.name}
-              className="bg-gray-50 font-semibold leading-none tracking-tight dark:bg-gray-900"
+              className="bg-neutral-50 font-semibold leading-none tracking-tight dark:bg-neutral-900"
               name="name"
               ref={inputRef}
             />
             <Button type="submit" size="icon">
-              <Check className="h-4 w-4 text-gray-300 dark:text-gray-700" />
+              <Check className="h-4 w-4 text-neutral-300 dark:text-neutral-700" />
             </Button>
             <Input type="hidden" value={item.id} name="planId" />
           </form>
@@ -89,8 +89,8 @@ export default function PlanCard({
       {...provided.draggableProps}
       {...provided.dragHandleProps}
       className={cn(
-        'group mb-5 flex items-start justify-between transition-colors hover:bg-white dark:hover:bg-gray-950',
-        snapshot.isDragging && 'bg-indigo-500/50 dark:bg-indigo-500/50'
+        'group mb-5 flex items-start justify-between transition-colors hover:bg-white dark:hover:bg-neutral-950',
+        snapshot.isDragging && 'bg-violet-500/50 dark:bg-violet-500/50'
       )}
     >
       {isMobile ? (
@@ -111,7 +111,7 @@ export default function PlanCard({
 
       <div className="flex items-center p-2">
         <Button onClick={handleRenamePlan} size="icon" variant="ghost">
-          <Edit2 className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+          <Edit2 className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />
         </Button>
         <PlanOptions plan={item} handleRenamePlan={handleRenamePlan} />
       </div>

@@ -26,7 +26,7 @@ export default async function CategoriesPage() {
                   <Link
                     key={c.id}
                     href={`/categories/${c.slug}`}
-                    className="block rounded-md py-2 pl-6 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="block rounded-md py-2 pl-6 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                   >
                     {c.name}
                   </Link>
@@ -46,7 +46,7 @@ export default async function CategoriesPage() {
                   <Link
                     key={c.id}
                     href={`/categories/${c.slug}`}
-                    className="block rounded-md py-2 pl-6 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="block rounded-md py-2 pl-6 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                   >
                     {c.name}
                   </Link>

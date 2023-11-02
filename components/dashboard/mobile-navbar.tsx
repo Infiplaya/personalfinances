@@ -36,7 +36,7 @@ export default function MobileNavbar({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger className="lg:hidden">
-        <HamburgerMenuIcon className="h-5 w-5 dark:text-gray-300" />
+        <HamburgerMenuIcon className="h-5 w-5 dark:text-neutral-300" />
       </SheetTrigger>
       <SheetContent className="w-full lg:hidden" side="right">
         <SheetHeader>
@@ -48,7 +48,7 @@ export default function MobileNavbar({
               }}
               href="/"
             >
-              <Home className="h-5 w-5 dark:text-gray-300" />
+              <Home className="h-5 w-5 dark:text-neutral-300" />
             </Link>
 
             <ProfileSwitcher
@@ -69,8 +69,8 @@ export default function MobileNavbar({
                   setOpen(false);
                 }}
                 className={cn(
-                  'mt-4 block w-full rounded-lg py-2 pl-8 text-left text-sm font-semibold text-gray-900 dark:text-gray-100',
-                  path === link.href && 'bg-indigo-500/75 dark:bg-indigo-500/75'
+                  'mt-4 block w-full rounded-lg py-2 pl-8 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100',
+                  path === link.href && 'bg-violet-500/75 dark:bg-violet-500/75'
                 )}
                 href={link.href}
               >
@@ -92,7 +92,7 @@ export default function MobileNavbar({
               }}
             >
               <Button size="icon" variant="outline">
-                <Settings className="h-5 w-5 dark:text-gray-300" />
+                <Settings className="h-5 w-5 dark:text-neutral-300" />
               </Button>
             </Link>
           </div>

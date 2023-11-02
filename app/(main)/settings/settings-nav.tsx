@@ -18,15 +18,15 @@ const settingsLinks = [
 export function SettingsNav() {
   const path = usePathname();
   return (
-    <nav className="w-full space-x-7 border-b py-1 dark:border-gray-800">
+    <nav className="w-full space-x-7 border-b py-1 dark:border-neutral-800">
       {settingsLinks.map((link) => (
         <Link
           key={link.link}
           href={`/settings/${link.link}`}
           className={cn(
-            'py-[6px] text-sm font-semibold hover:border-b-2 hover:border-indigo-500',
+            'py-[6px] text-sm font-semibold hover:border-b-2 hover:border-violet-500',
             path === '/settings' + link.link
-              ? 'border-b-2 border-indigo-500'
+              ? 'border-b-2 border-violet-500'
               : null
           )}
         >

@@ -56,7 +56,7 @@ export function CommandMenu() {
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>
         Search anything...
-        <kbd className="pointer-events-none ml-3 inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium text-gray-800 opacity-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
+        <kbd className="pointer-events-none ml-3 inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium text-neutral-800 opacity-100 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>

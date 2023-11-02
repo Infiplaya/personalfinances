@@ -124,7 +124,7 @@ export function Board({
         {Object.entries(optimisticColumns).map(([columnId, column]) => {
           return (
             <div
-              className="w-full min-w-[350px] rounded-md border bg-gray-100 py-4 shadow-md dark:border-gray-800 dark:bg-gray-900"
+              className="w-full min-w-[350px] rounded-md border bg-neutral-100 py-4 shadow-md dark:border-neutral-800 dark:bg-neutral-900"
               key={columnId}
             >
               <div className="mb-4 flex items-center justify-between px-6">
@@ -135,7 +135,7 @@ export function Board({
                     size="icon"
                     onClick={() => handleAddNewPlan(columnId)}
                   >
-                    <PlusCircle className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                    <PlusCircle className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />
                   </Button>
                   <ColumnOptions column={column} />
                 </div>
@@ -150,7 +150,7 @@ export function Board({
                       className={cn(
                         'min-h-[500px] w-full p-4',
                         snapshot.isDraggingOver &&
-                          'bg-gray-200 dark:bg-white/10'
+                          'bg-neutral-200 dark:bg-white/10'
                       )}
                     >
                       {displayForm && editedColumn === columnId ? (
@@ -211,7 +211,7 @@ export function Board({
                         className="flex w-full justify-start space-x-3"
                         onClick={() => handleAddNewPlan(columnId)}
                       >
-                        <PlusCircle className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                        <PlusCircle className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />
                         <span>New Plan</span>
                       </Button>
                     </div>

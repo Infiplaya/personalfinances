@@ -32,7 +32,7 @@ export default function ColumnOptions({ column }: { column: BudgetStatus }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon">
-            <Settings2 className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+            <Settings2 className="h-4 w-4 text-neutral-700 dark:text-neutral-300" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48">

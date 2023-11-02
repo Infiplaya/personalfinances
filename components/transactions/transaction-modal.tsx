@@ -45,7 +45,7 @@ export function TransactionModal({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="inline-flex items-center space-x-2">
-              <PlusCircle className="h-5 w-5 dark:text-gray-700" />{' '}
+              <PlusCircle className="h-5 w-5 dark:text-neutral-700" />{' '}
               <span>New Transaction</span>
             </Button>
           </DropdownMenuTrigger>
@@ -84,7 +84,7 @@ export function TransactionModal({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="inline-flex items-center space-x-2" size="sm">
-            <PlusCircle className="h-5 w-5 dark:text-gray-700" />{' '}
+            <PlusCircle className="h-5 w-5 dark:text-neutral-700" />{' '}
             <span>New Transaction</span>
           </Button>
         </DropdownMenuTrigger>

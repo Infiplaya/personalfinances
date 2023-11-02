@@ -52,9 +52,9 @@ export default async function UserOptions() {
       </div>
       <div className="mr-auto flex w-full items-center justify-between lg:hidden">
         <Link href="/" className="block">
-          <Home className="h-5 w-5 dark:text-gray-300" />
+          <Home className="h-5 w-5 dark:text-neutral-300" />
         </Link>
-          <CommandMenu />
+        <CommandMenu />
         <MobileNavbar
           currencies={currenciesData}
           currentCurrency={currentCurrency}

@@ -38,7 +38,7 @@ export default function SearchTransactions() {
         defaultValue={searchParams.get('name') as string}
       />
       {isPending ? (
-        <Loader2 className="absolute bottom-2 right-2 h-5 w-5 animate-spin text-gray-800 dark:text-gray-200" />
+        <Loader2 className="absolute bottom-2 right-2 h-5 w-5 animate-spin text-neutral-800 dark:text-neutral-200" />
       ) : null}
     </div>
   );

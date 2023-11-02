@@ -23,7 +23,7 @@ export function NameForm({
   return (
     <Card
       className={cn(
-        'mb-5 transition-colors hover:bg-gray-50 dark:hover:bg-gray-950'
+        'mb-5 transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-950'
       )}
     >
       <CardHeader>

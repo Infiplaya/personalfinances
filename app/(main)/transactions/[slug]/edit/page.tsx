@@ -1,4 +1,3 @@
-
 import {
   getTransaction,
   getTransactionFormData,
@@ -20,13 +19,11 @@ export default async function EditTransactionPage({
   }
 
   return (
-    <div>
-      <EditTransaction
-        categories={categories}
-        currencies={currencies}
-        edit={true}
-        transaction={transaction}
-      />
-    </div>
+    <EditTransaction
+      categories={categories}
+      currencies={currencies}
+      edit={true}
+      transaction={transaction}
+    />
   );
 }

@@ -131,7 +131,7 @@ export function DataTable<TData, TValue>({
 
       <div
         className={cn(
-          'rounded-md border dark:border-gray-800',
+          'rounded-md border dark:border-neutral-800',
           isPending && 'opacity-50'
         )}
       >
@@ -193,7 +193,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="mt-10 flex flex-col items-center space-y-3 lg:flex-row lg:justify-between lg:space-y-0">
-        <div className="flex-1 text-sm text-gray-700 dark:text-gray-200">
+        <div className="flex-1 text-sm text-neutral-700 dark:text-neutral-200">
           {table.getFilteredSelectedRowModel().rows.length} of{' '}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>

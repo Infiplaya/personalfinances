@@ -16,16 +16,16 @@ export function AuthPage({
     <>
       {' '}
       <div className="flex min-h-full flex-1">
-        <div className="relative hidden w-0 flex-1 items-center justify-center bg-gray-50 text-lg dark:bg-gray-950 lg:flex lg:flex-row">
+        <div className="relative hidden w-0 flex-1 items-center justify-center bg-neutral-50 text-lg dark:bg-neutral-950 lg:flex lg:flex-row">
           {type === 'signin' ? (
             <>
-              <h3 className="leading-6 text-gray-900 dark:text-gray-50">
+              <h3 className="leading-6 text-neutral-900 dark:text-neutral-50">
                 Do not have account?
               </h3>
               <Link href="/signup">
                 <Button
                   variant="link"
-                  className="text-lg text-gray-900 dark:text-gray-50"
+                  className="text-lg text-neutral-900 dark:text-neutral-50"
                 >
                   Sign Up
                 </Button>
@@ -33,13 +33,13 @@ export function AuthPage({
             </>
           ) : (
             <>
-              <h3 className="leading-6 text-gray-900 dark:text-gray-50">
+              <h3 className="leading-6 text-neutral-900 dark:text-neutral-50">
                 Already have an account?
               </h3>
               <Link href="/signin">
                 <Button
                   variant="link"
-                  className="text-lg text-gray-900 dark:text-gray-50"
+                  className="text-lg text-neutral-900 dark:text-neutral-50"
                 >
                   Sign In
                 </Button>
@@ -51,11 +51,11 @@ export function AuthPage({
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
               {type === 'signin' ? (
-                <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
+                <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-neutral-900 dark:text-neutral-100">
                   Sign In
                 </h2>
               ) : (
-                <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
+                <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-neutral-900 dark:text-neutral-100">
                   Create New Account
                 </h2>
               )}
@@ -70,10 +70,10 @@ export function AuthPage({
                     className="absolute inset-0 flex items-center"
                     aria-hidden="true"
                   >
-                    <div className="w-full border-t border-gray-200" />
+                    <div className="w-full border-t border-neutral-200" />
                   </div>
                   <div className="relative flex justify-center text-sm font-medium leading-6">
-                    <span className="bg-gray-50 px-6 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+                    <span className="bg-neutral-50 px-6 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
                       Or continue with
                     </span>
                   </div>

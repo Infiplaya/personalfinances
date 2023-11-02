@@ -77,7 +77,7 @@ export function DataTableToolbar<TData>({
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="ml-auto">
               Columns
-              <ChevronDown className="ml-2 h-4 w-4 text-gray-600 dark:text-gray-400" />
+              <ChevronDown className="ml-2 h-4 w-4 text-neutral-600 dark:text-neutral-400" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">

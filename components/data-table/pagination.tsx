@@ -40,7 +40,7 @@ export default function Pagination({
             },
           }}
           className={cn(
-            'rounded border bg-gray-100 p-1 text-sm text-gray-800 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900  dark:text-gray-100 dark:hover:bg-gray-800',
+            'rounded border bg-neutral-100 p-1 text-sm text-neutral-800 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900  dark:text-neutral-100 dark:hover:bg-neutral-800',
             notPreviousPage && 'pointer-events-none opacity-50'
           )}
         >
@@ -57,7 +57,7 @@ export default function Pagination({
             },
           }}
           className={cn(
-            'rounded border bg-gray-100 p-1 text-sm text-gray-800 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900  dark:text-gray-100 dark:hover:bg-gray-800',
+            'rounded border bg-neutral-100 p-1 text-sm text-neutral-800 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900  dark:text-neutral-100 dark:hover:bg-neutral-800',
             notPreviousPage && 'pointer-events-none opacity-50'
           )}
         >
@@ -74,7 +74,7 @@ export default function Pagination({
             },
           }}
           className={cn(
-            'rounded border bg-gray-100 p-1 text-sm text-gray-800 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900  dark:text-gray-100 dark:hover:bg-gray-800',
+            'rounded border bg-neutral-100 p-1 text-sm text-neutral-800 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900  dark:text-neutral-100 dark:hover:bg-neutral-800',
             notNextPage && 'pointer-events-none opacity-50'
           )}
         >
@@ -91,7 +91,7 @@ export default function Pagination({
             },
           }}
           className={cn(
-            'rounded border bg-gray-100 p-1 text-sm text-gray-800 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900  dark:text-gray-100 dark:hover:bg-gray-800',
+            'rounded border bg-neutral-100 p-1 text-sm text-neutral-800 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900  dark:text-neutral-100 dark:hover:bg-neutral-800',
             notNextPage && 'pointer-events-none opacity-50'
           )}
         >

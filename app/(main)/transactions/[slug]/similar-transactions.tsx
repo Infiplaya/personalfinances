@@ -21,10 +21,10 @@ export async function SimilarTransactions({
   if (list) {
     return (
       <div className="mt-4">
-        <h3 className="font-semibold text-gray-700 dark:text-gray-300">
+        <h3 className="font-semibold text-neutral-700 dark:text-neutral-300">
           Similar Transactions
         </h3>
-        <ul className="my-2 ml-6 list-disc text-gray-700 dark:text-gray-300 [&>li]:mt-2">
+        <ul className="my-2 ml-6 list-disc text-neutral-700 dark:text-neutral-300 [&>li]:mt-2">
           {transactions.map((t) => (
             <a
               href={`/transactions/${slugify(t.name)}`}
@@ -48,7 +48,7 @@ export async function SimilarTransactions({
             key={t.id}
             className="block"
           >
-            <Card className="bg-gray-100 transition-colors hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900">
+            <Card className="bg-neutral-100 transition-colors hover:bg-neutral-50 dark:bg-neutral-950 dark:hover:bg-neutral-900">
               <CardHeader>
                 <CardTitle className="space-x-3">
                   <div className="mb-4 space-x-2">
