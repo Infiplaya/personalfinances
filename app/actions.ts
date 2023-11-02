@@ -148,7 +148,7 @@ export async function updateTransaction(
       })
       .where(eq(transactions.id, transactionId));
 
-    revalidatePath('/');
+    revalidatePath('/transactions');
 
     return { success: true, message: 'Successfully updated transaction!' };
   } catch (e) {

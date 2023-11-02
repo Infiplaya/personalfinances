@@ -1,10 +1,10 @@
-import { Card } from '@/components/ui/card';
+
 import {
   getTransaction,
   getTransactionFormData,
 } from '@/db/queries/transactions';
-import { Back } from '@/components/ui/back';
-import { TransactionForm } from '@/components/transactions/transaction-form';
+import { EditTransaction } from './edit-transaction';
+import { notFound } from 'next/navigation';
 
 export default async function EditTransactionPage({
   params,
@@ -16,12 +16,12 @@ export default async function EditTransactionPage({
   const { categories, currencies } = await getTransactionFormData();
 
   if (!transaction) {
-    return <Card>No Transaction</Card>;
+    return notFound();
   }
+
   return (
     <div>
-      <Back link="/transactions" />
-      <TransactionForm
+      <EditTransaction
         categories={categories}
         currencies={currencies}
         edit={true}

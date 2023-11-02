@@ -3,7 +3,6 @@ import { Card } from '@/components/ui/card';
 import {
   getAllTransactionsSlugs,
   getTransaction,
-  getTransactionFormData,
 } from '@/db/queries/transactions';
 import { moneyFormat } from '@/lib/utils';
 
@@ -13,16 +12,13 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Back } from '@/components/ui/back';
-import EditTransaction from './edit/edit-transaction';
 
 type Props = {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata(
-  { params }: Props,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = params.slug;
 
   const transaction = await getTransaction(slug);
@@ -39,15 +35,10 @@ export async function generateStaticParams() {
 
 export default async function TransactionsPage({
   params,
-  searchParams,
 }: {
   params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const transaction = await getTransaction(params.slug);
-  const edit = searchParams.edit;
-
-  const { categories, currencies } = await getTransactionFormData();
 
   if (!transaction) {
     return <Card>No Transaction</Card>;
@@ -55,12 +46,6 @@ export default async function TransactionsPage({
   return (
     <div>
       <Back link="/transactions" />
-      <EditTransaction
-        categories={categories}
-        currencies={currencies}
-        edit={edit ? true : false}
-        transaction={transaction}
-      />
       <div className="mb-3 mt-10 space-x-3">
         <Link href={`/${transaction.type}s`}>
           <Badge>{transaction.type}</Badge>
@@ -71,7 +56,11 @@ export default async function TransactionsPage({
         {transaction.name} -{' '}
         {moneyFormat(transaction.amount, transaction.currencyCode)}{' '}
       </h1>
-      <p>{transaction.description ? transaction.description : 'No description provided'}</p>
+      <p>
+        {transaction.description
+          ? transaction.description
+          : 'No description provided'}
+      </p>
       <Suspense fallback={<Skeleton className="mt-12 h-24 w-full" />}>
         <SimilarTransactions transaction={transaction} />
       </Suspense>

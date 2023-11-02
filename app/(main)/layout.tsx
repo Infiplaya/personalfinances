@@ -4,15 +4,13 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Personal Finances App',
-  description: 'lsds Personal Finances App',
+  description: 'Personal Finances App',
 };
 
 export default function RootLayout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
-  modal: React.ReactNode;
 }) {
   return (
     <>
@@ -20,7 +18,6 @@ export default function RootLayout({
       <div>
         <Sidebar />
         <div className="mx-auto px-4 py-10 lg:ml-64 lg:px-12">{children}</div>
-        {modal}
       </div>
     </>
   );
