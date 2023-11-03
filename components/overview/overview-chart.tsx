@@ -21,7 +21,7 @@ export default function OverviewChart({
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center space-x-12">
+        <div className="flex items-center justify-between">
           <CardTitleWithTooltip
             message={'Your incomes and expenses in last 7 days'}
           >

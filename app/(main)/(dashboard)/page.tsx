@@ -11,6 +11,8 @@ import BalanceChartSkeleton from '@/components/skeletons/balance-chart-skeleton'
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { getTransactionFormData } from '@/db/queries/transactions';
+import { GoalCard } from '@/components/goals/goal-card';
+import { LimitCard } from '@/components/goals/limit-card';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -37,7 +39,7 @@ export default async function Home({ searchParams }: Props) {
     await getTransactionFormData();
 
   return (
-    <div className="space-y-6">
+    <div>
       <SuccessToast message="Welcome back!" />
       <div className="md:hidden">
         <TransactionModal
@@ -49,7 +51,7 @@ export default async function Home({ searchParams }: Props) {
       <Suspense fallback={<CardsSkeleton />}>
         <Cards currencyCode={currentCurrency} />
       </Suspense>
-      <div className="space-y-6 md:grid md:grid-cols-6 md:gap-x-4 md:space-y-0">
+      <div className="my-6 space-y-6 md:grid md:grid-cols-6 md:gap-x-4 md:space-y-0">
         <div className="md:col-span-4">
           <Suspense fallback={<BalanceChartSkeleton />}>
             <BalanceChart
@@ -64,9 +66,17 @@ export default async function Home({ searchParams }: Props) {
           </Suspense>
         </div>
       </div>
-      <Suspense fallback={<Skeleton className="h-72 w-full" />}>
-        <Overview currencyCode={currentCurrency} overview={overview} />
-      </Suspense>
+      <section className="flex flex-col gap-6 md:flex-row md:items-stretch">
+        <div className="flex-1">
+          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+            <Overview currencyCode={currentCurrency} overview={overview} />
+          </Suspense>
+        </div>
+        <div className="flex flex-1 flex-col justify-stretch gap-6">
+            <GoalCard />
+            <LimitCard />
+        </div>
+      </section>
     </div>
   );
 }

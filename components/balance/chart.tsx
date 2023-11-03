@@ -30,7 +30,7 @@ export default function Chart({
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center space-x-12">
+        <div className="flex items-center justify-between">
           <CardTitleWithTooltip message="Your balance  over selected time">
             Balance
           </CardTitleWithTooltip>
