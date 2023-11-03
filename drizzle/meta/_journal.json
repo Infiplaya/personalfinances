@@ -239,6 +239,20 @@
       "when": 1699025096891,
       "tag": "0034_black_mauler",
       "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "5",
+      "when": 1699037234224,
+      "tag": "0035_minor_colonel_america",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "5",
+      "when": 1699038796206,
+      "tag": "0036_real_stature",
+      "breakpoints": true
     }
   ]
 }

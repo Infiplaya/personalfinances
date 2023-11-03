@@ -1,0 +1,1 @@
+ALTER TABLE `financial_targets` MODIFY COLUMN `target` double(10,2);

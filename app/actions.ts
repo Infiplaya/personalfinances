@@ -7,6 +7,7 @@ import {
   BudgetPlan,
   budgetPlans,
   budgetStatuses,
+  financial_targets,
   transactions,
 } from '@/db/schema/finances';
 import { TransactionForm } from '@/lib/validation/transaction';
@@ -21,6 +22,7 @@ import { validateSession } from '@/db/queries/transactions';
 import slugify from 'slugify';
 import { z } from 'zod';
 import { PlanForm } from '@/lib/validation/budget';
+import { TargetForm } from '@/lib/validation/financial-target';
 
 export async function registerUser(formData: RegisterForm) {
   try {
@@ -581,6 +583,26 @@ export async function updateBudgetPlan(formData: PlanForm, planId: string) {
     return { success: true, message: 'Updated the plan' };
   } catch (e) {
     console.log(e);
+    return { success: false, message: 'Something went wrong' };
+  }
+}
+
+export async function createNewTarget(formData: TargetForm) {
+  const currentProfile = await getCurrentProfile();
+  console.log('hello');
+  try {
+    await db.insert(financial_targets).values({
+      ...formData,
+      id: uuidv4(),
+      amount: Number(formData.amount),
+      profileId: currentProfile.id,
+    });
+    revalidatePath('/');
+
+    return { success: true, message: 'Success' };
+  } catch (e) {
+    console.log(e);
+    revalidatePath('/');
     return { success: false, message: 'Something went wrong' };
   }
 }

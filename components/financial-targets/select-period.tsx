@@ -34,13 +34,18 @@ export function SelectTargetPeriod({ targetType }: { targetType: TargetType }) {
       }}
     >
       <SelectTrigger className="w-[180px]">
-        <SelectValue />
+        <SelectValue
+          className="capitalize"
+          defaultValue={searchParams.get(`${targetType}Period`) ?? 'Day'}
+        />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>{targetType} time</SelectLabel>
+          <SelectLabel className="capitalize">{targetType} time</SelectLabel>
           {timePeriods.map((p) => (
-            <SelectItem value={p}>{p}</SelectItem>
+            <SelectItem key={p} value={p}>
+              <span className="capitalize">{p}</span>
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>

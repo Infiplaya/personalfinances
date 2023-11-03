@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/db';
-import { balances, transactions } from '@/db/schema/finances';
+import { balances, Currency, transactions } from '@/db/schema/finances';
 import {
   and,
   asc,
@@ -27,6 +27,7 @@ import { getCurrencies, getCurrentCurrency } from './currencies';
 import { getCurrentProfile } from './auth';
 import { profiles } from '../schema/auth';
 import { getCategories } from './categories';
+import { TimePeriod } from './targets';
 
 export async function validateSession() {
   const session = await getServerSession(authOptions);
@@ -404,4 +405,79 @@ export async function getTransaction(slug: string) {
       category: true,
     },
   });
+}
+
+async function sumIncomeForTime(
+  timePeriod: TimePeriod,
+  currency: Currency['code']
+) {
+  const currentProfile = await getCurrentProfile();
+
+  const conversionRate = getConversionRate(currency);
+
+  const { startDate, endDate } = calculateTimePeriodDates(timePeriod);
+
+  const res = await db
+    .select({
+      totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'income' THEN transactions.baseAmount * ${conversionRate} ELSE 0 END)`,
+    })
+    .from(transactions)
+    .where(
+      and(
+        gte(transactions.timestamp, startDate),
+        lte(transactions.timestamp, endDate),
+        eq(transactions.profileId, currentProfile.id)
+      )
+    );
+
+  return res[0].totalIncome;
+}
+
+export const getIncomeForTime = cache(sumIncomeForTime);
+
+function calculateTimePeriodDates(timePeriod: TimePeriod) {
+  const currentDate = new Date();
+
+  if (timePeriod === 'day') {
+    const startDate = new Date(currentDate);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(currentDate);
+    endDate.setHours(23, 59, 59, 999);
+    return { startDate, endDate };
+  } else if (timePeriod === 'month') {
+    const startDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1,
+      0,
+      0,
+      0,
+      0
+    );
+    const endDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999
+    );
+    return { startDate, endDate };
+  } else if (timePeriod === 'year') {
+    const startDate = new Date(currentDate.getFullYear(), 0, 1, 0, 0, 0, 0);
+    const endDate = new Date(
+      currentDate.getFullYear(),
+      11,
+      31,
+      23,
+      59,
+      59,
+      999
+    );
+    return { startDate, endDate };
+  } else {
+    // Handle unsupported timePeriod
+    throw new Error('Unsupported timePeriod');
+  }
 }

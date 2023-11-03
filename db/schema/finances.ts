@@ -103,10 +103,11 @@ export const financial_targets = mysqlTable('financial_targets', {
   id: varchar('id', { length: 255 }).notNull().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
   amount: double('amount', { precision: 10, scale: 2 }).notNull(),
-  target: double('target', { precision: 10, scale: 2 }).notNull(),
+  target: double('target', { precision: 10, scale: 2 }),
   type: mysqlEnum('type', ['goal', 'limit']).notNull(),
   timePeriod: mysqlEnum('timePeriod', ['day', 'month', 'year']).notNull(),
   profileId: varchar('profileId', { length: 255 }).notNull(),
+  currencyCode: varchar('currencyCode', { length: 3 }).notNull(),
 });
 
 export const budgetStatusesRelations = relations(
@@ -163,3 +164,4 @@ export type Currency = typeof currencies.$inferSelect;
 export type Transaction = typeof transactions.$inferSelect;
 export type BudgetPlan = typeof budgetPlans.$inferSelect;
 export type BudgetStatus = typeof budgetStatuses.$inferSelect;
+export type FinancialTarget = typeof financial_targets.$inferSelect;

@@ -1,0 +1,1 @@
+ALTER TABLE `financial_targets` ADD `currencyCode` varchar(3) NOT NULL;

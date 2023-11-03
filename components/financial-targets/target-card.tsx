@@ -1,5 +1,6 @@
+import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { getTarget, TargetType, TimePeriod } from '@/db/queries/targets';
-import { Button } from '../ui/button';
+import { getIncomeForTime } from '@/db/queries/transactions';
 import {
   Card,
   CardContent,
@@ -7,8 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
+import { NewTargetModal } from './new-target-modal';
 import { SelectTargetPeriod } from './select-period';
 import { TargetCardContent } from './target-card-content';
+import { TargetForm } from './target-form';
 
 export async function TargetCard({
   targetPeriod,
@@ -18,25 +21,38 @@ export async function TargetCard({
   targetType: TargetType;
 }) {
   const target = await getTarget(targetPeriod, targetType);
+  const currency = await getCurrentCurrency();
+  const currencies = await getCurrencies();
+  const income =
+    targetType === 'goal' ? await getIncomeForTime(targetPeriod, currency) : 0;
+
   if (!target) {
     return (
       <Card className="h-full">
         <CardHeader>
           <div className="flex justify-between">
             <div className="space-y-1">
-              <CardTitle>Daily {targetType}</CardTitle>
+              <CardTitle className="capitalize">
+                {targetPeriod} {targetType}
+              </CardTitle>
               <CardDescription>
                 No {targetType} found for this {targetPeriod}
               </CardDescription>
             </div>
-
             <div>
               <SelectTargetPeriod targetType={targetType} />
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <Button>Create New</Button>
+          <NewTargetModal>
+            <TargetForm
+              type={targetType}
+              timePeriod={targetPeriod}
+              currentCurrency={currency}
+              currencies={currencies}
+            />
+          </NewTargetModal>
         </CardContent>
       </Card>
     );
@@ -44,12 +60,20 @@ export async function TargetCard({
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Daily {targetType}</CardTitle>
-        <CardDescription>{target.name}</CardDescription>
-        <SelectTargetPeriod targetType={targetType} />
+        <div className="flex justify-between">
+          <div className="space-y-1">
+            <CardTitle className="capitalize">
+              {targetPeriod} {targetType}
+            </CardTitle>
+            <CardDescription>{target.name}</CardDescription>
+          </div>
+          <div>
+            <SelectTargetPeriod targetType={targetType} />
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
-        <TargetCardContent />
+        <TargetCardContent target={target} income={income} />
       </CardContent>
     </Card>
   );
