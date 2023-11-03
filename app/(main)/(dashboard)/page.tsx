@@ -11,8 +11,8 @@ import BalanceChartSkeleton from '@/components/skeletons/balance-chart-skeleton'
 import { Skeleton } from '@/components/ui/skeleton';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { getTransactionFormData } from '@/db/queries/transactions';
-import { GoalCard } from '@/components/goals/goal-card';
-import { LimitCard } from '@/components/goals/limit-card';
+import { TargetCard } from '@/components/financial-targets/target-card';
+import { TimePeriod } from '@/db/queries/targets';
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -34,6 +34,16 @@ export default async function Home({ searchParams }: Props) {
     typeof searchParams.overview === 'string'
       ? Number(searchParams.overview)
       : 7;
+
+  const goalPeriod =
+    typeof searchParams.goalPeriod === 'string'
+      ? searchParams.goalPeriod
+      : 'day';
+
+  const limitPeriod =
+    typeof searchParams.limitPeriod === 'string'
+      ? searchParams.limitPeriod
+      : 'day';
 
   const { categories, currencies, currentCurrency } =
     await getTransactionFormData();
@@ -73,8 +83,18 @@ export default async function Home({ searchParams }: Props) {
           </Suspense>
         </div>
         <div className="flex flex-1 flex-col justify-stretch gap-6">
-            <GoalCard />
-            <LimitCard />
+          <Suspense fallback={<Skeleton className="h-36 w-full" />}>
+            <TargetCard
+              targetPeriod={goalPeriod as TimePeriod}
+              targetType="goal"
+            />
+          </Suspense>
+          <Suspense fallback={<Skeleton className="h-36 w-full" />}>
+            <TargetCard
+              targetPeriod={limitPeriod as TimePeriod}
+              targetType="limit"
+            />
+          </Suspense>
         </div>
       </section>
     </div>

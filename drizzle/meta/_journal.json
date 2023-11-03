@@ -225,6 +225,20 @@
       "when": 1698687919792,
       "tag": "0032_flat_omega_red",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "5",
+      "when": 1699025023050,
+      "tag": "0033_robust_dust",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "5",
+      "when": 1699025096891,
+      "tag": "0034_black_mauler",
+      "breakpoints": true
     }
   ]
 }

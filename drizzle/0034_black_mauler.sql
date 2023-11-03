@@ -1,0 +1,1 @@
+ALTER TABLE `financial_targets` ADD `target` double(10,2) NOT NULL;

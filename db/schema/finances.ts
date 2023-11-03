@@ -99,6 +99,16 @@ export const budgetPlans = mysqlTable('budgetPlans', {
   order: int('order').default(0),
 });
 
+export const financial_targets = mysqlTable('financial_targets', {
+  id: varchar('id', { length: 255 }).notNull().primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  amount: double('amount', { precision: 10, scale: 2 }).notNull(),
+  target: double('target', { precision: 10, scale: 2 }).notNull(),
+  type: mysqlEnum('type', ['goal', 'limit']).notNull(),
+  timePeriod: mysqlEnum('timePeriod', ['day', 'month', 'year']).notNull(),
+  profileId: varchar('profileId', { length: 255 }).notNull(),
+});
+
 export const budgetStatusesRelations = relations(
   budgetStatuses,
   ({ one, many }) => ({
