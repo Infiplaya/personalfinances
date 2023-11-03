@@ -92,6 +92,10 @@ export const links = [
     href: '/budget',
     label: 'Budget',
   },
+  {
+    href: '/balances',
+    label: 'Balances',
+  },
 ];
 
 export type NavLink = (typeof links)[number];

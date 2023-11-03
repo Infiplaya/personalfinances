@@ -334,7 +334,7 @@ export async function updateBudgetPlanStatus(planId: string, statusId: string) {
       })
       .where(eq(budgetPlans.id, planId));
 
-    revalidatePath('/budget');
+    revalidatePath('/');
     return { success: true, message: 'Successfully created new profile!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
@@ -353,7 +353,7 @@ export async function updateBudgetOrder(newOrder: BudgetPlan[]) {
         .where(eq(budgetPlans.id, planId));
     }
 
-    revalidatePath('/budget');
+    revalidatePath('/');
     return { success: true, message: 'Successfully created new profile!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
@@ -482,7 +482,7 @@ export async function deleteBudgetItems(formData: FormData) {
     await db.delete(budgetPlans).where(eq(budgetPlans.statusId, data.columnId));
 
     revalidatePath('/');
-    return { success: true, message: 'Successfullyc updated the name!' };
+    return { success: true, message: 'Cleared all items' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
@@ -513,7 +513,7 @@ export async function createBudgetPlan(prevState: unknown, formData: FormData) {
       order: 0,
     });
 
-    revalidatePath('/budget');
+    revalidatePath('/');
     return { success: true, message: 'Created new plan!' };
   } catch (e) {
     return { success: false, message: 'This column name is taken.' };
@@ -523,7 +523,7 @@ export async function createBudgetPlan(prevState: unknown, formData: FormData) {
 export async function deleteBudgetPlan(planId: string) {
   try {
     await db.delete(budgetPlans).where(eq(budgetPlans.id, planId));
-    revalidatePath('/budget');
+    revalidatePath('/');
     return { success: true, message: 'Deleted this plan' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
@@ -558,7 +558,7 @@ export async function changeBudgetPlanName(
       })
       .where(eq(budgetPlans.id, result.data.planId));
 
-    revalidatePath('/budget');
+    revalidatePath('/');
     return { success: true, message: 'Updated name of the plan' };
   } catch (e) {
     return { success: false, message: 'Something went wrong' };
@@ -576,7 +576,7 @@ export async function updateBudgetPlan(formData: PlanForm, planId: string) {
       })
       .where(eq(budgetPlans.id, planId));
 
-    revalidatePath('/budget');
+    revalidatePath('/');
 
     return { success: true, message: 'Updated the plan' };
   } catch (e) {

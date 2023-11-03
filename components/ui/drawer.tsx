@@ -23,7 +23,7 @@ const DrawerContent = React.forwardRef<
     <DialogOverlay>
       <Drawer.Content
         className={cn(
-          'fixed bottom-0 left-0 right-0 top-36 flex max-h-[82vh] flex-col rounded-t-[10px] bg-white dark:bg-neutral-950 md:hidden',
+          'fixed bottom-0 left-0 right-0 top-24 flex max-h-[82vh] flex-col rounded-t-[10px] bg-white dark:bg-neutral-950 md:hidden',
           className
         )}
         ref={ref}

@@ -26,7 +26,9 @@ export async function BalanceCard({ currencyCode }: { currencyCode: string }) {
               <span
                 className={cn(
                   'font-semibold',
-                  b.balance >= 0 ? 'text-green-500' : 'text-red-500'
+                  b.balance >= 0
+                    ? 'text-green-500 dark:text-green-400'
+                    : 'text-red-500 dark:text-red-400'
                 )}
               >
                 {moneyFormat(b.balance, currencyCode)}

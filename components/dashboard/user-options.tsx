@@ -1,7 +1,6 @@
 import { getCurrentProfile, getUserProfiles } from '@/db/queries/auth';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
-import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { ProfileSwitcher } from '../profile/profile-switcher';
 import { ThemeSwitcher } from './theme-switcher';
 import MobileNavbar from './mobile-navbar';
@@ -10,13 +9,15 @@ import { CurrencyDropdown } from './currency-dropdown';
 import { ProfileDropdown } from '../profile/profile-dropdown';
 import { Home } from 'lucide-react';
 import { CommandMenu } from './command-menu';
+import { TransactionModal } from '../transactions/transaction-modal';
+import { getTransactionFormData } from '@/db/queries/transactions';
 
 export default async function UserOptions() {
   const session = await getServerSession(authOptions);
-  const currenciesData = await getCurrencies();
-  const currentCurrency = await getCurrentCurrency();
   const userProfiles = await getUserProfiles();
   const currentProfile = await getCurrentProfile();
+  const { currencies, currentCurrency, categories } =
+    await getTransactionFormData();
 
   return (
     <>
@@ -25,7 +26,7 @@ export default async function UserOptions() {
           <ProfileSwitcher
             profiles={userProfiles}
             currentProfile={currentProfile}
-            currencies={currenciesData}
+            currencies={currencies}
             currentCurrency={currentCurrency}
           />
         </div>
@@ -33,14 +34,13 @@ export default async function UserOptions() {
           <CommandMenu />
         </div>
         <div className="lg:flex lg:items-center lg:space-x-8">
-          {session?.user ? null : (
-            <div className="inline-flex items-center space-x-4 text-xs">
-              <Link href="/signin">Sign In</Link>{' '}
-              <Link href="/signup">Register</Link>
-            </div>
-          )}
+          <TransactionModal
+            categories={categories}
+            currencies={currencies}
+            currentCurrency={currentCurrency}
+          />
           <CurrencyDropdown
-            currencies={currenciesData}
+            currencies={currencies}
             currentCurrency={currentCurrency}
           />
           <ThemeSwitcher />
@@ -56,7 +56,7 @@ export default async function UserOptions() {
         </Link>
         <CommandMenu />
         <MobileNavbar
-          currencies={currenciesData}
+          currencies={currencies}
           currentCurrency={currentCurrency}
           currentProfile={currentProfile}
           profiles={userProfiles}

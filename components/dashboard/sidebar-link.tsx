@@ -10,8 +10,10 @@ export function SidebarLink({ link }: { link: NavLink }) {
     <Link
       href={link.href}
       className={cn(
-        'block w-full rounded-md px-3 py-2 pl-6 text-sm hover:bg-neutral-100 dark:hover:bg-white/10',
-        path === link.href ? 'bg-violet-500/50' : null
+        'block w-full rounded-md px-3 py-2 pl-6 text-sm transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-900',
+        path === link.href
+          ? 'bg-violet-600 hover:bg-violet-600 dark:hover:bg-violet-600'
+          : null
       )}
     >
       {link.label}
