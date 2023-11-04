@@ -1,0 +1,1 @@
+ALTER TABLE `financial_targets` DROP COLUMN `target`;

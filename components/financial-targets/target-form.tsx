@@ -70,7 +70,7 @@ export function TargetForm({
 
   return (
     <Form {...form}>
-      <h3 className="py-4 font-semibold">Create new</h3>
+      <h3 className="py-4 font-semibold">Create new {type}</h3>
       <form
         onSubmit={form.handleSubmit((data) => handleCreateTarget(data))}
         className="space-y-6"

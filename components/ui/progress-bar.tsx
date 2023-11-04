@@ -1,3 +1,5 @@
+import { TargetType } from '@/db/queries/targets';
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -12,6 +14,7 @@ export interface ProgressCircleProps
   radius?: number;
   strokeWidth?: number;
   children?: React.ReactNode;
+  targetType: TargetType;
 }
 
 const size2config: Record<Size, { strokeWidth: number; radius: number }> = {
@@ -54,6 +57,7 @@ const ProgressCircle = React.forwardRef<HTMLDivElement, ProgressCircleProps>(
       size = 'md',
       radius: inputRadius,
       strokeWidth: inputStrokeWidth,
+      targetType,
       children,
       ...other
     } = props;
@@ -101,7 +105,10 @@ const ProgressCircle = React.forwardRef<HTMLDivElement, ProgressCircleProps>(
                 fill="transparent"
                 stroke=""
                 strokeLinecap="round"
-                className="stroke-violet-500 transition-colors ease-linear"
+                className={cn(
+                  'transition-colors ease-linear',
+                  getColor(value, targetType)
+                )}
               />
             ) : null}
           </svg>
@@ -111,6 +118,30 @@ const ProgressCircle = React.forwardRef<HTMLDivElement, ProgressCircleProps>(
     );
   }
 );
+
+function getColor(value: number, type: TargetType) {
+  if (type === 'limit') {
+    switch (true) {
+      case value > 50 && value < 80:
+        return 'stroke-yellow-500';
+      case value > 80 && value < 100:
+        return 'stroke-orange-500';
+      case value >= 100:
+        return 'stroke-red-500';
+      default:
+        return 'stroke-violet-500';
+    }
+  } else {
+    switch (true) {
+      case value > 50 && value < 80:
+        return 'stroke-yellow-500';
+      case value > 80:
+        return 'stroke-green-500';
+      default:
+        return 'stroke-violet-500';
+    }
+  }
+}
 
 ProgressCircle.displayName = 'ProgressCircle';
 

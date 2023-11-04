@@ -103,7 +103,6 @@ export const financial_targets = mysqlTable('financial_targets', {
   id: varchar('id', { length: 255 }).notNull().primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
   amount: double('amount', { precision: 10, scale: 2 }).notNull(),
-  target: double('target', { precision: 10, scale: 2 }),
   type: mysqlEnum('type', ['goal', 'limit']).notNull(),
   timePeriod: mysqlEnum('timePeriod', ['day', 'month', 'year']).notNull(),
   profileId: varchar('profileId', { length: 255 }).notNull(),
@@ -156,6 +155,13 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   currency: one(currencies, {
     fields: [transactions.currencyCode],
     references: [currencies.code],
+  }),
+}));
+
+export const targetsRelations = relations(financial_targets, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [financial_targets.profileId],
+    references: [profiles.id],
   }),
 }));
 

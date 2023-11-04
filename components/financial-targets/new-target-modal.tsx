@@ -16,7 +16,9 @@ export function NewTargetModal({ children }: { children: ReactNode }) {
         <DrawerTrigger asChild>
           <Button>Set New</Button>
         </DrawerTrigger>
-        <DrawerContent>target form here</DrawerContent>
+        <DrawerContent>
+          {children}
+        </DrawerContent>
       </DrawerRoot>
     );
   }

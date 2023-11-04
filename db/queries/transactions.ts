@@ -433,6 +433,34 @@ async function sumIncomeForTime(
   return res[0].totalIncome;
 }
 
+export const getExpenseForTime = cache(sumExpenseForTime);
+
+async function sumExpenseForTime(
+  timePeriod: TimePeriod,
+  currency: Currency['code']
+) {
+  const currentProfile = await getCurrentProfile();
+
+  const conversionRate = getConversionRate(currency);
+
+  const { startDate, endDate } = calculateTimePeriodDates(timePeriod);
+
+  const res = await db
+    .select({
+      totalIncome: sql<number>`sum(CASE WHEN transactions.type = 'expense' THEN transactions.baseAmount * ${conversionRate} ELSE 0 END)`,
+    })
+    .from(transactions)
+    .where(
+      and(
+        gte(transactions.timestamp, startDate),
+        lte(transactions.timestamp, endDate),
+        eq(transactions.profileId, currentProfile.id)
+      )
+    );
+
+  return res[0].totalIncome;
+}
+
 export const getIncomeForTime = cache(sumIncomeForTime);
 
 function calculateTimePeriodDates(timePeriod: TimePeriod) {

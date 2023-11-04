@@ -1,6 +1,6 @@
 import { getCurrencies, getCurrentCurrency } from '@/db/queries/currencies';
 import { getTarget, TargetType, TimePeriod } from '@/db/queries/targets';
-import { getIncomeForTime } from '@/db/queries/transactions';
+import { getExpenseForTime, getIncomeForTime } from '@/db/queries/transactions';
 import {
   Card,
   CardContent,
@@ -24,7 +24,13 @@ export async function TargetCard({
   const currency = await getCurrentCurrency();
   const currencies = await getCurrencies();
   const income =
-    targetType === 'goal' ? await getIncomeForTime(targetPeriod, currency) : 0;
+    targetType === 'goal'
+      ? await getIncomeForTime(targetPeriod, currency)
+      : null;
+  const expense =
+    targetType === 'limit'
+      ? await getExpenseForTime(targetPeriod, currency)
+      : null;
 
   if (!target) {
     return (
@@ -73,7 +79,7 @@ export async function TargetCard({
         </div>
       </CardHeader>
       <CardContent>
-        <TargetCardContent target={target} income={income} />
+        <TargetCardContent target={target} income={income} expense={expense} />
       </CardContent>
     </Card>
   );
