@@ -23,15 +23,10 @@ export async function TargetCard({
   const target = await getTarget(targetPeriod, targetType);
   const currency = await getCurrentCurrency();
   const currencies = await getCurrencies();
-  const income =
+  const currentAmount =
     targetType === 'goal'
       ? await getIncomeForTime(targetPeriod, currency)
-      : null;
-  const expense =
-    targetType === 'limit'
-      ? await getExpenseForTime(targetPeriod, currency)
-      : null;
-
+      : await getExpenseForTime(targetPeriod, currency);
   if (!target) {
     return (
       <Card className="h-full">
@@ -79,7 +74,7 @@ export async function TargetCard({
         </div>
       </CardHeader>
       <CardContent>
-        <TargetCardContent target={target} income={income} expense={expense} />
+        <TargetCardContent target={target} currentAmount={currentAmount} />
       </CardContent>
     </Card>
   );

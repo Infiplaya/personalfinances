@@ -7,22 +7,14 @@ import ProgressCircle from '../ui/progress-bar';
 
 export function TargetCardContent({
   target,
-  income,
-  expense,
+  currentAmount,
 }: {
   target: FinancialTarget;
-  income?: number | null;
-  expense?: number | null;
+  currentAmount: number;
 }) {
   const percentage = useMemo(() => {
-    if (income) {
-      return Math.floor((income * 100) / target.amount);
-    } else if (expense) {
-      return Math.floor((expense * 100) / target.amount);
-    } else {
-      return 0;
-    }
-  }, [income, target, expense]);
+    return Math.floor((currentAmount * 100) / target.amount);
+  }, [target, currentAmount]);
 
   const message = generateFinancialMessage(target.type, percentage);
   return (
@@ -34,7 +26,7 @@ export function TargetCardContent({
       </ProgressCircle>
       <div>
         <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200">
-          {moneyFormat(expense ? expense : income!, target.currencyCode)} /{' '}
+          {moneyFormat(currentAmount, target.currencyCode)} /{' '}
           {moneyFormat(target.amount, target.currencyCode)}
         </h3>
         <p className="text-sm text-neutral-700 dark:text-neutral-300">
