@@ -134,7 +134,7 @@ function getColor(value: number, type: TargetType) {
   } else {
     switch (true) {
       case value > 50 && value < 80:
-        return 'stroke-yellow-500';
+        return 'stroke-teal-500';
       case value > 80:
         return 'stroke-green-500';
       default:

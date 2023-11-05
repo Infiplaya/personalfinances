@@ -44,7 +44,10 @@ export function TransactionModal({
       <DrawerRoot open={open} onOpenChange={setOpen} shouldScaleBackground>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="inline-flex items-center space-x-2">
+            <Button
+              size="sm"
+              className="inline-flex w-full items-center space-x-2"
+            >
               <PlusCircle className="h-5 w-5 dark:text-neutral-700" />{' '}
               <span>New Transaction</span>
             </Button>

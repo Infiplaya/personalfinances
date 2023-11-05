@@ -61,42 +61,44 @@ export default async function Home({ searchParams }: Props) {
       <Suspense fallback={<CardsSkeleton />}>
         <Cards currencyCode={currentCurrency} />
       </Suspense>
-      <div className="my-6 space-y-6 md:grid md:grid-cols-6 md:gap-x-4 md:space-y-0">
-        <div className="md:col-span-4">
-          <Suspense fallback={<BalanceChartSkeleton />}>
-            <BalanceChart
-              balanceTime={balanceTime}
-              currencyCode={currentCurrency}
-            />
-          </Suspense>
+      <div className="mt-6 flex flex-col-reverse md:mt-0 md:flex-col">
+        <div className="my-6 space-y-6 md:grid md:grid-cols-6 md:gap-x-4 md:space-y-0">
+          <div className="md:col-span-4">
+            <Suspense fallback={<BalanceChartSkeleton />}>
+              <BalanceChart
+                balanceTime={balanceTime}
+                currencyCode={currentCurrency}
+              />
+            </Suspense>
+          </div>
+          <div className="md:col-span-2 md:mt-0">
+            <Suspense fallback={<RecentTransactionsSkeleton />}>
+              <RecentTransactions />
+            </Suspense>
+          </div>
         </div>
-        <div className="md:col-span-2 md:mt-0">
-          <Suspense fallback={<RecentTransactionsSkeleton />}>
-            <RecentTransactions />
-          </Suspense>
-        </div>
+        <section className="flex flex-col-reverse gap-6 md:flex-row md:items-stretch">
+          <div className="flex-1">
+            <Suspense fallback={<Skeleton className="h-72 w-full" />}>
+              <Overview currencyCode={currentCurrency} overview={overview} />
+            </Suspense>
+          </div>
+          <div className="flex flex-1 flex-col justify-stretch gap-6">
+            <Suspense fallback={<Skeleton className="h-36 w-full" />}>
+              <TargetCard
+                targetPeriod={goalPeriod as TimePeriod}
+                targetType="goal"
+              />
+            </Suspense>
+            <Suspense fallback={<Skeleton className="h-36 w-full" />}>
+              <TargetCard
+                targetPeriod={limitPeriod as TimePeriod}
+                targetType="limit"
+              />
+            </Suspense>
+          </div>
+        </section>
       </div>
-      <section className="flex flex-col gap-6 md:flex-row md:items-stretch">
-        <div className="flex-1">
-          <Suspense fallback={<Skeleton className="h-72 w-full" />}>
-            <Overview currencyCode={currentCurrency} overview={overview} />
-          </Suspense>
-        </div>
-        <div className="flex flex-1 flex-col justify-stretch gap-6">
-          <Suspense fallback={<Skeleton className="h-36 w-full" />}>
-            <TargetCard
-              targetPeriod={goalPeriod as TimePeriod}
-              targetType="goal"
-            />
-          </Suspense>
-          <Suspense fallback={<Skeleton className="h-36 w-full" />}>
-            <TargetCard
-              targetPeriod={limitPeriod as TimePeriod}
-              targetType="limit"
-            />
-          </Suspense>
-        </div>
-      </section>
     </div>
   );
 }

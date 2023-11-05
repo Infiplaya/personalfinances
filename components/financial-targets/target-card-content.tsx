@@ -25,11 +25,11 @@ export function TargetCardContent({
         </span>
       </ProgressCircle>
       <div>
-        <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200">
+        <h3 className="font-semibold text-neutral-800 dark:text-neutral-200 md:text-lg">
           {moneyFormat(currentAmount, target.currencyCode)} /{' '}
           {moneyFormat(target.amount, target.currencyCode)}
         </h3>
-        <p className="text-sm text-neutral-700 dark:text-neutral-300">
+        <p className="text-xs text-neutral-700 dark:text-neutral-300 md:text-sm">
           {message}
         </p>
       </div>

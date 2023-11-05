@@ -23,10 +23,7 @@ export async function TargetCard({
   const target = await getTarget(targetPeriod, targetType);
   const currency = await getCurrentCurrency();
   const currencies = await getCurrencies();
-  const currentAmount =
-    targetType === 'goal'
-      ? await getIncomeForTime(targetPeriod, currency)
-      : await getExpenseForTime(targetPeriod, currency);
+
   if (!target) {
     return (
       <Card className="h-full">
@@ -58,6 +55,11 @@ export async function TargetCard({
       </Card>
     );
   }
+
+  const currentAmount =
+    targetType === 'goal'
+      ? await getIncomeForTime(targetPeriod, target.currencyCode)
+      : await getExpenseForTime(targetPeriod, target.currencyCode);
   return (
     <Card className="h-full">
       <CardHeader>
