@@ -1,11 +1,7 @@
 'use server';
 
 import { db } from '@/db';
-import {
-  BudgetPlan,
-  budgetPlans,
-  budgetStatuses,
-} from '@/db/schema/finances';
+import { BudgetPlan, budgetPlans, budgetStatuses } from '@/db/schema/finances';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,7 +20,7 @@ export async function updateBudgetPlanStatus(planId: string, statusId: string) {
       .where(eq(budgetPlans.id, planId));
 
     revalidatePath('/budget');
-    return { success: true, message: 'Successfully created new profile!' };
+    return { success: true, message: 'Updated budget status' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
@@ -43,7 +39,7 @@ export async function updateBudgetOrder(newOrder: BudgetPlan[]) {
     }
 
     revalidatePath('/budget');
-    return { success: true, message: 'Successfully created new profile!' };
+    return { success: true, message: 'Changed the order' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
@@ -68,8 +64,8 @@ export async function changeBudgetColumnName(formData: FormData) {
       })
       .where(eq(budgetStatuses.id, data.columnId));
 
-    revalidatePath('/');
-    return { success: true, message: 'Successfully updated the name!' };
+    revalidatePath('/budget');
+    return { success: true, message: 'Changed status name' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
@@ -102,7 +98,7 @@ export async function createBudgetColumn(
       profileId: currentProfile.id,
     });
 
-    revalidatePath('/budget', 'layout');
+    revalidatePath('/budget');
     return { success: true, message: `Created status ${result.data.name}!` };
   } catch (e) {
     return { success: false, message: 'This column name is taken.' };
@@ -133,6 +129,8 @@ export async function createStatusFromClient(name: string, columnId: string) {
       profileId: currentProfile.id,
     });
 
+    revalidatePath('/budget');
+
     return { success: true, message: 'Created new status' };
   } catch (e) {
     return { success: false, message: 'This column name is taken.' };
@@ -152,7 +150,7 @@ export async function deleteBudgetColumn(formData: FormData) {
     await db.delete(budgetStatuses).where(eq(budgetStatuses.id, data.columnId));
 
     revalidatePath('/budget');
-    return { success: true, message: 'Column deleted' };
+    return { success: true, message: 'Status deleted' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
@@ -170,7 +168,7 @@ export async function deleteBudgetItems(formData: FormData) {
   try {
     await db.delete(budgetPlans).where(eq(budgetPlans.statusId, data.columnId));
 
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Cleared all items' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
@@ -202,7 +200,7 @@ export async function createBudgetPlan(prevState: unknown, formData: FormData) {
       order: 0,
     });
 
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Created new plan!' };
   } catch (e) {
     return { success: false, message: 'This column name is taken.' };
@@ -212,7 +210,7 @@ export async function createBudgetPlan(prevState: unknown, formData: FormData) {
 export async function deleteBudgetPlan(planId: string) {
   try {
     await db.delete(budgetPlans).where(eq(budgetPlans.id, planId));
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Deleted this plan' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
@@ -247,7 +245,7 @@ export async function changeBudgetPlanName(
       })
       .where(eq(budgetPlans.id, result.data.planId));
 
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Updated name of the plan' };
   } catch (e) {
     return { success: false, message: 'Something went wrong' };

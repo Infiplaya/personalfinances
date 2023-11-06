@@ -9,7 +9,7 @@ import { getCurrentProfile } from '@/db/queries/auth';
 import { z } from 'zod';
 
 const currencySchema = z.object({
-  code: z.string().nonempty(),
+  code: z.string().min(1),
 });
 
 export async function changeCurrency(prevState: unknown, formData: FormData) {

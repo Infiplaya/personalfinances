@@ -20,7 +20,7 @@ export async function createNewTarget(formData: TargetForm) {
     });
     revalidatePath('/');
 
-    return { success: true, message: 'Success' };
+    return { success: true, message: 'Created new target' };
   } catch (e) {
     console.log(e);
     revalidatePath('/');
