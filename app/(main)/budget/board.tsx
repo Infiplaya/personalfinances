@@ -7,7 +7,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Columns } from '@/db/queries/budgets';
 import { cn } from '@/lib/utils';
-import { useEffect, useOptimistic, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 // @ts-expect-error experimental hook
 import { useFormState } from 'react-dom';
@@ -41,7 +41,7 @@ export function Board({
   const [editedColumn, setEditedColumn] = useState<null | string>(null);
   const [displayForm, setDisplayForm] = useState(false);
   const nameInputRef = useRef<null | HTMLInputElement>(null);
-  const [optimisticColumns, changeColumnItems] = useOptimistic<Columns>(data);
+  // const [optimisticColumns, changeColumnItems] = useOptimistic<Columns>(data);
   const [state, newPlanAction] = useFormState(createBudgetPlan, initialState);
 
   const isMobile = useIsMobile();
@@ -75,17 +75,17 @@ export function Board({
       const [removed] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, removed);
 
-      changeColumnItems({
-        ...optimisticColumns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          budgetPlans: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          budgetPlans: destItems,
-        },
-      });
+      // changeColumnItems({
+      //   ...optimisticColumns,
+      //   [source.droppableId]: {
+      //     ...sourceColumn,
+      //     budgetPlans: sourceItems,
+      //   },
+      //   [destination.droppableId]: {
+      //     ...destColumn,
+      //     budgetPlans: destItems,
+      //   },
+      // });
 
       toast.success('Changed plan status');
 
@@ -98,13 +98,13 @@ export function Board({
       const [removed] = copiedItems.splice(source.index, 1);
       copiedItems.splice(destination.index, 0, removed);
 
-      changeColumnItems({
-        ...optimisticColumns,
-        [source.droppableId]: {
-          ...column,
-          budgetPlans: copiedItems,
-        },
-      });
+      // changeColumnItems({
+      //   ...optimisticColumns,
+      //   [source.droppableId]: {
+      //     ...column,
+      //     budgetPlans: copiedItems,
+      //   },
+      // });
 
       toast.success('Changed plan order');
 
@@ -120,7 +120,7 @@ export function Board({
   return (
     <div className="mt-10 flex min-h-[750px] w-full flex-col items-start gap-10 md:flex-row md:pr-8">
       <DragDropContext onDragEnd={async (result) => onDragEnd(result)}>
-        {Object.entries(optimisticColumns).map(([columnId, column]) => {
+        {Object.entries(data).map(([columnId, column]) => {
           return (
             <div
               className="w-full min-w-[350px] rounded-md border bg-neutral-100 py-4 shadow-md dark:border-neutral-800 dark:bg-neutral-900"
