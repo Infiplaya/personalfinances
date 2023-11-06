@@ -28,7 +28,7 @@ import {
 
 import Link from 'next/link';
 import { dateFormat, moneyFormat } from '@/lib/utils';
-import { deleteTransaction } from '@/app/actions';
+import { deleteTransaction } from '@/db/actions/transactions';
 import { toast } from 'sonner';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '../ui/badge';

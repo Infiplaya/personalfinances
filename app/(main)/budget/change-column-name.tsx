@@ -1,4 +1,4 @@
-import { changeBudgetColumnName } from '@/app/actions';
+import { changeBudgetColumnName } from '@/db/actions/budgets';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -9,7 +9,7 @@ import {
 import { BudgetStatus } from '@/db/schema/finances';
 import { SubmitButton } from '../settings/submit-button';
 
-export  function ChangeColumnName({ column }: { column: BudgetStatus }) {
+export function ChangeColumnName({ column }: { column: BudgetStatus }) {
   return (
     <Popover>
       <PopoverTrigger asChild>

@@ -37,7 +37,7 @@ import {
 } from '@/lib/validation/financial-target';
 import { Currency } from '@/db/schema/finances';
 import { TargetType, TimePeriod } from '@/db/queries/targets';
-import { createNewTarget } from '@/app/actions';
+import { createNewTarget } from '@/db/actions/targets';
 
 export function TargetForm({
   type,

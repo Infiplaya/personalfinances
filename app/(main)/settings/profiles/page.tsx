@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { ProfileModal } from '@/components/profile/profile-modal';
-import { deleteProfile } from '@/app/actions';
+import { deleteProfile } from '@/db/actions/auth';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

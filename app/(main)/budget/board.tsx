@@ -3,7 +3,7 @@ import {
   createBudgetPlan,
   updateBudgetOrder,
   updateBudgetPlanStatus,
-} from '@/app/actions';
+} from '@/db/actions/budgets';
 import { Button } from '@/components/ui/button';
 import { Columns } from '@/db/queries/budgets';
 import { cn } from '@/lib/utils';

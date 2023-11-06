@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { deleteBudgetColumn, deleteBudgetItems } from '@/app/actions';
+import { deleteBudgetColumn, deleteBudgetItems } from '@/db/actions/budgets';
 import { BudgetStatus } from '@/db/schema/finances';
 
 export default function ColumnOptions({ column }: { column: BudgetStatus }) {

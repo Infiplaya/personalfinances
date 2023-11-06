@@ -34,7 +34,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { DataTableToolbar } from './data-table-toolbar';
 import { Category } from '@/db/schema/finances';
 import { Button } from '@/components/ui/button';
-import { deleteTransactions } from '@/app/actions';
+import { deleteTransactions } from '@/db/actions/transactions';
 import { cn } from '@/lib/utils';
 
 interface DataTableProps<TData, TValue> {

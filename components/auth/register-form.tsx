@@ -13,7 +13,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 
-import { registerUser } from '@/app/actions';
+import { registerUser } from '@/db/actions/auth';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { RegisterForm, registerFormSchema } from '@/lib/validation/auth';

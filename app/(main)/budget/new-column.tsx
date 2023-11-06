@@ -8,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { SubmitButton } from '../settings/submit-button';
-import { createBudgetColumn } from '@/app/actions';
+import { createBudgetColumn } from '@/db/actions/budgets';
 // @ts-expect-error experimental hook
 import {  useFormState } from 'react-dom';
 import { useEffect } from 'react';

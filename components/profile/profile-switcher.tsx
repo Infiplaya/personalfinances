@@ -20,7 +20,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '../ui/command';
-import { changeCurrentProfile } from '@/app/actions';
+import { changeCurrentProfile } from '@/db/actions/auth';
 import { ProfileForm } from './profile-form';
 import { Currency } from '@/db/schema/finances';
 // @ts-expect-error experimental hook

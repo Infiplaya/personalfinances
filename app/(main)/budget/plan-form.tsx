@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import { BudgetPlan, BudgetStatus } from '@/db/schema/finances';
 import { PlanForm, planFormSchema } from '@/lib/validation/budget';
 import { Textarea } from '@/components/ui/textarea';
-import { createStatusFromClient, updateBudgetPlan } from '@/app/actions';
+import { createStatusFromClient, updateBudgetPlan } from '@/db/actions/budgets';
 import {
   Popover,
   PopoverContent,

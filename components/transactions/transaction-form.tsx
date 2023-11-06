@@ -41,7 +41,10 @@ import {
   transactionFormSchema,
 } from '@/lib/validation/transaction';
 import { Textarea } from '../ui/textarea';
-import { createNewTransaction, updateTransaction } from '@/app/actions';
+import {
+  createNewTransaction,
+  updateTransaction,
+} from '@/db/actions/transactions';
 import { CheckIcon } from 'lucide-react';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';

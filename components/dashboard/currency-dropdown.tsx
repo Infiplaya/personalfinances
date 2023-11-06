@@ -21,7 +21,7 @@ import {  useFormState } from 'react-dom';
 import { useFormStatus } from 'react-dom';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { changeCurrency } from '@/app/actions';
+import { changeCurrency } from '@/db/actions/currencies';
 
 const initialState = {
   message: null,

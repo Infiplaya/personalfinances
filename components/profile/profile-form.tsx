@@ -33,7 +33,7 @@ import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
 import { ProfileForm, profileFormSchema } from '@/lib/validation/auth';
 import { Currency } from '@/db/schema/finances';
-import { createNewProfile, updateUserProfile } from '@/app/actions';
+import { createNewProfile, updateUserProfile } from '@/db/actions/auth';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { ScrollArea } from '../ui/scroll-area';
@@ -144,7 +144,7 @@ export function ProfileForm({
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
                   <ScrollArea className="h-72 rounded-md border">
-                    <Command className='p-2'>
+                    <Command className="p-2">
                       <CommandInput
                         placeholder={`Search code`}
                         className="h-9"

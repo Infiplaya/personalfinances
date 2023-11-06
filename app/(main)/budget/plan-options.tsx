@@ -10,7 +10,7 @@ import { Edit, Edit2, MoreHorizontal, Trash } from 'lucide-react';
 
 import { BudgetPlan } from '@/db/schema/finances';
 import { useTransition } from 'react';
-import { deleteBudgetPlan } from '@/app/actions';
+import { deleteBudgetPlan } from '@/db/actions/budgets';
 import { toast } from 'sonner';
 import { SheetTrigger } from '@/components/ui/sheet';
 

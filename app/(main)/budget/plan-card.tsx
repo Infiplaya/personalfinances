@@ -1,5 +1,5 @@
 'use client';
-import { changeBudgetPlanName } from '@/app/actions';
+import { changeBudgetPlanName } from '@/db/actions/budgets';
 import {
   Card,
   CardDescription,
