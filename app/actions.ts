@@ -297,7 +297,7 @@ export async function changeCurrentProfile(
       })
       .where(eq(users.id, user.id));
 
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     return { success: true, message: `Changed profile to ${data.name}` };
   } catch (e) {
     console.log(e);
@@ -336,7 +336,7 @@ export async function updateBudgetPlanStatus(planId: string, statusId: string) {
       })
       .where(eq(budgetPlans.id, planId));
 
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Successfully created new profile!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
@@ -355,7 +355,7 @@ export async function updateBudgetOrder(newOrder: BudgetPlan[]) {
         .where(eq(budgetPlans.id, planId));
     }
 
-    revalidatePath('/');
+    revalidatePath('/budget');
     return { success: true, message: 'Successfully created new profile!' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
@@ -415,8 +415,8 @@ export async function createBudgetColumn(
       profileId: currentProfile.id,
     });
 
-    revalidatePath('/');
-    return { success: true, message: 'Successfully updated the name!' };
+    revalidatePath('/budget', 'layout');
+    return { success: true, message: `Created status ${result.data.name}!` };
   } catch (e) {
     return { success: false, message: 'This column name is taken.' };
   }
@@ -464,8 +464,8 @@ export async function deleteBudgetColumn(formData: FormData) {
   try {
     await db.delete(budgetStatuses).where(eq(budgetStatuses.id, data.columnId));
 
-    revalidatePath('/');
-    return { success: true, message: 'Successfully updated the name!' };
+    revalidatePath('/budget');
+    return { success: true, message: 'Column deleted' };
   } catch (e) {
     return { success: false, message: 'Something went wrong... Try Again' };
   }
@@ -578,7 +578,7 @@ export async function updateBudgetPlan(formData: PlanForm, planId: string) {
       })
       .where(eq(budgetPlans.id, planId));
 
-    revalidatePath('/');
+    revalidatePath('/budget');
 
     return { success: true, message: 'Updated the plan' };
   } catch (e) {

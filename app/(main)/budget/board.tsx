@@ -7,7 +7,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Columns } from '@/db/queries/budgets';
 import { cn } from '@/lib/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useOptimistic, useRef, useState } from 'react';
 import { DragDropContext, Draggable, DropResult } from 'react-beautiful-dnd';
 // @ts-expect-error experimental hook
 import { useFormState } from 'react-dom';
@@ -17,7 +17,6 @@ import { Separator } from '@/components/ui/separator';
 import { ChangeColumnName } from './change-column-name';
 import ColumnOptions from './column-options';
 import { toast } from 'sonner';
-import { useOptimistic } from 'react';
 import PlanCard from './plan-card';
 import { NameForm } from './name-form';
 import { Sheet } from '@/components/ui/sheet';
@@ -90,9 +89,9 @@ export function Board({
 
       toast.success('Changed plan status');
 
-      await updateBudgetOrder(destItems);
-
       await updateBudgetPlanStatus(removed.id, destColumn.id);
+
+      await updateBudgetOrder(destItems);
     } else {
       const column = data[source.droppableId];
       const copiedItems = [...column.budgetPlans];
@@ -119,7 +118,7 @@ export function Board({
   }
 
   return (
-    <div className="mt-10 flex min-h-[750px] w-full flex-col items-start gap-10 overflow-x-auto md:flex-row md:pr-8">
+    <div className="mt-10 flex min-h-[750px] w-full flex-col items-start gap-10 md:flex-row md:pr-8">
       <DragDropContext onDragEnd={async (result) => onDragEnd(result)}>
         {Object.entries(optimisticColumns).map(([columnId, column]) => {
           return (
