@@ -8,10 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { NewTargetModal } from './new-target-modal';
+import { TargetModal } from './target-modal';
 import { SelectTargetPeriod } from './select-period';
 import { TargetCardContent } from './target-card-content';
-import { TargetForm } from './target-form';
 
 export async function TargetCard({
   targetPeriod,
@@ -43,14 +42,13 @@ export async function TargetCard({
           </div>
         </CardHeader>
         <CardContent>
-          <NewTargetModal>
-            <TargetForm
-              type={targetType}
-              timePeriod={targetPeriod}
-              currentCurrency={currency}
-              currencies={currencies}
-            />
-          </NewTargetModal>
+          <TargetModal
+            edit={false}
+            targetType={targetType}
+            targetPeriod={targetPeriod}
+            currency={currency}
+            currencies={currencies}
+          />
         </CardContent>
       </Card>
     );
@@ -70,7 +68,15 @@ export async function TargetCard({
             </CardTitle>
             <CardDescription>{target.name}</CardDescription>
           </div>
-          <div>
+          <div className="flex items-center gap-3">
+            <TargetModal
+              edit={true}
+              targetType={targetType}
+              targetPeriod={targetPeriod}
+              currency={currency}
+              currencies={currencies}
+              target={target}
+            />
             <SelectTargetPeriod targetType={targetType} />
           </div>
         </div>

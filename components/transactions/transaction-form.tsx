@@ -120,6 +120,19 @@ export function TransactionForm({
       >
         <FormField
           control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <Input {...field} inputMode="numeric" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
@@ -131,24 +144,6 @@ export function TransactionForm({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Amount</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Amount of transaction"
-                  {...field}
-                  inputMode="numeric"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="currencyCode"

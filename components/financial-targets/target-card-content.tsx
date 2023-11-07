@@ -2,6 +2,7 @@
 
 import { FinancialTarget } from '@/db/schema/finances';
 import { moneyFormat } from '@/lib/utils';
+import { Check, X } from 'lucide-react';
 import { useMemo } from 'react';
 import ProgressCircle from '../ui/progress-bar';
 
@@ -21,7 +22,15 @@ export function TargetCardContent({
     <div className="mt-2 flex items-center space-x-8">
       <ProgressCircle value={percentage} targetType={target.type} size="md">
         <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-          {percentage}%
+          {percentage > 100 ? (
+            target.type === 'limit' ? (
+              <X className="h-5 w-5 text-red-400" />
+            ) : (
+              <Check className="h-5 w-5 text-green-400" />
+            )
+          ) : (
+            `${percentage}%`
+          )}
         </span>
       </ProgressCircle>
       <div>
@@ -29,7 +38,7 @@ export function TargetCardContent({
           {moneyFormat(currentAmount, target.currencyCode)} /{' '}
           {moneyFormat(target.amount, target.currencyCode)}
         </h3>
-        <p className="text-xs text-neutral-700 dark:text-neutral-300 md:text-sm">
+        <p className="hidden text-sm text-neutral-700 dark:text-neutral-300 md:block">
           {message}
         </p>
       </div>

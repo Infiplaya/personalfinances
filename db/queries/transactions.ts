@@ -303,7 +303,7 @@ async function selectRecentTransactions() {
   const currentProfile = await getCurrentProfile();
 
   return await db.query.transactions.findMany({
-    limit: 7,
+    limit: 8,
     orderBy: (transactions, { desc }) => [desc(transactions.timestamp)],
     with: {
       category: true,

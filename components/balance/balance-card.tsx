@@ -6,7 +6,7 @@ import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 export async function BalanceCard({ currencyCode }: { currencyCode: string }) {
   const balances = await getBalancesForUser(currencyCode);
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitleWithTooltip
           message="Your current balance for every profile"

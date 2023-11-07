@@ -6,7 +6,7 @@ import { TransactionItem } from './transaction-item';
 export default async function RecentTransactions() {
   const transactions = await getRecentTransactions();
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitleWithTooltip
           link="/transactions"
@@ -15,7 +15,7 @@ export default async function RecentTransactions() {
           Recent Transactions
         </CardTitleWithTooltip>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-1">
         {transactions.map((t) => (
           <TransactionItem transaction={t} key={t.id} />
         ))}

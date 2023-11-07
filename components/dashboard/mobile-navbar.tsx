@@ -3,6 +3,7 @@ import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import React, { useState } from 'react';
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -11,7 +12,7 @@ import {
 import Link from 'next/link';
 import { cn, links } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, Settings } from 'lucide-react';
+import { Home, Settings, X } from 'lucide-react';
 import { ThemeSwitcher } from './theme-switcher';
 import { Button } from '../ui/button';
 import { ProfileSwitcher } from '../profile/profile-switcher';
@@ -40,7 +41,7 @@ export default function MobileNavbar({
       </SheetTrigger>
       <SheetContent className="w-full lg:hidden" side="right">
         <SheetHeader>
-          <SheetTitle className="flex items-center space-x-14">
+          <SheetTitle className="flex items-center justify-between">
             <Link
               onClick={() => {
                 router.push('/');
@@ -56,6 +57,9 @@ export default function MobileNavbar({
               currentCurrency={currentCurrency}
               currencies={currencies}
             />
+            <SheetClose>
+              <X />
+            </SheetClose>
           </SheetTitle>
         </SheetHeader>
         <div className="flex h-full flex-col justify-between">

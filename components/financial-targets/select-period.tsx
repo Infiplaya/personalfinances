@@ -33,9 +33,9 @@ export function SelectTargetPeriod({ targetType }: { targetType: TargetType }) {
         );
       }}
     >
-      <SelectTrigger className="w-28">
+      <SelectTrigger className="h-8 rounded-md space-x-2 px-3 text-xs">
         <SelectValue
-          className="capitalize"
+          className="text-sm capitalize"
           defaultValue={searchParams.get(`${targetType}Period`) ?? 'Day'}
         />
       </SelectTrigger>

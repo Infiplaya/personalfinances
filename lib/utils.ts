@@ -92,10 +92,6 @@ export const links = [
     href: '/budget',
     label: 'Budget',
   },
-  {
-    href: '/balances',
-    label: 'Balances',
-  },
 ];
 
 export type NavLink = (typeof links)[number];
@@ -123,8 +119,6 @@ export async function findExchangeRate(
   }
 
   const exchangeRates = await fetchExchangeRates();
-
-  console.log();
 
   return exchangeRates[toCurrency] / exchangeRates[fromCurrency];
 }

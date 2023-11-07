@@ -35,27 +35,35 @@ import {
   TargetForm,
   targetFormSchema,
 } from '@/lib/validation/financial-target';
-import { Currency } from '@/db/schema/finances';
+import { Currency, FinancialTarget } from '@/db/schema/finances';
 import { TargetType, TimePeriod } from '@/db/queries/targets';
-import { createNewTarget } from '@/db/actions/targets';
+import { createNewTarget, editTarget } from '@/db/actions/targets';
 
 export function TargetForm({
   type,
   currencies,
   currentCurrency,
   timePeriod,
+  edit,
+  target,
+  closeModal,
 }: {
   type: TargetType;
   timePeriod: TimePeriod;
   currencies: Currency[];
   currentCurrency: Currency['code'];
+  edit: boolean;
+  target?: FinancialTarget;
+  closeModal: () => void;
 }) {
   const form = useForm<TargetForm>({
     resolver: zodResolver(targetFormSchema),
     defaultValues: {
       type,
       timePeriod,
-      currencyCode: currentCurrency,
+      currencyCode: target ? target.currencyCode : currentCurrency,
+      name: target?.name,
+      amount: String(target?.amount),
     },
   });
 
@@ -63,6 +71,18 @@ export function TargetForm({
     const result = await createNewTarget(data);
     if (result.success) {
       toast.success(result.message);
+      closeModal();
+    } else {
+      toast.error(result.message);
+    }
+  }
+
+  async function handleEditTarget(data: TargetForm) {
+    if (!target) return;
+    const result = await editTarget(data, target.id);
+    if (result.success) {
+      toast.success(result.message);
+      closeModal();
     } else {
       toast.error(result.message);
     }
@@ -70,9 +90,13 @@ export function TargetForm({
 
   return (
     <Form {...form}>
-      <h3 className="py-4 font-semibold">Create new {type}</h3>
+      <h3 className="py-4 font-semibold">
+        {edit ? 'Edit ' : 'Create new'} {type}
+      </h3>
       <form
-        onSubmit={form.handleSubmit((data) => handleCreateTarget(data))}
+        onSubmit={form.handleSubmit((data) =>
+          edit ? handleEditTarget(data) : handleCreateTarget(data)
+        )}
         className="space-y-6"
       >
         <FormField
@@ -106,10 +130,9 @@ export function TargetForm({
           control={form.control}
           name="type"
           render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Type</FormLabel>
+            <FormItem>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type="hidden" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,10 +143,9 @@ export function TargetForm({
           control={form.control}
           name="timePeriod"
           render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Time</FormLabel>
+            <FormItem>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} type="hidden" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -161,8 +183,7 @@ export function TargetForm({
                       className="h-9"
                     />
                     <CommandEmpty>No currency found.</CommandEmpty>
-
-                    <CommandGroup className="max-h-72 overflow-auto">
+                    <CommandGroup className="h-64 overflow-auto">
                       {currencies.map((currency) => (
                         <CommandItem
                           value={currency.code}
