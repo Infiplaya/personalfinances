@@ -4,7 +4,6 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 import { Drawer } from 'vaul';
-import { DialogOverlay } from './dialog';
 
 const DrawerRoot = Drawer.Root;
 
@@ -20,20 +19,19 @@ const DrawerContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof Drawer.Content>
 >(({ className, children }, ref) => (
   <Drawer.Portal>
-    <DialogOverlay>
-      <Drawer.Content
-        className={cn(
-          'fixed bottom-0 left-0 right-0 top-12 flex max-h-[82vh] flex-col rounded-t-[10px] bg-white dark:bg-neutral-950 md:hidden',
-          className
-        )}
-        ref={ref}
-      >
-        <div className="mx-auto mt-2 w-1/4 rounded-lg bg-neutral-200 py-1 dark:bg-neutral-800"></div>
-        <div className="mx-auto mt-3 flex w-full max-w-md flex-col overflow-auto rounded-t-[10px] p-3">
-          {children}
-        </div>
-      </Drawer.Content>
-    </DialogOverlay>
+    <Drawer.Overlay />
+    <Drawer.Content
+      className={cn(
+        'fixed bottom-0 left-0 right-0 top-24 flex max-h-[82vh] flex-col rounded-t-[10px] border bg-white dark:bg-neutral-950 md:hidden',
+        className
+      )}
+      ref={ref}
+    >
+      <div className="mx-auto mt-2 w-1/4 rounded-lg bg-neutral-200 py-1 dark:bg-neutral-800"></div>
+      <div className="mx-auto mt-3 flex w-full max-w-md flex-col overflow-auto rounded-t-[10px] p-3">
+        {children}
+      </div>
+    </Drawer.Content>
   </Drawer.Portal>
 ));
 DrawerContent.displayName = Drawer.Content.displayName;

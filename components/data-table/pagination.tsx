@@ -6,6 +6,7 @@ import {
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
+import { RowsControls } from './data-table-rows';
 
 interface Props {
   page: number;
@@ -25,7 +26,7 @@ export default function Pagination({
   notPreviousPage,
 }: Props) {
   return (
-    <div className="flex items-center space-x-6">
+    <div className="flex w-full items-center justify-between">
       <p className="text-sm">
         Page {page} of {lastPage}
       </p>
@@ -99,6 +100,7 @@ export default function Pagination({
           <DoubleArrowRightIcon className="h-4 w-4" />
         </Link>
       </div>
+      <RowsControls />
     </div>
   );
 }

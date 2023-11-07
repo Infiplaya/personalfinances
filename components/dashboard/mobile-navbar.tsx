@@ -73,7 +73,8 @@ export default function MobileNavbar({
                 }}
                 className={cn(
                   'mt-4 block w-full rounded-lg py-2 pl-8 text-left text-sm font-semibold text-neutral-900 dark:text-neutral-100',
-                  path === link.href && 'bg-violet-500 dark:bg-violet-500'
+                  path === link.href &&
+                    'bg-violet-500 text-gray-50 dark:bg-violet-500'
                 )}
                 href={link.href}
               >

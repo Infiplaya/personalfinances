@@ -3,7 +3,6 @@ import {
   getTransactionsCount,
 } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
-import { RowsControls } from '@/components/data-table/data-table-rows';
 import { Metadata } from 'next';
 import Pagination from '@/components/data-table/pagination';
 import { Suspense } from 'react';
@@ -90,7 +89,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
           />
         </Suspense>
 
-        <div className="mt-3 flex w-full items-center justify-between">
+        <div className="mt-3">
           <Pagination
             page={page}
             lastPage={lastPage}
@@ -99,7 +98,6 @@ export default async function TransactionsPage({ searchParams }: Props) {
             name={name}
             limit={limit}
           />
-          <RowsControls />
         </div>
       </section>
     </main>

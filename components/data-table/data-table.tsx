@@ -92,12 +92,16 @@ export function DataTable<TData, TValue>({
   }
   return (
     <>
-      <div className="flex items-center space-x-3 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
         <DataTableToolbar table={table} categories={categories} />
         {Object.keys(rowSelection).length > 0 ? (
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button size="sm" variant="destructive">
+              <Button
+                size="sm"
+                variant="destructive"
+                className="my-3 w-full md:my-0 md:ml-8 md:w-auto"
+              >
                 Delete
               </Button>
             </AlertDialogTrigger>

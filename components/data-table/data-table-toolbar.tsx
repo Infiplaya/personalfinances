@@ -35,7 +35,7 @@ export function DataTableToolbar<TData>({
   return (
     <div className="my-6 flex w-full items-center justify-between">
       <div className="inline-flex space-x-6">
-        <div className="mr-auto inline-flex space-x-2">
+        <div className="mr-auto inline-flex space-x-4">
           {table.getColumn('categoryName') && (
             <DataTableFacetedFilter title="category" options={categories} />
           )}
@@ -66,7 +66,7 @@ export function DataTableToolbar<TData>({
               className="h-8 px-2 lg:px-3"
             >
               <span className="hidden md:block">Reset</span>
-              <Cross2Icon className="ml-2 h-4 w-4" />
+              <Cross2Icon className="h-4 w-4 md:ml-2" />
             </Button>
           )}
         </div>
