@@ -13,13 +13,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoginForm, loginFormSchema } from '@/lib/validation/auth';
 import { signIn } from 'next-auth/react';
 
 export function LoginForm() {
-  const [error] = useState('');
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginFormSchema),
   });
@@ -42,7 +40,7 @@ export function LoginForm() {
               toast.error('Invalid Credentials! Try Again.');
             }
           } catch (e) {
-            console.log(e);
+            toast.error('Something went wrong. Try Again');
           }
         })}
         className="space-y-8"
@@ -81,7 +79,6 @@ export function LoginForm() {
           >
             {form.formState.isSubmitting ? 'Submitting' : 'Submit'}
           </Button>
-          <p className="text-sm text-rose-500 dark:text-rose-400">{error}</p>
         </div>
       </form>
     </Form>
