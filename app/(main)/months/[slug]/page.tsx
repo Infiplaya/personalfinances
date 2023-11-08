@@ -3,7 +3,7 @@ import { TransactionByMonth } from './transactions-by-month';
 import { Metadata } from 'next';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { Suspense } from 'react';
-import TableSkeleton from '@/components/skeletons/table-skeleton';
+import { TableSkeleton } from '@/components/skeletons/table-skeleton';
 import { getTransactionFormData } from '@/db/queries/transactions';
 
 type Props = {
@@ -11,9 +11,7 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata(
-  { params }: Props,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = params.slug;
 
   const month = params.slug.charAt(0).toUpperCase() + slug.slice(1);
