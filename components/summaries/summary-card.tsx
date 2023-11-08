@@ -5,7 +5,7 @@ import { Label } from '../ui/label';
 import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 import { getTotalIncomeAndExpenses } from '@/db/queries/transactions';
 
-export default async function SummaryCard({
+export async function SummaryCard({
   isCurrentMonth,
   currentCurrency,
 }: {

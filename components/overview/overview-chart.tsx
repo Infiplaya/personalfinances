@@ -5,10 +5,10 @@ import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { moneyFormat } from '@/lib/utils';
 import { useTransition } from 'react';
 import { Skeleton } from '../ui/skeleton';
-import TimeOptions from '../dashboard/time-options';
+import {TimeOptions} from '../dashboard/time-options';
 import { OverviewData } from '@/db/queries/transactions';
 
-export default function OverviewChart({
+export function OverviewChart({
   data,
   currencyCode,
   overview,

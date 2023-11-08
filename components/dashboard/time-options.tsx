@@ -18,7 +18,7 @@ export const timestamps = [
   },
 ];
 
-export default function TimeOptions({
+export function TimeOptions({
   isPending,
   startTransition,
   selectedTime,

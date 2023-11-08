@@ -1,7 +1,5 @@
-
-
 import { getOverviewData } from '@/db/queries/transactions';
-import OverviewChart from './overview-chart';
+import { OverviewChart } from './overview-chart';
 
 export async function Overview({
   currencyCode,

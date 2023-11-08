@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { useRef, useTransition } from 'react';
 import { Label } from '../ui/label';
 
-export default function SearchTransactions() {
+export function SearchTransactions() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const pathname = usePathname();

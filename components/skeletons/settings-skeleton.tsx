@@ -2,7 +2,7 @@ import React from 'react';
 import { Separator } from '../ui/separator';
 import { Skeleton } from '../ui/skeleton';
 
-export default function SettingsSkeleton() {
+export function SettingsSkeleton() {
   return (
     <div className="space-y-6">
       <div>

@@ -17,7 +17,7 @@ interface Props {
   notPreviousPage: boolean;
 }
 
-export default function Pagination({
+export function Pagination({
   page,
   lastPage,
   name,

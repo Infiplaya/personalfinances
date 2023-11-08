@@ -9,7 +9,7 @@ export function AuthPage({
   children,
   type,
 }: {
-  children?: ReactNode;
+  children: ReactNode;
   type: 'signin' | 'signup';
 }) {
   return (

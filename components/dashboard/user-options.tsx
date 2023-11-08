@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth';
 import { ProfileSwitcher } from '../profile/profile-switcher';
 import { ThemeSwitcher } from './theme-switcher';
-import MobileNavbar from './mobile-navbar';
+import { MobileNavbar } from './mobile-navbar';
 import Link from 'next/link';
 import { CurrencyDropdown } from './currency-dropdown';
 import { ProfileDropdown } from '../profile/profile-dropdown';
@@ -12,7 +12,7 @@ import { CommandMenu } from './command-menu';
 import { TransactionModal } from '../transactions/transaction-modal';
 import { getTransactionFormData } from '@/db/queries/transactions';
 
-export default async function UserOptions() {
+export async function UserOptions() {
   const session = await getServerSession(authOptions);
   const userProfiles = await getUserProfiles();
   const currentProfile = await getCurrentProfile();

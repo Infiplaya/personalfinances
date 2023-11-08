@@ -6,7 +6,7 @@ import { ThemeProvider } from './providers/theme-provider';
 import { Toaster } from 'sonner';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
-export default function Providers({ children }: { children: ReactNode }) {
+export function Providers({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile();
   return (
     <SessionProvider>

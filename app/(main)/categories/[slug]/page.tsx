@@ -1,4 +1,4 @@
-import TableSkeleton from '@/components/skeletons/table-skeleton';
+import {TableSkeleton} from '@/components/skeletons/table-skeleton';
 import { TransactionsTable } from '@/components/transactions/transactions-table';
 import {
   getCategory,

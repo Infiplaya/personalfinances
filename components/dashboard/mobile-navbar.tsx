@@ -20,7 +20,7 @@ import { Currency } from '@/db/schema/finances';
 import { Profile } from '@/db/queries/auth';
 import { CurrencyDropdown } from './currency-dropdown';
 
-export default function MobileNavbar({
+export function MobileNavbar({
   currencies,
   currentCurrency,
   profiles,

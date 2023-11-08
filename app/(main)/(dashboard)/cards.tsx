@@ -1,5 +1,5 @@
 import { BalanceCard } from '@/components/balance/balance-card';
-import SummaryCard from '@/components/summaries/summary-card';
+import { SummaryCard } from '@/components/summaries/summary-card';
 
 export function Cards({ currencyCode }: { currencyCode: string }) {
   return (

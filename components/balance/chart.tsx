@@ -12,12 +12,12 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import TimeOptions from '../dashboard/time-options';
+import { TimeOptions } from '../dashboard/time-options';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import { CardTitleWithTooltip } from '../ui/card-title-with-tooltip';
 import { Skeleton } from '../ui/skeleton';
 
-export default function Chart({
+export function Chart({
   balanceTime,
   data,
   currencyCode,

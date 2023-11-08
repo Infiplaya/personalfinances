@@ -23,7 +23,7 @@ import { Input } from '@/components/ui/input';
 import { deleteBudgetColumn, deleteBudgetItems } from '@/db/actions/budgets';
 import { BudgetStatus } from '@/db/schema/finances';
 
-export default function ColumnOptions({ column }: { column: BudgetStatus }) {
+export function ColumnOptions({ column }: { column: BudgetStatus }) {
   const [selectedTrigger, setSelectedTrigger] = useState<
     null | 'column' | 'items'
   >(null);

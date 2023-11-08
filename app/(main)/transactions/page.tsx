@@ -4,12 +4,12 @@ import {
 } from '@/db/queries/transactions';
 import { Transaction } from '@/db/schema/finances';
 import { Metadata } from 'next';
-import Pagination from '@/components/data-table/pagination';
+import {Pagination} from '@/components/data-table/pagination';
 import { Suspense } from 'react';
-import TableSkeleton from '@/components/skeletons/table-skeleton';
+import {TableSkeleton} from '@/components/skeletons/table-skeleton';
 import { Transactions } from './transactions';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
-import SearchTransactions from '@/components/data-table/search-transactions';
+import {SearchTransactions} from '@/components/data-table/search-transactions';
 
 export const metadata: Metadata = {
   title: 'Transactions',

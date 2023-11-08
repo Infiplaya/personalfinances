@@ -1,4 +1,4 @@
-import TableSkeleton from '@/components/skeletons/table-skeleton';
+import {TableSkeleton} from '@/components/skeletons/table-skeleton';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Loading() {

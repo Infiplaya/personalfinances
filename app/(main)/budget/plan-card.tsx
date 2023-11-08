@@ -11,7 +11,7 @@ import { BudgetPlan } from '@/db/schema/finances';
 import { cn } from '@/lib/utils';
 import { useEffect, useRef, useState } from 'react';
 import { DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
-import PlanOptions from './plan-options';
+import { PlanOptions } from './plan-options';
 // @ts-expect-error experimental hook
 import { useFormState } from 'react-dom';
 import { toast } from 'sonner';
@@ -25,7 +25,7 @@ const initialState = {
   message: null,
 };
 
-export default function PlanCard({
+export function PlanCard({
   provided,
   snapshot,
   item,

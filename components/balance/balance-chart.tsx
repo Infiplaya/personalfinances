@@ -1,5 +1,5 @@
 import { getBalanceData } from '@/db/queries/transactions';
-import Chart from './chart';
+import {Chart} from './chart';
 
 export async function BalanceChart({
   currencyCode,

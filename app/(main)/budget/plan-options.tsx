@@ -14,7 +14,7 @@ import { deleteBudgetPlan } from '@/db/actions/budgets';
 import { toast } from 'sonner';
 import { SheetTrigger } from '@/components/ui/sheet';
 
-export default function PlanOptions({
+export function PlanOptions({
   plan,
   handleRenamePlan,
 }: {

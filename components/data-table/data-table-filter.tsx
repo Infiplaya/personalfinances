@@ -139,7 +139,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   );
 }
 
-export default function SelectItem({
+export function SelectItem({
   option,
   selectedValues,
   isSelected,
