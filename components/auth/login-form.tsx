@@ -43,7 +43,7 @@ export function LoginForm() {
             toast.error('Something went wrong. Try Again');
           }
         })}
-        className="space-y-8"
+        className="w-full max-w-sm space-y-8"
       >
         <FormField
           control={form.control}
@@ -77,7 +77,7 @@ export function LoginForm() {
             className="w-full"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? 'Submitting' : 'Submit'}
+            {form.formState.isSubmitting ? 'Submitting' : 'Sign in'}
           </Button>
         </div>
       </form>
