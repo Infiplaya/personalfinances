@@ -63,7 +63,6 @@ export function AuthPage({
 
             <div className="mt-10">
               {children}
-
               <div className="mt-10">
                 <div className="relative">
                   <div
@@ -115,6 +114,33 @@ export function AuthPage({
                       GitHub
                     </span>
                   </Button>
+                </div>
+                <div className="flex flex-col items-center justify-center lg:hidden mt-12">
+                  {type === 'signin' ? (
+                    <>
+                      <h3 className="leading-6 text-neutral-900 dark:text-neutral-50">
+                        Do not have account?
+                      </h3>
+                      <Link
+                        href="/signup"
+                        className="text-lg text-neutral-900 underline-offset-4 hover:underline dark:text-neutral-50 dark:decoration-neutral-100"
+                      >
+                        Sign Up
+                      </Link>{' '}
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="leading-6 text-neutral-900 dark:text-neutral-50">
+                        Already have an account?
+                      </h3>
+                      <Link
+                        href="/signin"
+                        className="text-lg text-neutral-900 underline-offset-4 hover:underline dark:text-neutral-50 dark:decoration-neutral-100"
+                      >
+                        Sign In
+                      </Link>{' '}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
