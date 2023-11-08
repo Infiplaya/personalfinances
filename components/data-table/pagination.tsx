@@ -11,7 +11,7 @@ import { RowsControls } from './data-table-rows';
 interface Props {
   page: number;
   lastPage: number;
-  name: string | string[] | undefined;
+  name?: string | string[];
   limit: number;
   notNextPage: boolean;
   notPreviousPage: boolean;

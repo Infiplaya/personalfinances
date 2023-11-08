@@ -34,6 +34,8 @@ export function CommandMenu() {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
+  const isMobile = useIsMobile();
+
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -49,8 +51,6 @@ export function CommandMenu() {
     setOpen(false);
     command();
   }, []);
-
-  const isMobile = useIsMobile();
 
   return (
     <>
