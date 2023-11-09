@@ -40,8 +40,6 @@ export async function UserOptions() {
             currentCurrency={currentCurrency}
           />
           <CurrencyDropdown
-            currencies={currencies}
-            currentCurrency={currentCurrency}
           />
           <ThemeSwitcher />
           <ProfileDropdown

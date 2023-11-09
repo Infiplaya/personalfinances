@@ -26,10 +26,11 @@ export async function changeCurrency(prevState: unknown, formData: FormData) {
       })
       .where(eq(profiles.id, currentProfile.id));
 
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     return {
       success: true,
       message: `Changed currency to ${data.code}`,
+      newCurrency: data.code,
     };
   } catch (e) {
     console.log(e);

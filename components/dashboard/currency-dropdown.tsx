@@ -23,9 +23,12 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { changeCurrency } from '@/db/actions/currencies';
 import { cn } from '@/lib/utils';
+import { useCurrencies, useUserCurrency } from '@/context/CurrenciesContext';
 
 const initialState = {
   message: null,
+  newCode: null,
+  success: false,
 };
 
 function SubmitButton({
@@ -57,15 +60,11 @@ function SubmitButton({
   );
 }
 
-export function CurrencyDropdown({
-  currencies,
-  currentCurrency,
-}: {
-  currencies: Currency[];
-  currentCurrency: string;
-}) {
+export function CurrencyDropdown() {
   const [open, setOpen] = useState(false);
   const [, formAction] = useFormState(changeCurrency, initialState);
+  const [currencies] = useCurrencies();
+  const [currentCurrency, setUserCurrency] = useUserCurrency();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -89,7 +88,11 @@ export function CurrencyDropdown({
           <CommandEmpty>No currency found.</CommandEmpty>
           <CommandGroup>
             {currencies.map((currency) => (
-              <form action={formAction} key={currency.id}>
+              <form
+                action={formAction}
+                onSubmit={() => setUserCurrency(currency.code)}
+                key={currency.id}
+              >
                 <input
                   type="hidden"
                   id="code"
