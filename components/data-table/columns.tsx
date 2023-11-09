@@ -32,7 +32,7 @@ import { deleteTransaction } from '@/db/actions/transactions';
 import { toast } from 'sonner';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '../ui/badge';
-import { EditTransaction } from '@/app/(main)/transactions/[slug]/edit/edit-transaction';
+import { EditTransaction } from '@/components/transactions/edit-transaction';
 import { Dialog, DialogTrigger } from '../ui/dialog';
 
 export const columns: ColumnDef<Transaction>[] = [
