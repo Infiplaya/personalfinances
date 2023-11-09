@@ -84,10 +84,7 @@ export function MobileNavbar({
             ))}
           </div>
           <div className="ml-auto flex items-center space-x-3 pb-20">
-            <CurrencyDropdown
-              currencies={currencies}
-              currentCurrency={currentCurrency}
-            />
+            <CurrencyDropdown />
             <ThemeSwitcher />
             <Link
               href="/settings"

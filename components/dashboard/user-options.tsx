@@ -39,8 +39,7 @@ export async function UserOptions() {
             currencies={currencies}
             currentCurrency={currentCurrency}
           />
-          <CurrencyDropdown
-          />
+          <CurrencyDropdown />
           <ThemeSwitcher />
           <ProfileDropdown
             userImg={session?.user.image}
