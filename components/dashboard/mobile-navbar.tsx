@@ -12,13 +12,14 @@ import {
 import Link from 'next/link';
 import { cn, links } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, Settings, X } from 'lucide-react';
+import { Home, LogOut, Settings, X } from 'lucide-react';
 import { ThemeSwitcher } from './theme-switcher';
 import { Button } from '../ui/button';
 import { ProfileSwitcher } from '../profile/profile-switcher';
 import { Currency } from '@/db/schema/finances';
 import { Profile } from '@/db/queries/auth';
 import { CurrencyDropdown } from './currency-dropdown';
+import { signOut } from 'next-auth/react';
 
 export function MobileNavbar({
   currencies,
@@ -99,6 +100,15 @@ export function MobileNavbar({
                 <Settings className="h-5 w-5 dark:text-neutral-300" />
               </Button>
             </Link>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                signOut({ callbackUrl: '/?signedOut=true' });
+              }}
+            >
+              <LogOut className="h-[1.2rem] w-[1.2rem]" />
+            </Button>
           </div>
         </div>
       </SheetContent>
