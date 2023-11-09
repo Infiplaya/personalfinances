@@ -4,7 +4,6 @@ import { Metadata } from 'next';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { Suspense } from 'react';
 import { TableSkeleton } from '@/components/skeletons/table-skeleton';
-import { getTransactionFormData } from '@/db/queries/transactions';
 
 type Props = {
   params: { slug: string };
@@ -27,9 +26,6 @@ export default async function MonthPage({
 }: {
   params: { slug: string };
 }) {
-  const { categories, currencies, currentCurrency } =
-    await getTransactionFormData();
-
   return (
     <main>
       <div>
@@ -38,11 +34,7 @@ export default async function MonthPage({
         </h1>
       </div>
       <div className="flex w-full justify-end px-3 md:my-6">
-        <TransactionModal
-          categories={categories}
-          currencies={currencies}
-          currentCurrency={currentCurrency}
-        />
+        <TransactionModal />
       </div>
       <Suspense fallback={<TableSkeleton />}>
         <TransactionByMonth month={getMonthIndex(params.slug)} />

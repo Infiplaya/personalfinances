@@ -1,9 +1,6 @@
-import {TableSkeleton} from '@/components/skeletons/table-skeleton';
+import { TableSkeleton } from '@/components/skeletons/table-skeleton';
 import { TransactionsTable } from '@/components/transactions/transactions-table';
-import {
-  getCategory,
-  getCategoryPageData,
-} from '@/db/queries/categories';
+import { getCategory, getCategoryPageData } from '@/db/queries/categories';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { TransactionModal } from '@/components/transactions/transaction-modal';
@@ -14,9 +11,7 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-export async function generateMetadata(
-  { params }: Props,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = params.slug;
 
   const category = await getCategory(slug);
@@ -33,8 +28,9 @@ export default async function CategoriesPage({
   params: { slug: string };
 }) {
   const category = await getCategory(params.slug);
-  const { totalAmount, categories, currencies, currentCurrency, totalMonth } =
-    await getCategoryPageData(category as Category);
+  const { totalAmount, totalMonth } = await getCategoryPageData(
+    category as Category
+  );
 
   if (!category) {
     return <p>No such category transactions.</p>;
@@ -52,11 +48,7 @@ export default async function CategoriesPage({
         </div>
 
         <div className="flex w-full justify-end px-3 md:my-6">
-          <TransactionModal
-            categories={categories}
-            currencies={currencies}
-            currentCurrency={currentCurrency}
-          />
+          <TransactionModal />
         </div>
       </div>
       <Suspense fallback={<TableSkeleton />}>

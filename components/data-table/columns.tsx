@@ -32,6 +32,8 @@ import { deleteTransaction } from '@/db/actions/transactions';
 import { toast } from 'sonner';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '../ui/badge';
+import { EditTransaction } from '@/app/(main)/transactions/[slug]/edit/edit-transaction';
+import { Dialog, DialogTrigger } from '../ui/dialog';
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -169,56 +171,61 @@ export const columns: ColumnDef<Transaction>[] = [
       const transaction = row.original;
       return (
         <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
+          <Dialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
 
-              <Link href={`/transactions/${transaction.slug}/edit`}>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-              </Link>
-              <AlertDialogTrigger asChild>
-                <DropdownMenuItem>
-                  <span>Delete</span>
-                </DropdownMenuItem>
-              </AlertDialogTrigger>
+                <DialogTrigger asChild>
+                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                </DialogTrigger>
 
-              <Link href={`/transactions/${transaction.slug}`}>
-                <DropdownMenuItem>View details</DropdownMenuItem>
-              </Link>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <AlertDialogTrigger asChild>
+                  <DropdownMenuItem>
+                    <span>Delete</span>
+                  </DropdownMenuItem>
+                </AlertDialogTrigger>
 
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete this
-                transaction from the database.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <form
-                action={() => {
-                  deleteTransaction(transaction.id);
-                  toast.success('Succesfully deleted this transaction.');
-                }}
-              >
-                <AlertDialogAction asChild>
-                  <Button type="submit" className="w-full">
-                    Delete
-                  </Button>
-                </AlertDialogAction>
-              </form>
-            </AlertDialogFooter>
-          </AlertDialogContent>
+                <Link href={`/transactions/${transaction.slug}`}>
+                  <DropdownMenuItem>View details</DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  this transaction from the database.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <form
+                  action={() => {
+                    deleteTransaction(transaction.id);
+                    toast.success('Succesfully deleted this transaction.');
+                  }}
+                >
+                  <AlertDialogAction asChild>
+                    <Button type="submit" className="w-full">
+                      Delete
+                    </Button>
+                  </AlertDialogAction>
+                </form>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+
+            <EditTransaction transaction={transaction} />
+          </Dialog>
         </AlertDialog>
       );
     },

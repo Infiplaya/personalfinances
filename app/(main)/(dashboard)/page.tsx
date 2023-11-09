@@ -45,18 +45,13 @@ export default async function Home({ searchParams }: Props) {
       ? searchParams.limitPeriod
       : 'day';
 
-  const { categories, currencies, currentCurrency } =
-    await getTransactionFormData();
+  const { currentCurrency } = await getTransactionFormData();
 
   return (
     <div>
       <SuccessToast message="Welcome back!" />
       <div className="w-full md:hidden">
-        <TransactionModal
-          categories={categories}
-          currencies={currencies}
-          currentCurrency={currentCurrency}
-        />
+        <TransactionModal />
       </div>
       <Suspense fallback={<CardsSkeleton />}>
         <Cards currencyCode={currentCurrency} />

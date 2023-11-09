@@ -35,7 +35,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { Category, Currency, Transaction } from '@/db/schema/finances';
+import { Transaction } from '@/db/schema/finances';
 import {
   TransactionForm,
   transactionFormSchema,
@@ -49,25 +49,21 @@ import { CheckIcon } from 'lucide-react';
 import { CaretSortIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { useTransactionFormData } from '@/context/TransactionFormDataContext';
 
 export function TransactionForm({
-  categories,
-  currencies,
-  currentCurrency,
   type,
   transaction,
   edit,
   closeModal,
 }: {
-  categories: Category[];
-  currencies: Currency[];
-  currentCurrency?: string;
   type?: 'expense' | 'income';
   transaction?: Transaction;
   edit?: boolean;
   closeModal?: () => void;
 }) {
   const router = useRouter();
+  const { currencies, categories, currentCurrency } = useTransactionFormData();
   const form = useForm<TransactionForm>({
     resolver: zodResolver(transactionFormSchema),
     defaultValues: transaction
@@ -84,6 +80,8 @@ export function TransactionForm({
           currencyCode: currentCurrency?.toUpperCase(),
         },
   });
+
+  const filteredCategories = categories.filter((c) => c.type === type);
 
   async function handleEditTransaction(data: TransactionForm) {
     if (!transaction) return;
@@ -218,7 +216,7 @@ export function TransactionForm({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {categories.map((category) => (
+                  {filteredCategories.map((category) => (
                     <SelectItem value={category.name} key={category.id}>
                       {category.name}
                     </SelectItem>

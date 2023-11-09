@@ -22,8 +22,7 @@ interface Props {
   };
 }
 export default async function TransactionsPage({ searchParams }: Props) {
-  const { categories, currencies, currentCurrency } =
-    await getTransactionFormData();
+  const { categories } = await getTransactionFormData();
 
   const page =
     typeof searchParams.page === 'string' ? Number(searchParams.page) : 1;
@@ -62,11 +61,7 @@ export default async function TransactionsPage({ searchParams }: Props) {
     <main>
       <div className="flex flex-col gap-8 md:flex-row-reverse md:justify-end">
         <div className="md:hidden">
-          <TransactionModal
-            categories={categories}
-            currencies={currencies}
-            currentCurrency={currentCurrency}
-          />
+          <TransactionModal />
         </div>
 
         <SearchTransactions />

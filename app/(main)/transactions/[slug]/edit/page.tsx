@@ -1,7 +1,4 @@
-import {
-  getTransaction,
-  getTransactionFormData,
-} from '@/db/queries/transactions';
+import { getTransaction } from '@/db/queries/transactions';
 import { EditTransaction } from './edit-transaction';
 import { notFound } from 'next/navigation';
 
@@ -12,18 +9,9 @@ export default async function EditTransactionPage({
 }) {
   const transaction = await getTransaction(params.slug);
 
-  const { categories, currencies } = await getTransactionFormData();
-
   if (!transaction) {
     return notFound();
   }
 
-  return (
-    <EditTransaction
-      categories={categories}
-      currencies={currencies}
-      edit={true}
-      transaction={transaction}
-    />
-  );
+  return <EditTransaction transaction={transaction} />;
 }

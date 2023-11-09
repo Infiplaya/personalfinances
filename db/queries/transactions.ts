@@ -393,6 +393,10 @@ export async function getTransactionFormData() {
   return { categories, currencies, currentCurrency };
 }
 
+export type TransactionFormData = Awaited<
+  ReturnType<typeof getTransactionFormData>
+>;
+
 export async function getTransaction(slug: string) {
   const currentProfile = await getCurrentProfile();
 

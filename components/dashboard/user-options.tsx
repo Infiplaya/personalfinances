@@ -16,7 +16,7 @@ export async function UserOptions() {
   const session = await getServerSession(authOptions);
   const userProfiles = await getUserProfiles();
   const currentProfile = await getCurrentProfile();
-  const { currencies, currentCurrency, categories } =
+  const { currencies, currentCurrency } =
     await getTransactionFormData();
 
   return (
@@ -34,11 +34,7 @@ export async function UserOptions() {
           <CommandMenu />
         </div>
         <div className="lg:flex lg:items-center lg:space-x-8">
-          <TransactionModal
-            categories={categories}
-            currencies={currencies}
-            currentCurrency={currentCurrency}
-          />
+          <TransactionModal />
           <CurrencyDropdown />
           <ThemeSwitcher />
           <ProfileDropdown

@@ -2,7 +2,6 @@
 
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { TransactionForm } from '@/components/transactions/transaction-form';
-import { Category, Currency } from '@/db/schema/finances';
 import { useState } from 'react';
 import { Button } from '../ui/button';
 
@@ -18,24 +17,11 @@ import { PlusCircle } from 'lucide-react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { DrawerContent, DrawerRoot, DrawerTrigger } from '../ui/drawer';
 
-export function TransactionModal({
-  categories,
-  currencies,
-  currentCurrency,
-}: {
-  categories: Category[];
-  currencies: Currency[];
-  currentCurrency: string;
-}) {
+export function TransactionModal() {
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'expense'
   );
-
-  const filteredCategories =
-    selectedType === 'expense'
-      ? categories.filter((c) => c.type === 'expense')
-      : categories.filter((c) => c.type === 'income');
 
   const isMobile = useIsMobile();
 
@@ -44,10 +30,7 @@ export function TransactionModal({
       <DrawerRoot open={open} onOpenChange={setOpen} shouldScaleBackground>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              size="sm"
-              className="space-x-2 w-full"
-            >
+            <Button size="sm" className="w-full space-x-2">
               <PlusCircle className="h-5 w-5 dark:text-neutral-700" />{' '}
               <span>New Transaction</span>
             </Button>
@@ -71,10 +54,7 @@ export function TransactionModal({
 
         <DrawerContent>
           <TransactionForm
-            currencies={currencies}
-            categories={filteredCategories}
             type={selectedType}
-            currentCurrency={currentCurrency}
             closeModal={() => setOpen(false)}
           />
         </DrawerContent>
@@ -110,15 +90,8 @@ export function TransactionModal({
       </DropdownMenu>
       <DialogContent>
         <TransactionForm
-          categories={
-            selectedType === 'expense'
-              ? categories.filter((c) => c.type === 'expense')
-              : categories.filter((c) => c.type === 'income')
-          }
-          currencies={currencies}
           type={selectedType}
           closeModal={() => setOpen(false)}
-          currentCurrency={currentCurrency}
         />
       </DialogContent>
     </Dialog>
