@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronsUpDown } from 'lucide-react';
+import { CheckIcon, ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -16,18 +16,25 @@ import {
 } from '@/components/ui/popover';
 import { Currency } from '@/db/schema/finances';
 // @ts-expect-error experimental hook
-import {  useFormState } from 'react-dom';
+import { useFormState } from 'react-dom';
 // @ts-expect-error experimental hook
 import { useFormStatus } from 'react-dom';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { changeCurrency } from '@/db/actions/currencies';
+import { cn } from '@/lib/utils';
 
 const initialState = {
   message: null,
 };
 
-function SubmitButton({ currency }: { currency: Currency }) {
+function SubmitButton({
+  currency,
+  isSelected,
+}: {
+  currency: Currency;
+  isSelected: boolean;
+}) {
   const { pending } = useFormStatus();
 
   return (
@@ -38,9 +45,13 @@ function SubmitButton({ currency }: { currency: Currency }) {
       <button
         aria-disabled={pending}
         type="submit"
-        className="ml-2 w-full text-left"
+        className={cn(
+          'inline-flex w-full items-center space-x-2 text-left',
+          isSelected ? 'font-semibold' : null
+        )}
       >
-        {currency.code}
+        <span>{currency.code}</span>
+        {isSelected ? <CheckIcon className="ml-2 h-5 w-5" /> : null}
       </button>
     </CommandItem>
   );
@@ -85,7 +96,10 @@ export function CurrencyDropdown({
                   name="code"
                   value={currency.code}
                 />
-                <SubmitButton currency={currency} />
+                <SubmitButton
+                  currency={currency}
+                  isSelected={currency.code === currentCurrency}
+                />
               </form>
             ))}
           </CommandGroup>

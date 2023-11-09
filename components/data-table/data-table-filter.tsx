@@ -182,9 +182,9 @@ export function SelectItem({
       ) : (
         <div
           className={cn(
-            'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
+            'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-neutral-100',
             isSelected
-              ? 'bg-primary text-primary-foreground'
+              ? 'bg-neutral-200 text-neutral-900'
               : 'opacity-50 [&_svg]:invisible'
           )}
         >

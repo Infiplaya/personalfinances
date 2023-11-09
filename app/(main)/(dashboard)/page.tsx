@@ -51,7 +51,7 @@ export default async function Home({ searchParams }: Props) {
   return (
     <div>
       <SuccessToast message="Welcome back!" />
-      <div className="md:hidden">
+      <div className="md:hidden w-full">
         <TransactionModal
           categories={categories}
           currencies={currencies}
