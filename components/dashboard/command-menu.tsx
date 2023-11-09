@@ -66,7 +66,7 @@ export function CommandMenu() {
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup
             heading="Suggestions"
-            className="max-h-64 overflow-auto"
+            className="max-h-64 overflow-auto lg:max-h-max lg:overflow-hidden"
           >
             {links.map((link) => (
               <CommandItem

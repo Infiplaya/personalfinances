@@ -29,7 +29,7 @@ export default async function ProfilesSettingsPage() {
     <div className="space-y-6">
       <div>
         <h3 className="text-lg font-medium">Manage Profiles</h3>
-        <div className="flex flex-col items-baseline md:flex-row md:justify-between space-y-6">
+        <div className="flex flex-col items-baseline space-y-6 md:flex-row md:justify-between">
           <p className="text-muted-foreground text-sm">
             This are the settings for managing all of your profiles.
           </p>
