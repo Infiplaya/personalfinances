@@ -33,16 +33,21 @@ const initialState = {
 
 function SubmitButton({
   currency,
+  handleClick,
   isSelected,
 }: {
   currency: Currency;
   isSelected: boolean;
+  handleClick: () => void;
 }) {
   const { pending } = useFormStatus();
 
   return (
     <CommandItem
-      onSelect={() => toast.success(`Changed currency to ${currency.name}`)}
+      onSelect={() => {
+        toast.success(`Changed currency to ${currency.name}`);
+        handleClick();
+      }}
       disabled={pending}
     >
       <button
@@ -88,11 +93,7 @@ export function CurrencyDropdown() {
           <CommandEmpty>No currency found.</CommandEmpty>
           <CommandGroup>
             {currencies.map((currency) => (
-              <form
-                action={formAction}
-                onSubmit={() => setUserCurrency(currency.code)}
-                key={currency.id}
-              >
+              <form action={formAction} key={currency.id}>
                 <input
                   type="hidden"
                   id="code"
@@ -101,6 +102,7 @@ export function CurrencyDropdown() {
                 />
                 <SubmitButton
                   currency={currency}
+                  handleClick={() => setUserCurrency(currency.code)}
                   isSelected={currency.code === currentCurrency}
                 />
               </form>
