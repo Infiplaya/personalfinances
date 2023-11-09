@@ -8,10 +8,7 @@ export async function BalanceCard({ currencyCode }: { currencyCode: string }) {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitleWithTooltip
-          message="Your current balance for every profile"
-          link="/balances"
-        >
+        <CardTitleWithTooltip message="Your current balance for every profile">
           Balance
         </CardTitleWithTooltip>
       </CardHeader>

@@ -64,7 +64,10 @@ export function CommandMenu() {
         <CommandInput placeholder="Type a command or search..." autoFocus />
         <CommandList className={isMobile ? 'max-h-full' : ''}>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
+          <CommandGroup
+            heading="Suggestions"
+            className="max-h-64 overflow-auto"
+          >
             {links.map((link) => (
               <CommandItem
                 key={link.href}

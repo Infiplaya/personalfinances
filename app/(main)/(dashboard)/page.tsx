@@ -51,7 +51,7 @@ export default async function Home({ searchParams }: Props) {
   return (
     <div>
       <SuccessToast message="Welcome back!" />
-      <div className="md:hidden w-full">
+      <div className="w-full md:hidden">
         <TransactionModal
           categories={categories}
           currencies={currencies}
@@ -61,9 +61,9 @@ export default async function Home({ searchParams }: Props) {
       <Suspense fallback={<CardsSkeleton />}>
         <Cards currencyCode={currentCurrency} />
       </Suspense>
-      <div className="mt-6 flex flex-col-reverse md:mt-0 md:flex-col">
-        <div className="my-6 space-y-6 md:grid md:grid-cols-6 md:gap-x-4 md:space-y-0">
-          <div className="md:col-span-4">
+      <div className="mt-6 flex flex-col-reverse lg:mt-0 lg:flex-col">
+        <div className="my-6 space-y-6 xl:grid xl:grid-cols-6 xl:gap-x-4 xl:space-y-0">
+          <div className="xl:col-span-4">
             <Suspense fallback={<BalanceChartSkeleton />}>
               <BalanceChart
                 balanceTime={balanceTime}
@@ -71,13 +71,13 @@ export default async function Home({ searchParams }: Props) {
               />
             </Suspense>
           </div>
-          <div className="md:col-span-2 md:mt-0">
+          <div className="xl:col-span-2 xl:mt-0">
             <Suspense fallback={<RecentTransactionsSkeleton />}>
               <RecentTransactions />
             </Suspense>
           </div>
         </div>
-        <section className="flex flex-col-reverse gap-6 md:flex-row md:items-stretch">
+        <section className="flex flex-col-reverse gap-6 xl:flex-row xl:items-stretch">
           <div className="flex-1">
             <Suspense fallback={<Skeleton className="h-72 w-full" />}>
               <Overview currencyCode={currentCurrency} overview={overview} />

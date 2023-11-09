@@ -31,7 +31,7 @@ export function ProfileModal({
           </DrawerTrigger>
         ) : (
           <DrawerTrigger asChild>
-            <Button>New Profile</Button>
+            <Button size="sm">New Profile</Button>
           </DrawerTrigger>
         )}
         <DrawerContent>

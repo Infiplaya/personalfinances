@@ -19,7 +19,7 @@ export function CardTitleWithTooltip({
   link?: string;
 }) {
   return (
-    <div className="inline-flex items-center justify-between space-x-4">
+    <div className="inline-flex items-center justify-between">
       <div className="inline-flex items-center space-x-4">
         <CardTitle>{children}</CardTitle>
         <TooltipProvider>
@@ -38,7 +38,7 @@ export function CardTitleWithTooltip({
           href={link}
           className="group inline-flex items-center space-x-[1px]  text-xs"
         >
-          <span className="transition-color group-hover:text-violet-500 dark:group-hover:text-violet-400 ">
+          <span className="transition-color hidden group-hover:text-violet-500 dark:group-hover:text-violet-400 xl:block ">
             More{' '}
           </span>
           <ChevronRight className="transition-color h-4 w-4 text-neutral-700 group-hover:text-violet-500 dark:text-neutral-300 dark:group-hover:text-violet-400" />{' '}
