@@ -9,7 +9,6 @@ import { CardsSkeleton } from '@/components/skeletons/cards-skeleton';
 import { RecentTransactionsSkeleton } from '@/components/skeletons/recent-transactions-skeleton';
 import { BalanceChartSkeleton } from '@/components/skeletons/balance-chart-skeleton';
 import { Skeleton } from '@/components/ui/skeleton';
-import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { getTransactionFormData } from '@/db/queries/transactions';
 import { TargetCard } from '@/components/financial-targets/target-card';
 import { TimePeriod } from '@/db/queries/targets';
