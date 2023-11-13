@@ -20,8 +20,8 @@ export async function UserOptions() {
 
   return (
     <>
-      <div className="ml-auto hidden w-full items-center justify-between space-x-8 lg:inline-flex">
-        <div>
+      <div className="flex w-full items-center justify-between">
+        <div className="hidden lg:block">
           <ProfileSwitcher
             profiles={userProfiles}
             currentProfile={currentProfile}
@@ -29,10 +29,19 @@ export async function UserOptions() {
             currentCurrency={currentCurrency}
           />
         </div>
-        <div>
+        <div className="flex w-full items-center justify-between lg:w-auto lg:justify-start">
+          <Link href="/" className="block lg:hidden">
+            <Home className="h-5 w-5 dark:text-neutral-300" />
+          </Link>
           <CommandMenu />
+          <MobileNavbar
+            currencies={currencies}
+            currentCurrency={currentCurrency}
+            currentProfile={currentProfile}
+            profiles={userProfiles}
+          />
         </div>
-        <div className="lg:flex lg:items-center lg:space-x-8">
+        <div className="hidden lg:flex lg:items-center lg:space-x-8">
           <TransactionModal />
           <CurrencyDropdown />
           <ThemeSwitcher />
@@ -41,18 +50,6 @@ export async function UserOptions() {
             username={session?.user.name}
           />
         </div>
-      </div>
-      <div className="mr-auto flex w-full items-center justify-between lg:hidden">
-        <Link href="/" className="block">
-          <Home className="h-5 w-5 dark:text-neutral-300" />
-        </Link>
-        <CommandMenu />
-        <MobileNavbar
-          currencies={currencies}
-          currentCurrency={currentCurrency}
-          currentProfile={currentProfile}
-          profiles={userProfiles}
-        />
       </div>
     </>
   );

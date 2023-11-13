@@ -1,6 +1,6 @@
 'use client';
 
-import { useIsMobile } from '@/hooks/useIsMobile';
+import useMediaQuery from '@/lib/hooks/useMediaQuery';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { DrawerContent, DrawerRoot, DrawerTrigger } from '../ui/drawer';
@@ -26,7 +26,7 @@ export function TargetModal({
   edit: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const { isMobile } = useMediaQuery();
 
   if (isMobile) {
     return (

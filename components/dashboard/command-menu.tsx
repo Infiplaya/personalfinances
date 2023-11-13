@@ -15,7 +15,6 @@ import {
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 import { links } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/useIsMobile';
 
 const settingsLinks = [
   {
@@ -34,8 +33,6 @@ export function CommandMenu() {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
-  const isMobile = useIsMobile();
-
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -43,6 +40,7 @@ export function CommandMenu() {
         setOpen((open) => !open);
       }
     };
+
     document.addEventListener('keydown', down);
     return () => document.removeEventListener('keydown', down);
   }, []);
@@ -62,12 +60,9 @@ export function CommandMenu() {
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Type a command or search..." autoFocus />
-        <CommandList className={isMobile ? 'max-h-full' : ''}>
+        <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup
-            heading="Suggestions"
-            className="max-h-64 overflow-auto lg:max-h-max lg:overflow-hidden"
-          >
+          <CommandGroup heading="Suggestions">
             {links.map((link) => (
               <CommandItem
                 key={link.href}

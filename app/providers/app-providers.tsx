@@ -1,8 +1,8 @@
 'use client';
 
 import { ReactNode } from 'react';
-import CurrenciesProvider from '@/context/CurrenciesContext';
-import TransactionFormDataProvider from '@/context/TransactionFormDataContext';
+import CurrenciesProvider from '@/lib/context/CurrenciesContext';
+import TransactionFormDataProvider from '@/lib/context/TransactionFormDataContext';
 import { Category, Currency } from '@/db/schema/finances';
 
 export function AppProviders({

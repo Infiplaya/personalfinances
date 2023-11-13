@@ -15,14 +15,14 @@ import { StrictModeDroppable } from './strict-droppable';
 import { PlusCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ChangeColumnName } from './change-column-name';
-import {ColumnOptions} from './column-options';
+import { ColumnOptions } from './column-options';
 import { toast } from 'sonner';
-import {PlanCard} from './plan-card';
+import { PlanCard } from './plan-card';
 import { NameForm } from './name-form';
 import { Sheet } from '@/components/ui/sheet';
 import { EditPlanDesktop } from './desktop-edit-plan';
 import { BudgetStatus } from '@/db/schema/finances';
-import { useIsMobile } from '@/hooks/useIsMobile';
+import useMediaQuery from '@/lib/hooks/useMediaQuery';
 import { DrawerRoot } from '@/components/ui/drawer';
 import { EditPlanMobile } from './mobile-edit-plan';
 
@@ -44,7 +44,7 @@ export function Board({
   // const [optimisticColumns, changeColumnItems] = useOptimistic<Columns>(data);
   const [state, newPlanAction] = useFormState(createBudgetPlan, initialState);
 
-  const isMobile = useIsMobile();
+  const { isMobile } = useMediaQuery();
 
   function resetForm() {
     setEditedColumn(null);

@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { SelectProfile } from '@/db/schema/auth';
 import { Currency } from '@/db/schema/finances';
-import { useIsMobile } from '@/hooks/useIsMobile';
+import useMediaQuery from '@/lib/hooks/useMediaQuery';
 import { Edit } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '../ui/button';
@@ -21,7 +21,7 @@ export function ProfileModal({
   edit: boolean;
 }) {
   const [showDialog, setShowDialog] = useState(false);
-  const isMobile = useIsMobile();
+  const { isMobile } = useMediaQuery();
   if (isMobile) {
     return (
       <DrawerRoot onOpenChange={setShowDialog} open={showDialog}>

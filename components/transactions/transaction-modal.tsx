@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { PlusCircle } from 'lucide-react';
-import { useIsMobile } from '@/hooks/useIsMobile';
+import useMediaQuery from '@/lib/hooks/useMediaQuery';
 import { DrawerContent, DrawerRoot, DrawerTrigger } from '../ui/drawer';
 
 export function TransactionModal() {
@@ -23,7 +23,7 @@ export function TransactionModal() {
     'expense'
   );
 
-  const isMobile = useIsMobile();
+  const { isMobile } = useMediaQuery();
 
   if (isMobile) {
     return (

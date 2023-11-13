@@ -23,7 +23,10 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { changeCurrency } from '@/db/actions/currencies';
 import { cn } from '@/lib/utils';
-import { useCurrencies, useUserCurrency } from '@/context/CurrenciesContext';
+import {
+  useCurrencies,
+  useUserCurrency,
+} from '@/lib/context/CurrenciesContext';
 
 const initialState = {
   message: null,
