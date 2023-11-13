@@ -9,7 +9,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
     redirect('/');
   }
   return (
-    <div className="mx-auto flex h-full max-w-5xl flex-col items-center justify-center md:flex-row md:justify-between">
+    <div className="mx-auto flex h-full max-w-5xl flex-col items-center justify-center px-6 md:flex-row md:justify-between">
       {children}
     </div>
   );

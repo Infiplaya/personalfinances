@@ -1,7 +1,6 @@
 'use client';
 
 import { LogOut, Settings } from 'lucide-react';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,7 +43,7 @@ export function ProfileDropdown({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            signOut({ callbackUrl: '/?signedOut=true' });
+            signOut();
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />

@@ -7,7 +7,7 @@ export default function SignInPage() {
   return (
     <>
       <SuccessToast message="Created account! Sign In with your credentials" />
-      <p className="w-full max-w-sm text-lg md:text-xl">
+      <p className="w-full max-w-sm md:text-xl">
         Don&apos;t have account?{' '}
         <Link
           href="/signup"

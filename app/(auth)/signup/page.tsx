@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function SignUpPage() {
   return (
     <>
-      <p className="w-full max-w-sm text-lg md:text-xl">
+      <p className="w-full max-w-sm md:text-xl">
         Already have account?{' '}
         <Link
           href="/signin"
