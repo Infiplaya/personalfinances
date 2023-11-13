@@ -135,7 +135,7 @@ export function DataTable<TData, TValue>({
 
       <div
         className={cn(
-          'rounded-md border dark:border-neutral-800',
+          '-mx-2 rounded-md border dark:border-neutral-800 md:mx-0',
           isPending && 'opacity-50'
         )}
       >

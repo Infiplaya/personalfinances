@@ -3,7 +3,6 @@ import { TransactionsTable } from '@/components/transactions/transactions-table'
 import { getCategory, getCategoryPageData } from '@/db/queries/categories';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { Category } from '@/db/schema/finances';
 
 type Props = {
@@ -45,10 +44,6 @@ export default async function CategoriesPage({
           </h1>
           <p className="text-sm">Total: {totalAmount.totalAmount}</p>
           <p className="text-sm">This Month: {totalMonth.totalAmount}</p>
-        </div>
-
-        <div className="flex w-full justify-end px-3 md:my-6">
-          <TransactionModal />
         </div>
       </div>
       <Suspense fallback={<TableSkeleton />}>

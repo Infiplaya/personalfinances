@@ -91,7 +91,7 @@ export function CurrencyDropdown() {
         <Command>
           <CommandInput placeholder="Search currency..." />
           <CommandEmpty>No currency found.</CommandEmpty>
-          <CommandGroup>
+          <CommandGroup className="max-h-64 overflow-auto">
             {currencies.map((currency) => (
               <form action={formAction} key={currency.id}>
                 <input

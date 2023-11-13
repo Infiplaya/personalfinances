@@ -28,7 +28,6 @@ import { useFormState } from 'react-dom';
 // @ts-expect-error experimental hook
 import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 
 interface Profile {
   id: string;
@@ -43,40 +42,29 @@ const initialState = {
 
 function SubmitButton({
   profile,
-  changeSelectedProfile,
   selectedProfile,
 }: {
   profile: Profile;
-  changeSelectedProfile: () => void;
   selectedProfile: Profile;
 }) {
   const { pending } = useFormStatus();
-  const router = useRouter();
 
   return (
-    <CommandItem
-      onSelect={() => {
-        changeSelectedProfile();
-        router.refresh();
-        toast.success(`Changed profile to ${profile.name}`);
-      }}
-      aria-disabled={pending}
-      className="w-full"
-    >
+    <>
       <button
         aria-disabled={pending}
         type="submit"
-        className="ml-2 w-full text-left"
+        className="ml-2 flex h-full w-full px-2 py-1.5  text-left text-sm"
       >
         {profile.name}
+        <CheckIcon
+          className={cn(
+            'ml-auto h-5 w-5',
+            selectedProfile.id === profile.id ? 'opacity-100' : 'opacity-0'
+          )}
+        />
       </button>
-      <CheckIcon
-        className={cn(
-          'ml-auto h-5 w-5',
-          selectedProfile.id === profile.id ? 'opacity-100' : 'opacity-0'
-        )}
-      />
-    </CommandItem>
+    </>
   );
 }
 
@@ -112,20 +100,29 @@ export function ProfileSwitcher({
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[200px] p-1">
           <Command>
             <CommandList>
               <CommandInput placeholder="Search profile..." />
               <CommandEmpty>No profile found.</CommandEmpty>
               {profiles.map((p) => (
-                <form action={formAction} key={p.id}>
-                  <input type="hidden" id="name" name="name" value={p.name} />
-                  <SubmitButton
-                    selectedProfile={selectedProfile}
-                    profile={p}
-                    changeSelectedProfile={() => setSelectedProfile(p)}
-                  />
-                </form>
+                <CommandItem key={p.id} className="p-0">
+                  <form
+                    className="h-full w-full"
+                    action={formAction}
+                    key={p.id}
+                    onSubmit={() => {
+                      setSelectedProfile(p);
+                      toast.success(`Switched profile to ${p.name}`);
+                    }}
+                  >
+                    <input type="hidden" id="name" name="name" value={p.name} />
+                    <SubmitButton
+                      selectedProfile={selectedProfile}
+                      profile={p}
+                    />
+                  </form>
+                </CommandItem>
               ))}
             </CommandList>
             <CommandSeparator />

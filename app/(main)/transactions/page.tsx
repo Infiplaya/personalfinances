@@ -8,7 +8,6 @@ import { Pagination } from '@/components/data-table/pagination';
 import { Suspense } from 'react';
 import { TableSkeleton } from '@/components/skeletons/table-skeleton';
 import { Transactions } from './transactions';
-import { TransactionModal } from '@/components/transactions/transaction-modal';
 import { SearchTransactions } from '@/components/data-table/search-transactions';
 
 export const metadata: Metadata = {
@@ -60,15 +59,11 @@ export default async function TransactionsPage({ searchParams }: Props) {
   return (
     <main>
       <div className="flex flex-col gap-8 md:flex-row-reverse md:justify-end">
-        <div className="md:hidden">
-          <TransactionModal />
-        </div>
-
         <SearchTransactions />
       </div>
       <section className="my-3">
         <Suspense
-          key={`${name}-${page}`}
+          key={page}
           fallback={
             <div className="my-10">
               <TableSkeleton />

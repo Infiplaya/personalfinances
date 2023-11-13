@@ -50,9 +50,6 @@ export default async function Home({ searchParams }: Props) {
   return (
     <div>
       <SuccessToast message="Welcome back!" />
-      <div className="w-full md:hidden">
-        <TransactionModal />
-      </div>
       <Suspense fallback={<CardsSkeleton />}>
         <Cards currencyCode={currentCurrency} />
       </Suspense>

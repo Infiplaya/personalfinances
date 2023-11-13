@@ -16,8 +16,7 @@ export async function UserOptions() {
   const session = await getServerSession(authOptions);
   const userProfiles = await getUserProfiles();
   const currentProfile = await getCurrentProfile();
-  const { currencies, currentCurrency } =
-    await getTransactionFormData();
+  const { currencies, currentCurrency } = await getTransactionFormData();
 
   return (
     <>
